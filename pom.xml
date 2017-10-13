@@ -17,6 +17,10 @@
       <id>spigot-repo</id>
       <url>https://hub.spigotmc.org/nexus/content/repositories/snapshots/</url>
     </repository>
+    <repository>
+      <id>citizens-repo</id>
+      <url>http://repo.citizensnpcs.co/</url>
+    </repository>
   </repositories>
 
   <dependencies>
@@ -27,6 +31,16 @@
       <version>1.12.2-R0.1-SNAPSHOT</version>
       <scope>provided</scope>
     </dependency>
+
+    <!--RealmsCore-->
+    <dependency>
+      <groupId>com.KyleNecrowolf</groupId>
+      <artifactId>RealmsCore</artifactId>
+      <version>1.0</version>
+      <scope>system</scope>
+      <systemPath>${project.basedir}/RealmsCore.jar</systemPath>
+    </dependency>
+
     <!--Citizens API-->
     <dependency>
 	    <groupId>net.citizensnpcs</groupId>
