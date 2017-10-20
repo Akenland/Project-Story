@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import org.bukkit.ChatColor;
+import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.entity.Player;
 
 import com.KyleNecrowolf.RealmsCore.Player.PlayerData;
@@ -53,10 +54,13 @@ public class NPCTag extends Tag {
         for(Tag tag : getTotalInheritedTags()){
             
             //// Conversations
-            // onInteract prompts - load per condition
-            for(String key : tag.getData().getConfigurationSection("prompts").getKeys(false)){
-                Prompt prompt = new Prompt(tag.getData().getConfigurationSection("prompts."+key));
-                prompts.putIfAbsent(key, prompt);
+            // Prompts - load per condition
+            ConfigurationSection promptFile = tag.getData().getConfigurationSection("prompts");
+            if(promptFile!=null){
+                for(String key : promptFile.getKeys(false)){
+                    Prompt prompt = new Prompt(promptFile.getConfigurationSection(key));
+                    prompts.putIfAbsent(key, prompt);
+                }
             }
 
             /*/ Conversations
