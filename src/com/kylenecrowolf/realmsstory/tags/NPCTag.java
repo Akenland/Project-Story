@@ -143,9 +143,9 @@ public class NPCTag extends Tag {
             answers.add(i, answer);
 
             // Replace THISNPC with npc_ID in all actions
-            String action = actions.get(i);
+            String action = actions.get(i).toLowerCase();
             actions.remove(i);
-            action = action.replace("NPC_PROMPTS", "npc_"+npc.getId());
+            action = action.replace("thisnpc", "npc_"+npc.getId());
             actions.add(i, action);
         }
         conversation.setAnswers(answers, actions);

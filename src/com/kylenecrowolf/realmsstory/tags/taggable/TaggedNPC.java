@@ -103,7 +103,7 @@ public class TaggedNPC extends Trait implements Taggable {
     @EventHandler
     public void onPlayerPromptResponse(PromptActionEvent event){
         if(event.isType("npc")){
-            String action[] = event.getAction().split(".", 2);
+            String action[] = event.getAction().split("\\.", 2);
             TaggedNPC npc = getTaggedNPC(Integer.parseInt(action[0]));
             if(npc.getNPC() != this.getNPC()) return;
             ((NPCTag)npc.getTag()).displayConversation(event.getPlayer(), npc.getNPC(), action[1]);
