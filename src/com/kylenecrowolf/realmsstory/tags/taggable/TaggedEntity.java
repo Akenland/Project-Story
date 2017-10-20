@@ -63,6 +63,10 @@ public class TaggedEntity implements Taggable {
         return tags;       
     }
 
+    public Tag getTag(){
+        return new Tag(getTags());
+    }
+
     public boolean hasTag(Tag... tags){
         return getTags().containsAll(Arrays.asList(tags));
     }
