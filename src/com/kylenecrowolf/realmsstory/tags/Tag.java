@@ -69,7 +69,7 @@ public class Tag {
         // If already loaded, return
         if(loaded || name==null) return;
 
-        Utils.notifyAdmins("Loading tag "+name);
+        //Utils.notifyAdmins("Loading tag "+name);
 
         // Get the file
         file = new ConfigAccessor("tags\\"+name+".yml", Main.plugin).getConfig();
@@ -83,7 +83,7 @@ public class Tag {
             // Load Realm
             if(realm==null){
                 String realmName = tag.getData().getString("realmscore.realm");
-                Utils.notifyAdmins("Found realm "+realmName);
+                //Utils.notifyAdmins("Found realm "+realmName);
                 if(realmName!=null) realm = new Realm(realmName);
             }
         }
