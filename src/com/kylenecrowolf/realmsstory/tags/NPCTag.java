@@ -55,7 +55,7 @@ public class NPCTag extends Tag {
             //// Conversations
             // onInteract prompts - load per condition
             for(String key : tag.getData().getConfigurationSection("prompts").getKeys(false)){
-                Prompt prompt = new Prompt(tag.getData().getConfigurationSection("prompt."+key));
+                Prompt prompt = new Prompt(tag.getData().getConfigurationSection("prompts."+key));
                 prompts.putIfAbsent(key, prompt);
             }
 
