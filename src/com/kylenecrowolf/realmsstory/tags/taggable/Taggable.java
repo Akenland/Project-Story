@@ -17,6 +17,12 @@ public interface Taggable {
     public List<Tag> getTags();
 
     /**
+     * Gets the abstract Tag for this object, defining the effective behavior and data for this object in a single Tag.
+     * @return an abstract Tag for this object
+     */
+    public Tag getTag();
+
+    /**
      * Checks if this object has specific tags.
      * @param tag the tag(s) to check for
      * @return true if the object has all of these tags

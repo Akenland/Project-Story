@@ -1,12 +1,16 @@
 package com.kylenecrowolf.realmsstory.tags;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
-
+import java.util.Map;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 
 import com.KyleNecrowolf.RealmsCore.Player.PlayerData;
 import com.KyleNecrowolf.RealmsCore.Prompts.Prompt;
+
+import net.citizensnpcs.api.npc.NPC;
 
 /**
  * A tag that contains behaviors and conversations for NPCs.
@@ -17,7 +21,8 @@ public class NPCTag extends Tag {
     private boolean loaded;
 
     //// CONVERSATIONS
-    // The initial question(s) for the NPC to ask, and the conditions for displaying those questions
+    Map<String,Prompt> prompts = new HashMap<String,Prompt>();
+    /*// The initial question(s) for the NPC to ask, and the conditions for displaying those questions
     private List<String> questions;
     private List<String> questionConditions;
     // Whether to display a single question (chosen at random), instead of all questions in order
@@ -25,7 +30,7 @@ public class NPCTag extends Tag {
     // Answers and actions
 	private List<String> answers;
 	private List<String> actions;
-    private List<String> answerConditions;
+    private List<String> answerConditions;*/
     
     //// REALMSCORE DATA
     // The title of NPCs with this tag
@@ -47,7 +52,14 @@ public class NPCTag extends Tag {
         // Iterate through tags 
         for(Tag tag : getTotalInheritedTags()){
             
-            // Conversations
+            //// Conversations
+            // onInteract prompts - load per condition
+            for(String key : tag.getData().getConfigurationSection("prompts").getKeys(false)){
+                Prompt prompt = new Prompt(tag.getData().getConfigurationSection("prompt."+key));
+                prompts.putIfAbsent(key, prompt);
+            }
+
+            /*/ Conversations
             if(questions==null || questions.isEmpty()){
                 questions = tag.getData().getStringList("conversations.questions");
                 questionConditions = tag.getData().getStringList("conversations.question-conditions");
@@ -57,7 +69,7 @@ public class NPCTag extends Tag {
                 answers = tag.getData().getStringList("conversations.answers");
                 actions = tag.getData().getStringList("conversations.actions");
                 answerConditions = tag.getData().getStringList("conversations.answer-conditions");
-            }
+            }*/
 
             // Title
             if(title==null || title.isEmpty()) title = tag.getData().getString("realmscore.title");
@@ -71,54 +83,68 @@ public class NPCTag extends Tag {
     /**
      * Display the appropriate conversation to a player.
      * @param player the player that sees the conversation
-     * @param npcName the name of the NPC, shown as a prefix for conversation messages
+     * @param npc the {@link NPC} that says the conversation
+     * @param promptName the prompt to display, or null to display onInteract prompt
      */
-    public void displayConversation(Player player, String npcName){
+    public void displayConversation(Player player, NPC npc, String promptName){
         load();
 
-        if(questions==null || answers==null) return;
+        if(prompts.isEmpty()) return;
+
+        // Get the appropriate prompt
+        promptName = (promptName!=null) ? promptName : "onInteract";
+        // TODO check conditions
+        Prompt conversation = prompts.get(promptName);
+        if(conversation==null) return;
+
 
         // Format all strings with player and NPC name
         PlayerData data = new PlayerData(player);
         String playerName = player.getDisplayName();
         String playerTitle = data.getTitle(); playerTitle = playerTitle.length()<2 ? "explorer" : playerTitle;
         String playerRealm = (data.getRealm()!=null && data.getRealm().exists()) ? data.getRealm().getFullName() : "Akenland";
+        String npcName = npc.getFullName();
         String npcTitle = title!=null ? title : "citizen";
         String npcRealm = (getRealm()!=null && getRealm().exists()) ? getRealm().getFullName() : "Akenland";
+
+        // Format questions
+        List<String> questions = conversation.getQuestions();
         for(int i=0; i<questions.size(); i++){
             String question = questions.get(i);
             questions.remove(i);
-            question = question.replace("PLAYER_NAME", playerName);
-            question = question.replace("PLAYER_TITLE", playerTitle);
-            question = question.replace("PLAYER_REALM", playerRealm);
-            question = question.replace("NPC_NAME", npcName);
-            question = question.replace("NPC_TITLE", npcTitle);
-            question = question.replace("NPC_REALM", npcRealm);
+            question = question
+                .replace("PLAYER_NAME", playerName)
+                .replace("PLAYER_TITLE", playerTitle)
+                .replace("PLAYER_REALM", playerRealm)
+                .replace("NPC_NAME", npcName)
+                .replace("NPC_TITLE", npcTitle)
+                .replace("NPC_REALM", npcRealm);
             questions.add(i, question);
         }
+        conversation.setQuestions(questions);
+        // Format answers
+        Map<String,String> promptAnswers = conversation.getAnswers();
+        List<String> answers = new ArrayList<String>(promptAnswers.keySet());
+        List<String> actions = new ArrayList<String>(promptAnswers.values());
         for(int i=0; i<answers.size(); i++){
             String answer = answers.get(i);
             answers.remove(i);
-            answer = answer.replace("PLAYER_NAME", playerName);
-            answer = answer.replace("PLAYER_TITLE", playerTitle);
-            answer = answer.replace("PLAYER_REALM", playerRealm);
-            answer = answer.replace("NPC_NAME", npcName);
-            answer = answer.replace("NPC_TITLE", npcTitle);
-            answer = answer.replace("NPC_REALM", npcRealm);
+            answer = answer
+                .replace("PLAYER_NAME", playerName)
+                .replace("PLAYER_TITLE", playerTitle)
+                .replace("PLAYER_REALM", playerRealm)
+                .replace("NPC_NAME", npcName)
+                .replace("NPC_TITLE", npcTitle)
+                .replace("NPC_REALM", npcRealm);
             answers.add(i, answer);
+
+            // Replace THISNPC with npc_ID in all actions
+            String action = actions.get(i);
+            actions.remove(i);
+            action = action.replace("NPC_PROMPTS", "npc_"+npc.getId());
+            actions.add(i, action);
         }
-        /*for(String question : questions){
-            question = question.replace("PLAYER_NAME", playerName);
-            question = question.replace("PLAYER_TITLE", playerTitle);
-            question = question.replace("PLAYER_REALM", playerRealm);
-            question = question.replace("NPC_NAME", npcName);
-        }
-        for(String answer : answers){
-            answer = answer.replace("PLAYER_NAME", playerName);
-            answer = answer.replace("PLAYER_TITLE", playerTitle);
-            answer = answer.replace("PLAYER_REALM", playerRealm);
-            answer = answer.replace("NPC_NAME", npcName);
-        }*/
+        conversation.setAnswers(answers, actions);
 
         // Format NPC name
         ChatColor realmColor = getRealm()!=null ? getRealm().getColor() : ChatColor.GRAY;
@@ -127,6 +153,14 @@ public class NPCTag extends Tag {
         String formattedNPCName = topRealmColor+"<"+realmColor+formattedTitle+npcName+topRealmColor+"> ";
 
         // Prepare the prompt
-        new Prompt(questions, questionConditions, randomizeQuestions, answers, actions, answerConditions).display(player, formattedNPCName);
+        conversation.display(player, formattedNPCName);
+    }
+    /**
+     * Display the appropriate conversation to a player.
+     * @param player the player that sees the conversation
+     * @param npc the {@link NPC} that says the conversation
+     */
+    public void displayConversation(Player player, NPC npc){
+        displayConversation(player, npc, null);
     }
 }

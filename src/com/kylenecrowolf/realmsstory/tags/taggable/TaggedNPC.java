@@ -9,9 +9,10 @@ import org.bukkit.event.EventHandler;
 
 import com.KyleNecrowolf.RealmsCore.Common.Utils;
 import com.KyleNecrowolf.RealmsCore.Prompts.Prompt;
+import com.KyleNecrowolf.RealmsCore.Prompts.PromptActionEvent;
 import com.kylenecrowolf.realmsstory.tags.NPCTag;
 import com.kylenecrowolf.realmsstory.tags.Tag;
-
+import net.citizensnpcs.api.CitizensAPI;
 import net.citizensnpcs.api.event.NPCRightClickEvent;
 import net.citizensnpcs.api.persistence.Persist;
 import net.citizensnpcs.api.trait.Trait;
@@ -49,6 +50,10 @@ public class TaggedNPC extends Trait implements Taggable {
             for(Trait trait : getNPC().getTraits()) tags.addAll(new Tag(trait.getName()).getTotalInheritedTags());
         }
         return tags;       
+    }
+
+    public Tag getTag(){
+        return new NPCTag(getTags());
     }
 
     public boolean hasTag(Tag... tags){
@@ -90,6 +95,27 @@ public class TaggedNPC extends Trait implements Taggable {
     @EventHandler
     public void onPlayerInteract(NPCRightClickEvent event){
         if(event.getNPC() != this.getNPC()) return;
-        new NPCTag(getTags()).displayConversation(event.getClicker(), event.getNPC().getFullName());
+        ((NPCTag)getTag()).displayConversation(event.getClicker(), event.getNPC());
+    }
+    /**
+     * Player chat response event. Displays the requested prompt when player chooses a response to a previous conversation.
+     */
+    @EventHandler
+    public void onPlayerPromptResponse(PromptActionEvent event){
+        if(event.isType("npc")){
+            String action[] = event.getAction().split("_", 2);
+            TaggedNPC npc = getTaggedNPC(Integer.parseInt(action[0]));
+            ((NPCTag)npc.getTag()).displayConversation(event.getPlayer(), npc.getNPC(), action[1]);
+        }
+    }
+
+
+    /**
+     * Gets the TaggedNPC {@link Trait} for an {@link net.citizensnpcs.api.npc.NPC}.
+     * @param npcID the ID of the {@link net.citizensnpcs.api.npc.NPC}
+     * @return the TaggedNPC trait
+     */
+    public static TaggedNPC getTaggedNPC(int npcID){
+        return CitizensAPI.getNPCRegistry().getById(npcID).getTrait(TaggedNPC.class);
     }
 }
