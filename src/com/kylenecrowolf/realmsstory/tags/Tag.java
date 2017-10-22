@@ -83,11 +83,14 @@ public class Tag {
             // Load Realm
             if(realm==null){
                 String realmName = tag.getData().getString("realmscore.realm");
-                //Utils.notifyAdmins("Found realm "+realmName);
+                Utils.notifyAdmins("Found realm "+realmName+" for tag "+name);
                 if(realmName!=null) realm = new Realm(realmName);
             }
         }
-        if(realm!=null && realm.exists()) inheritedTags.add(new Tag(realm.getName()));
+        if(realm!=null && realm.exists()){
+            inheritedTags.add(new Tag(realm.getName()));
+            Utils.notifyAdmins("Saved realm "+realm.getFullName()+" for tag "+name);
+        }
     }
 
 
