@@ -83,17 +83,10 @@ public class Tag {
             // Load Realm
             if(realm==null){
                 String realmName = tag.getData().getString("data.realm");
-                Utils.notifyAdmins("Found realm "+realmName+" for tag "+name);
-                if(realmName!=null){
-                    realm = new Realm(realmName);
-                    Utils.notifyAdmins("Assigned realm "+realm.getFullName()+" for tag "+name);
-                }
+                if(realmName!=null) realm = new Realm(realmName);
             }
         }
-        if(realm!=null && realm.exists()){
-            if(!realm.getName().equalsIgnoreCase(name)) inheritedTags.add(new Tag(realm.getName()));
-            Utils.notifyAdmins("Saved realm "+realm.getFullName()+" for tag "+name);
-        }
+        if(realm!=null && realm.exists()) if(!realm.getName().equalsIgnoreCase(name)) inheritedTags.add(new Tag(realm.getName()));
     }
 
 
@@ -158,8 +151,6 @@ public class Tag {
      */
     public Realm getRealm(){
         load();
-        if(realm!=null) Utils.notifyAdmins("getRealm called on "+name+", returning realm "+realm.getFullName());
-        else Utils.notifyAdmins("getRealm called on "+name+", returning null");
         return realm;
     }
 }
