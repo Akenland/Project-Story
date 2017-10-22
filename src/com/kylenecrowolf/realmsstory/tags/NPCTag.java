@@ -14,7 +14,7 @@ import com.KyleNecrowolf.RealmsCore.Prompts.Prompt;
 import net.citizensnpcs.api.npc.NPC;
 
 /**
- * A tag that contains behaviors and conversations for NPCs.
+ * A tag that contains behaviors and conversations for an {@link NPC}.
  */
 public class NPCTag extends Tag {
 
@@ -23,15 +23,6 @@ public class NPCTag extends Tag {
 
     //// CONVERSATIONS
     Map<String,Prompt> prompts = new HashMap<String,Prompt>();
-    /*// The initial question(s) for the NPC to ask, and the conditions for displaying those questions
-    private List<String> questions;
-    private List<String> questionConditions;
-    // Whether to display a single question (chosen at random), instead of all questions in order
-    private boolean randomizeQuestions;
-    // Answers and actions
-	private List<String> answers;
-	private List<String> actions;
-    private List<String> answerConditions;*/
     
     //// REALMSCORE DATA
     // The title of NPCs with this tag
@@ -52,8 +43,7 @@ public class NPCTag extends Tag {
 
         // Iterate through tags 
         for(Tag tag : getTotalInheritedTags()){
-            
-            //// Conversations
+
             // Prompts - load per condition
             ConfigurationSection promptFile = tag.getData().getConfigurationSection("prompts");
             if(promptFile!=null){
@@ -63,30 +53,17 @@ public class NPCTag extends Tag {
                 }
             }
 
-            /*/ Conversations
-            if(questions==null || questions.isEmpty()){
-                questions = tag.getData().getStringList("conversations.questions");
-                questionConditions = tag.getData().getStringList("conversations.question-conditions");
-                randomizeQuestions = tag.getData().getBoolean("conversations.random-question");
-            }
-            if(answers==null || answers.isEmpty()){
-                answers = tag.getData().getStringList("conversations.answers");
-                actions = tag.getData().getStringList("conversations.actions");
-                answerConditions = tag.getData().getStringList("conversations.answer-conditions");
-            }*/
-
             // Title
             if(title==null || title.isEmpty()) title = tag.getData().getString("realmscore.title");
         }
-        
 
         loaded = true;
     }
 
 
     /**
-     * Display the appropriate conversation to a player.
-     * @param player the player that sees the conversation
+     * Display the appropriate conversation to a {@link Player}.
+     * @param player the {@link Player} that sees the conversation
      * @param npc the {@link NPC} that says the conversation
      * @param promptName the prompt to display, or null to display onInteract prompt
      */
@@ -117,13 +94,13 @@ public class NPCTag extends Tag {
             String question = questions.get(i);
             questions.remove(i);
             question = question
-                .replace("PLAYER_NAME", playerName)
-                .replace("PLAYER_TITLE", playerTitle)
-                .replace("PLAYER_REALM", playerRealm)
-                .replace("NPC_NAME", npcName)
-                .replace("NPC_TITLE", npcTitle)
-                .replace("NPC_REALM", npcRealm);
-            questions.add(i, question);
+                .replace("PLAYER_NAME", playerName + ChatColor.WHITE)
+                .replace("PLAYER_TITLE", playerTitle + ChatColor.WHITE)
+                .replace("PLAYER_REALM", playerRealm + ChatColor.WHITE)
+                .replace("NPC_NAME", npcName + ChatColor.WHITE)
+                .replace("NPC_TITLE", npcTitle + ChatColor.WHITE)
+                .replace("NPC_REALM", npcRealm + ChatColor.WHITE);
+            questions.add(i, ChatColor.WHITE + question);
         }
         conversation.setQuestions(questions);
         // Format answers
@@ -134,12 +111,12 @@ public class NPCTag extends Tag {
             String answer = answers.get(i);
             answers.remove(i);
             answer = answer
-                .replace("PLAYER_NAME", playerName)
-                .replace("PLAYER_TITLE", playerTitle)
-                .replace("PLAYER_REALM", playerRealm)
-                .replace("NPC_NAME", npcName)
-                .replace("NPC_TITLE", npcTitle)
-                .replace("NPC_REALM", npcRealm);
+                .replace("PLAYER_NAME", playerName + ChatColor.GRAY)
+                .replace("PLAYER_TITLE", playerTitle + ChatColor.GRAY)
+                .replace("PLAYER_REALM", playerRealm + ChatColor.GRAY)
+                .replace("NPC_NAME", npcName + ChatColor.GRAY)
+                .replace("NPC_TITLE", npcTitle + ChatColor.GRAY)
+                .replace("NPC_REALM", npcRealm + ChatColor.GRAY);
             answers.add(i, answer);
 
             // Replace THISNPC with npc_ID in all actions
@@ -160,8 +137,8 @@ public class NPCTag extends Tag {
         conversation.display(player, formattedNPCName);
     }
     /**
-     * Display the appropriate conversation to a player.
-     * @param player the player that sees the conversation
+     * Display the appropriate conversation to a {@link Player}.
+     * @param player the {@link Player} that sees the conversation
      * @param npc the {@link NPC} that says the conversation
      */
     public void displayConversation(Player player, NPC npc){

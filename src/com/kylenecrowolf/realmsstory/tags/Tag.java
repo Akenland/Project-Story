@@ -39,13 +39,13 @@ public class Tag {
 
     //// Tag data
     /**
-     * The realm associated with this tag.
+     * The {@link Realm} associated with this tag.
      */
     private Realm realm;
 
 
     /**
-     * Gets a tag by name.
+     * Gets a Tag by name.
      * @param name the unique name of the tag
      */
     public Tag(String name){
@@ -92,7 +92,7 @@ public class Tag {
 
 
     /**
-     * Gets the unique name of this tag.
+     * Gets the unique name of this Tag.
      * @return the unique name of this tag
      */
     public String getName(){
@@ -123,8 +123,8 @@ public class Tag {
 
 
     /**
-     * Displays information about this tag to a CommandSender.
-     * @param sender the CommandSender to display information to
+     * Displays information about this tag to a {@link CommandSender}.
+     * @param sender the {@link CommandSender} to display information to
      */
     public void displayInfo(CommandSender sender){
         Prompt prompt = new Prompt();
@@ -138,7 +138,7 @@ public class Tag {
 
 
     /**
-     * Gets the FileConfiguration for this tag.
+     * Gets the {@link FileConfiguration} for this tag.
      */
     public FileConfiguration getData(){
         load();
