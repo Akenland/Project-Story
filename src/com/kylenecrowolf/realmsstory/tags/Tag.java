@@ -39,9 +39,13 @@ public class Tag {
 
     //// Tag data
     /**
-     * The {@link Realm} associated with this tag.
+     * The {@link Realm} associated with this Tag.
      */
     private Realm realm;
+    /**
+     * A location name associated with this Tag. Can be any string.
+     */
+    private String locationName;
 
 
     /**
@@ -85,6 +89,8 @@ public class Tag {
                 String realmName = tag.getData().getString("data.realm");
                 if(realmName!=null) realm = new Realm(realmName);
             }
+            // Load location name
+            if(locationName==null) locationName = tag.getData().getString("data.location");
         }
         if(realm!=null && realm.exists()) if(!realm.getName().equalsIgnoreCase(name)) inheritedTags.add(new Tag(realm.getName()));
     }
@@ -137,7 +143,7 @@ public class Tag {
 
 
     /**
-     * Gets the {@link FileConfiguration} for this tag.
+     * Gets the {@link FileConfiguration} for this Tag.
      */
     public FileConfiguration getData(){
         load();
@@ -146,11 +152,19 @@ public class Tag {
 
 
     /**
-     * Gets the {@link Realm} associated with this tag.
-     * @return the Realm, or null if this tag is not associated with any Realm.
+     * Gets the {@link Realm} associated with this Tag.
+     * @return the Realm, or null if this tag is not associated with any Realm
      */
     public Realm getRealm(){
         load();
         return realm;
+    }
+    /**
+     * Gets the location name associated with this Tag. Can be any string.
+     * @return the location name, or null if one was not found
+     */
+    public String getLocationName(){
+        load();
+        return locationName;
     }
 }

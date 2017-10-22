@@ -87,6 +87,7 @@ public class NPCTag extends Tag {
         String npcName = npc.getFullName();
         String npcTitle = title!=null ? (title.length()>2 ? title : title+"citizen" ) : "citizen";
         String npcRealm = (getRealm()!=null && getRealm().exists()) ? getRealm().getFullName() : "Akenland";
+        String npcLoc = getLocationName()!=null ? getLocationName() : npcRealm;
 
         // Format questions
         List<String> questions = conversation.getQuestions();
@@ -99,7 +100,8 @@ public class NPCTag extends Tag {
                 .replace("PLAYER_REALM", playerRealm + ChatColor.WHITE)
                 .replace("NPC_NAME", npcName + ChatColor.WHITE)
                 .replace("NPC_TITLE", npcTitle + ChatColor.WHITE)
-                .replace("NPC_REALM", npcRealm + ChatColor.WHITE);
+                .replace("NPC_REALM", npcRealm + ChatColor.WHITE)
+                .replace("NPC_LOCATION", npcLoc + ChatColor.WHITE);
             questions.add(i, ChatColor.WHITE + question);
         }
         conversation.setQuestions(questions);
@@ -116,7 +118,8 @@ public class NPCTag extends Tag {
                 .replace("PLAYER_REALM", playerRealm + ChatColor.GRAY)
                 .replace("NPC_NAME", npcName + ChatColor.GRAY)
                 .replace("NPC_TITLE", npcTitle + ChatColor.GRAY)
-                .replace("NPC_REALM", npcRealm + ChatColor.GRAY);
+                .replace("NPC_REALM", npcRealm + ChatColor.GRAY)
+                .replace("NPC_LOCATION", npcLoc + ChatColor.GRAY);
             answers.add(i, answer);
 
             // Replace THISNPC with npc_ID in all actions
