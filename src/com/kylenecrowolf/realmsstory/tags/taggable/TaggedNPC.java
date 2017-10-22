@@ -77,10 +77,14 @@ public class TaggedNPC extends Trait implements Taggable {
         tags = null;
     }
 
+    public void reload(){
+        tags = null;
+    }
+
 
     public void displayInfo(CommandSender sender){
         Prompt prompt = new Prompt();
-        prompt.addQuestion(Utils.infoText+"--- NPC: "+Utils.messageText+getNPC().getFullName()+Utils.infoText+" ---");
+        prompt.addQuestion(Utils.infoText+"--- NPC: "+Utils.messageText+getNPC().getFullName()+Utils.infoText+" "+getNPC().getId()+" ---");
         prompt.addQuestion(Utils.infoText+"Has the following tags:");
         for(Tag tag : getTags()){
             prompt.addAnswer(tag.getName(),"");

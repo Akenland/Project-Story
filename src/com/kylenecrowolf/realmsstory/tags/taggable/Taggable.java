@@ -42,6 +42,11 @@ public interface Taggable {
      */
     public void removeTag(Tag tag);
 
+    /**
+     * Reloads the tags and data applied to this object.
+     */
+    public void reload();
+
 
     /**
      * Display information about this taggable to a CommandSender.

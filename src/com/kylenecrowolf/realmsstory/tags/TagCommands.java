@@ -85,6 +85,9 @@ public final class TagCommands implements TabExecutor {
         } else if(args.length==4 && args[2].equalsIgnoreCase("remove")){
             target.removeTag(new Tag(args[3]));
             sender.sendMessage(Utils.messageText+"Removed tag "+args[3].toLowerCase()+" from "+target);
+        } else if(args[2].equalsIgnoreCase("reload")){
+            target.reload();
+            sender.sendMessage(Utils.messageText+"Reloaded tags for "+target);
         }
 
         return true;

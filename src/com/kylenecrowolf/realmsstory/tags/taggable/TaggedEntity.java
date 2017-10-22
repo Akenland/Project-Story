@@ -86,6 +86,10 @@ public class TaggedEntity implements Taggable {
         tags = null;
     }
 
+    public void reload(){
+        tags = null;
+    }
+
 
     public void displayInfo(CommandSender sender){
         Prompt prompt = new Prompt();

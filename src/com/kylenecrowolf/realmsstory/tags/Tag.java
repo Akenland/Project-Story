@@ -82,7 +82,7 @@ public class Tag {
         for(Tag tag : getTotalInheritedTags()){
             // Load Realm
             if(realm==null){
-                String realmName = tag.getData().getString("realmscore.realm");
+                String realmName = tag.getData().getString("data.realm");
                 Utils.notifyAdmins("Found realm "+realmName+" for tag "+name);
                 if(realmName!=null) realm = new Realm(realmName);
             }

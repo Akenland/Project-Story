@@ -54,7 +54,7 @@ public class NPCTag extends Tag {
             }
 
             // Title
-            if(title==null || title.isEmpty()) title = tag.getData().getString("realmscore.title");
+            if(title==null || title.isEmpty()) title = tag.getData().getString("data.title");
         }
 
         loaded = true;
