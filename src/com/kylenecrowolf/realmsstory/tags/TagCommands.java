@@ -66,7 +66,7 @@ public final class TagCommands implements TabExecutor {
 
             case "npc":
                 if(Main.citizensEnabled){
-                    NPC npc = (args.length<2 || args[2].equalsIgnoreCase("sel")) ? CitizensAPI.getDefaultNPCSelector().getSelected(sender) : CitizensAPI.getNPCRegistry().getById(Integer.parseInt(args[1]));
+                    NPC npc = (args.length<2 || args[1].equalsIgnoreCase("sel")) ? CitizensAPI.getDefaultNPCSelector().getSelected(sender) : CitizensAPI.getNPCRegistry().getById(Integer.parseInt(args[1]));
                     target = npc.getTrait(TaggedNPC.class);
                     break;
                 }
