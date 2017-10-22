@@ -67,13 +67,15 @@ public class Tag {
      */
     private void load(){
         // If already loaded, return
-        if(loaded || name==null) return;
+        if(loaded) return;
 
-        // Get the file
-        file = new ConfigAccessor("tags\\"+name+".yml", Main.plugin).getConfig();
+        if(name!=null){
+            // Get the file
+            file = new ConfigAccessor("tags\\"+name+".yml", Main.plugin).getConfig();
 
-        // Load inherited tags
-        for(String tagName : file.getStringList("inherit")) inheritedTags.add(new Tag(tagName));
+            // Load inherited tags
+            for(String tagName : file.getStringList("inherit")) inheritedTags.add(new Tag(tagName));
+        }
 
         loaded = true;
         
