@@ -8,6 +8,7 @@ import org.bukkit.ChatColor;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.entity.Player;
 
+import com.KyleNecrowolf.RealmsCore.Common.Utils;
 import com.KyleNecrowolf.RealmsCore.Player.PlayerData;
 import com.KyleNecrowolf.RealmsCore.Prompts.Prompt;
 
@@ -69,6 +70,8 @@ public class NPCTag extends Tag {
      */
     public void displayConversation(Player player, NPC npc, String promptName){
         load();
+
+        Utils.notifyAdmins(npc.getFullName()+ChatColor.DARK_GRAY+" is a member of "+getRealm().getName()+"("+super.getRealm().getName()+")");
 
         if(prompts.isEmpty()) return;
 
