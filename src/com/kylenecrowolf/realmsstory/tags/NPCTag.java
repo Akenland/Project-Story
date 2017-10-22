@@ -71,7 +71,7 @@ public class NPCTag extends Tag {
     public void displayConversation(Player player, NPC npc, String promptName){
         load();
 
-        Utils.notifyAdmins(npc.getFullName()+ChatColor.DARK_GRAY+" is a member of "+getRealm().getName()+"("+super.getRealm().getName()+")");
+        Utils.notifyAdmins(npc.getFullName()+ChatColor.DARK_GRAY+" is a member of "+super.getRealm().getName());
 
         if(prompts.isEmpty()) return;
 

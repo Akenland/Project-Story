@@ -47,7 +47,7 @@ public class TaggedNPC extends Trait implements Taggable {
             if(savedTags!=null) for(String tag : savedTags) tags.addAll(new Tag(tag).getTotalInheritedTags());
 
             // Load other traits
-            for(Trait trait : getNPC().getTraits()) tags.addAll(new Tag(trait.getName()).getTotalInheritedTags());
+            //for(Trait trait : getNPC().getTraits()) tags.addAll(new Tag(trait.getName()).getTotalInheritedTags());
         }
         return tags;       
     }

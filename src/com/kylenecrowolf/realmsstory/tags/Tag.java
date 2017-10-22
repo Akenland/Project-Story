@@ -69,8 +69,6 @@ public class Tag {
         // If already loaded, return
         if(loaded || name==null) return;
 
-        //Utils.notifyAdmins("Loading tag "+name);
-
         // Get the file
         file = new ConfigAccessor("tags\\"+name+".yml", Main.plugin).getConfig();
 
@@ -88,7 +86,7 @@ public class Tag {
             }
         }
         if(realm!=null && realm.exists()){
-            inheritedTags.add(new Tag(realm.getName()));
+            if(!realm.getName().equalsIgnoreCase(name)) inheritedTags.add(new Tag(realm.getName()));
             Utils.notifyAdmins("Saved realm "+realm.getFullName()+" for tag "+name);
         }
     }
