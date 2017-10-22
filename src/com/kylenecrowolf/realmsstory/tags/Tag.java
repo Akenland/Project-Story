@@ -82,7 +82,10 @@ public class Tag {
             if(realm==null){
                 String realmName = tag.getData().getString("data.realm");
                 Utils.notifyAdmins("Found realm "+realmName+" for tag "+name);
-                if(realmName!=null) realm = new Realm(realmName);
+                if(realmName!=null){
+                    realm = new Realm(realmName);
+                    Utils.notifyAdmins("Assigned realm "+realm.getFullName()+" for tag "+name);
+                }
             }
         }
         if(realm!=null && realm.exists()){
