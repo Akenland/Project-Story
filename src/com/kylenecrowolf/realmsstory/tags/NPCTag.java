@@ -85,7 +85,7 @@ public class NPCTag extends Tag {
         String playerTitle = data.getTitle(); playerTitle = playerTitle.length()<2 ? "explorer" : playerTitle;
         String playerRealm = (data.getRealm()!=null && data.getRealm().exists()) ? data.getRealm().getFullName() : "Akenland";
         String npcName = npc.getFullName();
-        String npcTitle = title!=null ? title : "citizen";
+        String npcTitle = title!=null ? (title.length()>2 ? title : title+"citizen" ) : "citizen";
         String npcRealm = (getRealm()!=null && getRealm().exists()) ? getRealm().getFullName() : "Akenland";
 
         // Format questions
@@ -130,7 +130,7 @@ public class NPCTag extends Tag {
         // Format NPC name
         ChatColor realmColor = getRealm()!=null ? getRealm().getColor() : ChatColor.GRAY;
         ChatColor topRealmColor = getRealm()!=null ? getRealm().getTopParent().getColor() : realmColor;
-        String formattedTitle = title!=null && !title.isEmpty() ? title+" " : "";
+        String formattedTitle = title!=null ? (title.length()>2 ? title+" " : title) : "";
         String formattedNPCName = topRealmColor+"<"+realmColor+formattedTitle+npcName+topRealmColor+"> ";
 
         // Prepare the prompt
