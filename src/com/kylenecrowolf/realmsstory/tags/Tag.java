@@ -156,6 +156,8 @@ public class Tag {
      */
     public Realm getRealm(){
         load();
+        if(realm!=null) Utils.notifyAdmins("getRealm called on "+name+", returning realm "+realm.getFullName());
+        else Utils.notifyAdmins("getRealm called on "+name+", returning null");
         return realm;
     }
 }

@@ -8,7 +8,6 @@ import org.bukkit.ChatColor;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.entity.Player;
 
-import com.KyleNecrowolf.RealmsCore.Common.Utils;
 import com.KyleNecrowolf.RealmsCore.Player.PlayerData;
 import com.KyleNecrowolf.RealmsCore.Prompts.Prompt;
 
