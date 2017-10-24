@@ -1,16 +1,17 @@
 package com.kylenecrowolf.realmsstory.tags;
 
 import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+
 import org.bukkit.ChatColor;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.entity.Player;
 
 import com.KyleNecrowolf.RealmsCore.Player.PlayerData;
 import com.KyleNecrowolf.RealmsCore.Prompts.Prompt;
-
+import com.kylenecrowolf.realmsstory.tags.taggable.TaggedEntity;
 import net.citizensnpcs.api.npc.NPC;
 
 /**
@@ -22,7 +23,7 @@ public class NPCTag extends Tag {
     private boolean loaded;
 
     //// CONVERSATIONS
-    Map<String,Prompt> prompts = new HashMap<String,Prompt>();
+    Map<String,Prompt> prompts = new LinkedHashMap<String,Prompt>();
     
     //// REALMSCORE DATA
     // The title of NPCs with this tag
@@ -74,8 +75,18 @@ public class NPCTag extends Tag {
 
         // Get the appropriate prompt
         promptName = (promptName!=null) ? promptName : "onInteract";
-        // TODO check conditions
-        Prompt conversation = prompts.get(promptName);
+
+        // Get a list of available prompts, based on conditions
+        Map<String,Prompt> availablePrompts = new LinkedHashMap<String,Prompt>();
+        for(Map.Entry<String,Prompt> p : prompts.entrySet()){
+            String s[] = p.getKey().split("cond:", 2);
+            String newPromptName = s[0].trim();
+            // If condition is missing, or evaluates to true, add prompt to availablePrompts
+            if(s.length==1 || new Condition(s[1]).eval(new TaggedEntity(player)))
+                availablePrompts.putIfAbsent(newPromptName, p.getValue());
+        }
+
+        Prompt conversation = availablePrompts.get(promptName);
         if(conversation==null) return;
 
 
