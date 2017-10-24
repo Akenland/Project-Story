@@ -4,7 +4,10 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import org.bukkit.entity.Entity;
+
 import com.kylenecrowolf.realmsstory.tags.taggable.Taggable;
+import com.kylenecrowolf.realmsstory.tags.taggable.TaggedEntity;
 
 /**
  * A tag condition that can be evaluated.
@@ -50,5 +53,13 @@ public class Condition {
         }
 
         return false;
+    }
+    /**
+     * Checks if an {@link Entity} meets this Condition.
+     * @param target the Entity to check
+     * @return true if the target has all of the tags as specified by this Condition
+     */
+    public boolean eval(Entity target){
+        return eval(new TaggedEntity(target));
     }
 }
