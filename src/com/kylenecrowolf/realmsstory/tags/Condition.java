@@ -25,7 +25,7 @@ public class Condition {
      * Tags seperated by && are matched as AND (all tags must be present).
      */
     public Condition(String expression){
-        expressions = Arrays.asList(expression.split(","));
+        expressions = new ArrayList<String>(Arrays.asList(expression.split(",")));
 
         // Remove spaces and convert to lower case
         for(String e : expressions){
