@@ -43,13 +43,14 @@ public class Condition {
     public boolean eval(Taggable target){
         for(String expression : expressions){
             // Convert expression to array of tags
-            List<Tag> tagArray = new ArrayList<Tag>();
+            List<Tag> tagList = new ArrayList<Tag>();
             for(String exp : expression.split("&&")){
-                tagArray.add(new Tag(exp));
+                tagList.add(new Tag(exp));
             }
+            Tag tagArray[] = tagList.toArray(new Tag[tagList.size()]);
 
             // If Tag has this tag, return true
-            if(target.hasTag((Tag[])tagArray.toArray())) return true;
+            if(target.hasTag(tagArray)) return true;
         }
 
         return false;
