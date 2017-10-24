@@ -67,10 +67,9 @@ public class TaggedNPC extends Trait implements Taggable {
     }
 
     public void addTag(Tag tag){
-        //getTags().add(0, tag);
         if(savedTags==null) savedTags = new ArrayList<String>();
         savedTags.add(0, tag.getName());
-        tags = null;
+        reload();
     }
 
     /**
@@ -80,7 +79,12 @@ public class TaggedNPC extends Trait implements Taggable {
      */
     public void removeTag(Tag tag){
         savedTags.remove(tag.getName());
-        tags = null;
+        reload();
+    }
+
+    public void removeAllTags(){
+        savedTags.clear();
+        reload();
     }
 
     public void reload(){

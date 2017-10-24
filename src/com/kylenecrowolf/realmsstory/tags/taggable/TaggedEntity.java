@@ -89,7 +89,12 @@ public class TaggedEntity implements Taggable {
      */
     public void removeTag(Tag tag){
         entity.removeScoreboardTag(tag.getName());
-        tags = null;
+        reload();
+    }
+
+    public void removeAllTags(){
+        for(String tag : entity.getScoreboardTags()) entity.removeScoreboardTag(tag);
+        reload();
     }
 
     public void reload(){

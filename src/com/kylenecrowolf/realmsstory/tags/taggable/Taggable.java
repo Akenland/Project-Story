@@ -43,6 +43,12 @@ public interface Taggable {
     public void removeTag(Tag tag);
 
     /**
+     * Removes all tags from this object.
+     * Tags provided by other plugins will not be removed.
+     */
+    public void removeAllTags();
+
+    /**
      * Reloads the tags and data applied to this object.
      */
     public void reload();
