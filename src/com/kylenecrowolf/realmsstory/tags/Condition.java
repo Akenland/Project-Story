@@ -29,9 +29,10 @@ public class Condition {
         expressions = new ArrayList<String>(Arrays.asList(expression.split(",")));
 
         // Remove spaces and convert to lower case
-        for(String e : expressions){
-            expressions.remove(e);
-            expressions.add(e.toLowerCase().replace(" ", ""));
+        for(int i=0; i<expressions.size(); i++){
+            String e = expressions.get(i);
+            expressions.remove(i);
+            expressions.add(i, e.toLowerCase().replace(" ", ""));
         }
     }
 
@@ -51,7 +52,6 @@ public class Condition {
                 tagList.add(new Tag(exp));
             }
             Tag tagArray[] = tagList.toArray(new Tag[tagList.size()]);
-            Utils.notifyAdmins("AKA "+tagArray);
 
             // If Tag has this tag, return true
             if(target.hasTag(tagArray)){
