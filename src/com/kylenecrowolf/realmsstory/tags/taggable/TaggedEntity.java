@@ -1,7 +1,6 @@
 package com.kylenecrowolf.realmsstory.tags.taggable;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 import org.bukkit.command.CommandSender;
@@ -68,12 +67,14 @@ public class TaggedEntity implements Taggable {
     }
 
     public boolean hasTag(Tag... tags){
-        Utils.notifyAdmins("Starting tag check on "+entity.getName());
-        for(Tag t : tags){
-            Utils.notifyAdmins("Checking for "+t.getName()+"... "+getTags().contains(t));
-        }
-        Utils.notifyAdmins("Overall result: "+getTags().containsAll(Arrays.asList(tags)));
-        return getTags().containsAll(Arrays.asList(tags));
+        // Get a list of the names of all tags
+        List<String> tagNames = new ArrayList<String>();
+        for(Tag t : getTags()) tagNames.add(t.getName());
+        List<String> checkTagNames = new ArrayList<String>();
+        for(Tag t : tags) checkTagNames.add(t.getName());
+
+        // Return true if all tag names are found
+        return tagNames.containsAll(checkTagNames);
     }
 
     public void addTag(Tag tag){
