@@ -6,6 +6,7 @@ import java.util.List;
 
 import org.bukkit.entity.Entity;
 
+import com.KyleNecrowolf.RealmsCore.Common.Utils;
 import com.kylenecrowolf.realmsstory.tags.taggable.Taggable;
 import com.kylenecrowolf.realmsstory.tags.taggable.TaggedEntity;
 
@@ -41,18 +42,25 @@ public class Condition {
      * @return true if the target has all of the tags as specified by this Condition
      */
     public boolean eval(Taggable target){
+        Utils.notifyAdmins("Evaulating condition on "+target);
         for(String expression : expressions){
+            Utils.notifyAdmins("Checking "+expression);
             // Convert expression to array of tags
             List<Tag> tagList = new ArrayList<Tag>();
             for(String exp : expression.split("&&")){
                 tagList.add(new Tag(exp));
             }
             Tag tagArray[] = tagList.toArray(new Tag[tagList.size()]);
+            Utils.notifyAdmins("AKA "+tagArray);
 
             // If Tag has this tag, return true
-            if(target.hasTag(tagArray)) return true;
+            if(target.hasTag(tagArray)){
+                Utils.notifyAdmins("Match found!");
+                return true;
+            }
         }
 
+        Utils.notifyAdmins("No match found.");
         return false;
     }
     /**
