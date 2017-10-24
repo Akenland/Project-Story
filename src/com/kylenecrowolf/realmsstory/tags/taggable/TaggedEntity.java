@@ -2,6 +2,7 @@ package com.kylenecrowolf.realmsstory.tags.taggable;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Entity;
@@ -93,7 +94,8 @@ public class TaggedEntity implements Taggable {
     }
 
     public void removeAllTags(){
-        for(String tag : entity.getScoreboardTags()) entity.removeScoreboardTag(tag);
+        Set<String> tags = entity.getScoreboardTags();
+        for(String tag : tags) entity.removeScoreboardTag(tag);
         reload();
     }
 
