@@ -68,6 +68,10 @@ public class TaggedEntity implements Taggable {
     }
 
     public boolean hasTag(Tag... tags){
+        Utils.notifyAdmins("Starting tag check on "+entity.getName());
+        for(Tag t : tags){
+            Utils.notifyAdmins("Checking for "+t.getName());
+        }
         return getTags().containsAll(Arrays.asList(tags));
     }
 
