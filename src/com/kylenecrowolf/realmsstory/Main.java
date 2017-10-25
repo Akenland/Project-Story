@@ -47,7 +47,7 @@ public final class Main extends JavaPlugin {
 										.getTag()
 											.getMarkerConditions()){
 									if(c.eval(player)){
-										player.spawnParticle(Particle.NOTE, entity.getLocation().add(0, 2.5, 0), 1);
+										player.spawnParticle(Particle.NOTE, entity.getLocation().add(0, 3, 0), 1);
 										break;
 									}
 								}
