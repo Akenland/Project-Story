@@ -55,7 +55,7 @@ public final class Main extends JavaPlugin {
 						}
 					}
 				}
-			}, 100, 60);
+			}, 100, 40);
 		}
 	}
 }
