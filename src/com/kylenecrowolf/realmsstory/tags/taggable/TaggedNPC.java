@@ -41,7 +41,7 @@ public class TaggedNPC extends Trait implements Taggable {
     /**
      * The task ID for repeating tasks
      */
-    private int taskID;
+    private int taskID = 0;
 
 
     public TaggedNPC(){
@@ -140,18 +140,20 @@ public class TaggedNPC extends Trait implements Taggable {
     @Override
     public void onSpawn(){
         // Set up markers
-        taskID = Bukkit.getScheduler().scheduleSyncRepeatingTask(Main.plugin, () -> {
-            for(Player p : Bukkit.getOnlinePlayers()){
-                for(Condition c : 
-                    getTag()
-                        .getMarkerConditions()){
-                    if(c.eval(p)){
-                        p.spawnParticle(Particle.NOTE, getNPC().getEntity().getLocation(), 1);
-                        break;
+        if(taskID==0){
+            taskID = Bukkit.getScheduler().scheduleSyncRepeatingTask(Main.plugin, () -> {
+                for(Player p : Bukkit.getOnlinePlayers()){
+                    for(Condition c : 
+                        getTag()
+                            .getMarkerConditions()){
+                        if(c.eval(p)){
+                            p.spawnParticle(Particle.NOTE, getNPC().getEntity().getLocation(), 1);
+                            break;
+                        }
                     }
                 }
-            }
-        }, 60, 60);
+            }, 60, 60);
+        }
     }
     /**
      * Called when the NPC is despawned.
