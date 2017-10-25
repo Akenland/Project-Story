@@ -47,6 +47,8 @@ public class Condition {
             List<Tag> tagList = new ArrayList<Tag>();
             for(String exp : expression.split("&&")){
                 tagList.add(new Tag(exp));
+                // Return true if condition is "always"
+                if(exp.equalsIgnoreCase("always")) return true;
             }
             Tag tagArray[] = tagList.toArray(new Tag[tagList.size()]);
 
