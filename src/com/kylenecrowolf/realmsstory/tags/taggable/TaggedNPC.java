@@ -3,7 +3,6 @@ package com.kylenecrowolf.realmsstory.tags.taggable;
 import java.util.ArrayList;
 import java.util.List;
 import org.bukkit.Bukkit;
-import org.bukkit.Effect;
 import org.bukkit.Particle;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
