@@ -46,6 +46,10 @@ public class Tag {
      * A location name associated with this Tag. Can be any string.
      */
     private String locationName;
+    /**
+     * Conditions on which to display marker icons above tagged objects.
+     */
+    private List<Condition> markerConditions;
 
 
     /**
@@ -91,6 +95,14 @@ public class Tag {
             }
             // Load location name
             if(locationName==null) locationName = tag.getData().getString("data.location");
+
+            // Load conditions on which to display marker
+            if(markerConditions==null||markerConditions.isEmpty()){
+                markerConditions = new ArrayList<Condition>();
+                List<String> conditionStrings = tag.getData().getStringList("marker");
+                for(String c : conditionStrings)
+                    markerConditions.add(new Condition(c));
+            }
         }
         if(realm!=null && realm.exists()) if(!realm.getName().equalsIgnoreCase(name)) inheritedTags.add(new Tag(realm.getName()));
     }
@@ -166,5 +178,12 @@ public class Tag {
     public String getLocationName(){
         load();
         return locationName;
+    }
+    /**
+     * Gets every {@link Condition} on which to display a marker above tagged objects.
+     * @return a list of conditions
+     */
+    public List<Condition> getMarkerConditions(){
+        return markerConditions;
     }
 }
