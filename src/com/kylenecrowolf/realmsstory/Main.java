@@ -1,8 +1,14 @@
 package com.kylenecrowolf.realmsstory;
 
+import org.bukkit.Bukkit;
+import org.bukkit.Particle;
+import org.bukkit.entity.Entity;
+import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
-
+import com.kylenecrowolf.realmsstory.tags.Condition;
 import com.kylenecrowolf.realmsstory.tags.TagCommands;
+import com.kylenecrowolf.realmsstory.tags.taggable.TaggedNPC;
+import net.citizensnpcs.api.CitizensAPI;
 
 public final class Main extends JavaPlugin {
 
@@ -28,6 +34,25 @@ public final class Main extends JavaPlugin {
 			getLogger().info("Enabling Citizens integration!");
 			net.citizensnpcs.api.CitizensAPI.getTraitFactory().registerTrait(net.citizensnpcs.api.trait.TraitInfo.create(com.kylenecrowolf.realmsstory.tags.taggable.TaggedNPC.class));
 			citizensEnabled = true;
+
+			// NPC markers
+			Bukkit.getScheduler().scheduleSyncRepeatingTask(plugin, () -> {
+				for(Player player : Bukkit.getOnlinePlayers()){
+					for(Entity entity : player.getNearbyEntities(30, 30, 30)){
+						if(CitizensAPI.getNPCRegistry().isNPC(entity)){
+							TaggedNPC npcTrait = CitizensAPI.getNPCRegistry().getNPC(entity).getTrait(TaggedNPC.class);
+							if(npcTrait!=null){
+								for(Condition c : npcTrait.getTag().getMarkerConditions()){
+									if(c.eval(player)){
+										player.spawnParticle(Particle.NOTE, entity.getLocation().add(0, 2.5, 0), 1);
+										break;
+									}
+								}
+							}
+						}
+					}
+				}
+			}, 100, 60);
 		}
 	}
 }

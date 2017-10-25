@@ -2,17 +2,12 @@ package com.kylenecrowolf.realmsstory.tags.taggable;
 
 import java.util.ArrayList;
 import java.util.List;
-import org.bukkit.Bukkit;
-import org.bukkit.Particle;
 import org.bukkit.command.CommandSender;
-import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 
 import com.KyleNecrowolf.RealmsCore.Common.Utils;
 import com.KyleNecrowolf.RealmsCore.Prompts.Prompt;
 import com.KyleNecrowolf.RealmsCore.Prompts.PromptActionEvent;
-import com.kylenecrowolf.realmsstory.Main;
-import com.kylenecrowolf.realmsstory.tags.Condition;
 import com.kylenecrowolf.realmsstory.tags.NPCTag;
 import com.kylenecrowolf.realmsstory.tags.Tag;
 import net.citizensnpcs.api.CitizensAPI;
@@ -36,11 +31,6 @@ public class TaggedNPC extends Trait implements Taggable {
      * Tags saved to this NPC in the saves file
      */
     @Persist("tags") private List<String> savedTags;
-
-    /**
-     * The task ID for repeating tasks
-     */
-    private int taskID = 0;
 
 
     public TaggedNPC(){
@@ -131,37 +121,6 @@ public class TaggedNPC extends Trait implements Taggable {
             if(npc.getNPC() != this.getNPC()) return;
             ((NPCTag)npc.getTag()).displayConversation(event.getPlayer(), npc.getNPC(), action[1]);
         }
-    }
-
-    /**
-     * Called when the NPC is spawned.
-     */
-    @Override
-    public void onSpawn(){
-        Utils.notifyAdmins("Spawned NPC "+npc.getId()+" "+npc.getFullName());
-        // Set up markers
-        if(taskID==0){
-            taskID = Bukkit.getScheduler().scheduleSyncRepeatingTask(Main.plugin, () -> {
-                Utils.notifyAdmins("Running task "+taskID+" for NPC "+npc.getId()+" "+npc.getFullName());
-                for(Player p : Bukkit.getOnlinePlayers()){
-                    for(Condition c : this.getTag().getMarkerConditions()){
-                        if(c.eval(p)){
-                            p.spawnParticle(Particle.NOTE, getNPC().getEntity().getLocation().add(0, 2.5, 0), 1);
-                            break;
-                        }
-                    }
-                }
-            }, 60, 60);
-            Utils.notifyAdmins("Starting task "+taskID);
-        } else Utils.notifyAdmins("Task already started - "+taskID);
-    }
-    /**
-     * Called when the NPC is despawned.
-     */
-    @Override
-    public void onDespawn(){
-        // Cancel repeating tasks
-        Bukkit.getScheduler().cancelTask(taskID);
     }
 
 
