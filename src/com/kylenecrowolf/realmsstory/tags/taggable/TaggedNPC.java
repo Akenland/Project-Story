@@ -149,6 +149,7 @@ public class TaggedNPC extends Trait implements Taggable {
                             .getMarkerConditions()){
                         if(c.eval(p)){
                             p.spawnParticle(Particle.NOTE, getNPC().getEntity().getLocation(), 1);
+                            Utils.notifyAdmins("Displaying marker to "+p.getName());
                             break;
                         }
                     }
