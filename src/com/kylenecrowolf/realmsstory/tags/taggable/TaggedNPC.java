@@ -142,7 +142,9 @@ public class TaggedNPC extends Trait implements Taggable {
         // Set up markers
         taskID = Bukkit.getScheduler().scheduleSyncRepeatingTask(Main.plugin, () -> {
             for(Player p : Bukkit.getOnlinePlayers()){
-                for(Condition c : getTag().getMarkerConditions()){
+                for(Condition c : 
+                    getTag()
+                        .getMarkerConditions()){
                     if(c.eval(p)){
                         p.spawnParticle(Particle.NOTE, getNPC().getEntity().getLocation(), 1);
                         break;
