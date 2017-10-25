@@ -41,7 +41,7 @@ public final class Main extends JavaPlugin {
 					for(Entity entity : player.getNearbyEntities(30, 30, 30)){
 						if(CitizensAPI.getNPCRegistry().isNPC(entity)){
 							TaggedNPC npcTrait = CitizensAPI.getNPCRegistry().getNPC(entity).getTrait(TaggedNPC.class);
-							if(npcTrait!=null){
+							if(npcTrait!=null && npcTrait.getTag()!=null && npcTrait.getTag().getMarkerConditions()!=null){
 								for(Condition c : 
 									npcTrait
 										.getTag()
