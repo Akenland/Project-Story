@@ -184,6 +184,7 @@ public class Tag {
      * @return a list of conditions
      */
     public List<Condition> getMarkerConditions(){
+        load();
         return markerConditions;
     }
 }
