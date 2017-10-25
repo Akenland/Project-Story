@@ -138,9 +138,11 @@ public class TaggedNPC extends Trait implements Taggable {
      */
     @Override
     public void onSpawn(){
+        Utils.notifyAdmins("Spawned NPC "+npc.getId()+" "+npc.getFullName());
         // Set up markers
         if(taskID==0){
             taskID = Bukkit.getScheduler().scheduleSyncRepeatingTask(Main.plugin, () -> {
+                Utils.notifyAdmins("Running task "+taskID+" for NPC "+npc.getId()+" "+npc.getFullName());
                 for(Player p : Bukkit.getOnlinePlayers()){
                     for(Condition c : 
                         this.getTag()
@@ -152,7 +154,8 @@ public class TaggedNPC extends Trait implements Taggable {
                     }
                 }
             }, 60, 60);
-        }
+            Utils.notifyAdmins("Starting task "+taskID);
+        } else Utils.notifyAdmins("Task already started - "+taskID);
     }
     /**
      * Called when the NPC is despawned.
