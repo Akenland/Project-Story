@@ -42,7 +42,10 @@ public final class Main extends JavaPlugin {
 						if(CitizensAPI.getNPCRegistry().isNPC(entity)){
 							TaggedNPC npcTrait = CitizensAPI.getNPCRegistry().getNPC(entity).getTrait(TaggedNPC.class);
 							if(npcTrait!=null){
-								for(Condition c : npcTrait.getTag().getMarkerConditions()){
+								for(Condition c : 
+									npcTrait
+										.getTag()
+											.getMarkerConditions()){
 									if(c.eval(player)){
 										player.spawnParticle(Particle.NOTE, entity.getLocation().add(0, 2.5, 0), 1);
 										break;
