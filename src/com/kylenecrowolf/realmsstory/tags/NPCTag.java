@@ -4,10 +4,16 @@ import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.Location;
+import org.bukkit.block.BlockState;
+import org.bukkit.block.Container;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.Inventory;
 
 import com.KyleNecrowolf.RealmsCore.Player.PlayerData;
 import com.KyleNecrowolf.RealmsCore.Prompts.Prompt;
@@ -28,6 +34,12 @@ public class NPCTag extends Tag {
     //// REALMSCORE DATA
     // The title of NPCs with this tag
     private String title;
+
+    //// NPC DATA
+    // Equipment chest
+    Inventory equipmentChest;
+    // Skin UUID
+    UUID skinUUID;
 
 
     public NPCTag(String name){
@@ -56,6 +68,21 @@ public class NPCTag extends Tag {
 
             // Title
             if(title==null || title.isEmpty()) title = tag.getData().getString("data.title");
+
+            // Equipment chest
+            if(equipmentChest==null){
+                String[] locString = tag.getData().getString("equipment").split(" ");
+                if(locString.length==4){
+                    BlockState chest = new Location(Bukkit.getWorld(locString[0]), Double.parseDouble(locString[1]), Double.parseDouble(locString[2]), Double.parseDouble(locString[3])).getBlock().getState();
+                    if(chest instanceof Container) equipmentChest = ((Container)chest).getInventory();
+                }
+            }
+
+            // Skin UUID
+            if(skinUUID==null){
+                String uuidString = tag.getData().getString("skin");
+                if(uuidString!=null) skinUUID = UUID.fromString(uuidString);
+            }
         }
 
         loaded = true;
@@ -158,4 +185,22 @@ public class NPCTag extends Tag {
     public void displayConversation(Player player, NPC npc){
         displayConversation(player, npc, null);
     }
+
+
+    /**
+     * Gets the equipment chest that NPCs with this tag can take from.
+     * @return the {@link Inventory} that NPCs with this tag can take items from
+     */
+    public Inventory getEquipmentChest(){
+        return equipmentChest;
+    }
+
+    /**
+     * Gets the UUID for a skin.
+     * @return the {@link UUID} of the player whose skin should be used on NPCs with this tag
+     */
+    public UUID getSkin(){
+        return skinUUID;
+    }
+
 }
