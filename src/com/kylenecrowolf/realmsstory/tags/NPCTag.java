@@ -71,10 +71,13 @@ public class NPCTag extends Tag {
 
             // Equipment chest
             if(equipmentChest==null){
-                String[] locString = tag.getData().getString("equipment").split(" ");
-                if(locString.length==4){
-                    BlockState chest = new Location(Bukkit.getWorld(locString[0]), Double.parseDouble(locString[1]), Double.parseDouble(locString[2]), Double.parseDouble(locString[3])).getBlock().getState();
-                    if(chest instanceof Container) equipmentChest = ((Container)chest).getInventory();
+                String unsplitLocString = tag.getData().getString("equipment");
+                if(unsplitLocString!=null){
+                    String[] locString = unsplitLocString.split(" ");
+                    if(locString.length==4){
+                        BlockState chest = new Location(Bukkit.getWorld(locString[0]), Double.parseDouble(locString[1]), Double.parseDouble(locString[2]), Double.parseDouble(locString[3])).getBlock().getState();
+                        if(chest instanceof Container) equipmentChest = ((Container)chest).getInventory();
+                    }
                 }
             }
 
