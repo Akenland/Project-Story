@@ -192,7 +192,7 @@ public class NPCTag extends Tag {
 
     /**
      * Gets the equipment chest that NPCs with this tag can take from.
-     * @return the {@link Inventory} that NPCs with this tag can take items from
+     * @return the {@link Inventory} that NPCs with this tag can take items from, or null if not defined
      */
     public Inventory getEquipmentChest(){
         return equipmentChest;
