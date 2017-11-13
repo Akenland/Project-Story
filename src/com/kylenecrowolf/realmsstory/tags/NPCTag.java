@@ -77,10 +77,8 @@ public class NPCTag extends Tag {
                     String[] locString = unsplitLocString.split(" ");
                     if(locString.length==4){
                         BlockState chest = new Location(Bukkit.getWorld(locString[0]), Double.parseDouble(locString[1]), Double.parseDouble(locString[2]), Double.parseDouble(locString[3])).getBlock().getState();
-                        if(chest instanceof Container){
-                            equipmentChest = ((Container)chest).getInventory();
-                            Utils.notifyAdmins("Found equipment chest in tag "+tag.getName());
-                        } else Utils.notifyAdmins("Expected container, found "+chest.getType());
+                        if(chest instanceof Container) equipmentChest = ((Container)chest).getInventory();
+                        else Utils.notifyAdmins("Tag "+tag.getName()+": Expected container, found "+chest.getType());
                     }
                 }
             }
@@ -199,6 +197,7 @@ public class NPCTag extends Tag {
      * @return the {@link Inventory} that NPCs with this tag can take items from, or null if not defined
      */
     public Inventory getEquipmentChest(){
+        load();
         return equipmentChest;
     }
 
@@ -207,6 +206,7 @@ public class NPCTag extends Tag {
      * @return the {@link UUID} of the player whose skin should be used on NPCs with this tag
      */
     public UUID getSkin(){
+        load();
         return skinUUID;
     }
 
