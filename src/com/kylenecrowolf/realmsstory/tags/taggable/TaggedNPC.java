@@ -1,13 +1,17 @@
 package com.kylenecrowolf.realmsstory.tags.taggable;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
+import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.HumanEntity;
 import org.bukkit.event.EventHandler;
 import org.bukkit.inventory.Inventory;
+import org.bukkit.inventory.ItemStack;
+
 import com.KyleNecrowolf.RealmsCore.Common.Utils;
 import com.KyleNecrowolf.RealmsCore.Prompts.Prompt;
 import com.KyleNecrowolf.RealmsCore.Prompts.PromptActionEvent;
@@ -119,10 +123,23 @@ public class TaggedNPC extends Trait implements Taggable {
     @EventHandler
     public void onPlayerPromptResponse(PromptActionEvent event){
         if(event.isType("npc")){
+            // Get target NPC
             String action[] = event.getAction().split("\\.", 2);
             TaggedNPC npc = getTaggedNPC(Integer.parseInt(action[0]));
             if(npc.getNPC() != this.getNPC()) return;
+
+            // Display prompt
             ((NPCTag)npc.getTag()).displayConversation(event.getPlayer(), npc.getNPC(), action[1]);
+
+            //// Extra actions
+            // Get equipment
+            if(action[1].equalsIgnoreCase("equip")){
+                equip();
+            }
+            // Sentinel actions
+            if(action[1].startsWith("sentinel") && Bukkit.getPluginManager().isPluginEnabled("Sentinel")){
+                event.getPlayer().sendMessage("Not yet implemented.");
+            }
         }
     }
 
@@ -131,6 +148,14 @@ public class TaggedNPC extends Trait implements Taggable {
      */
     @Override
     public void onSpawn(){
+        equip();
+    }
+
+
+    /**
+     * Tells this NPC to put on equipment from their equipment chest.
+     */
+    public void equip(){
         if(npc.getEntity() instanceof HumanEntity){
             HumanEntity entity = (HumanEntity)npc.getEntity();
 
@@ -202,6 +227,25 @@ public class TaggedNPC extends Trait implements Taggable {
                 if(bootsSlot!=-1){
                     entity.getEquipment().setBoots(equipmentChest.getItem(bootsSlot));
                     equipmentChest.clear(bootsSlot);
+                }
+            }
+            // Equip weapon
+            if(entity.getEquipment().getItemInMainHand()==null){
+                // Find first weapon
+                List<Material> weapons = Arrays.asList(
+                    Material.DIAMOND_SWORD, Material.IRON_SWORD, Material.STONE_SWORD, Material.GOLD_SWORD, Material.WOOD_SWORD,
+                    Material.DIAMOND_SPADE, Material.IRON_SPADE, Material.STONE_SPADE, Material.GOLD_SPADE, Material.WOOD_SPADE,
+                    Material.DIAMOND_PICKAXE, Material.IRON_PICKAXE, Material.STONE_PICKAXE, Material.GOLD_PICKAXE, Material.WOOD_PICKAXE,
+                    Material.DIAMOND_AXE, Material.IRON_AXE, Material.STONE_AXE, Material.GOLD_AXE, Material.WOOD_AXE,
+                    Material.DIAMOND_HOE, Material.IRON_HOE, Material.STONE_HOE, Material.GOLD_HOE, Material.WOOD_HOE,
+                    Material.BOW, Material.SPLASH_POTION, Material.LINGERING_POTION, Material.SNOW_BALL, Material.EGG
+                );
+                for(ItemStack item : equipmentChest){
+                    if(weapons.contains(item.getType())){
+                        entity.getEquipment().setItemInMainHand(item);
+                        equipmentChest.removeItem(item);
+                        break;
+                    }
                 }
             }
         }
