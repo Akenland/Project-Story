@@ -15,6 +15,7 @@ import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 
+import com.KyleNecrowolf.RealmsCore.Common.Utils;
 import com.KyleNecrowolf.RealmsCore.Player.PlayerData;
 import com.KyleNecrowolf.RealmsCore.Prompts.Prompt;
 import com.kylenecrowolf.realmsstory.tags.taggable.TaggedEntity;
@@ -76,7 +77,10 @@ public class NPCTag extends Tag {
                     String[] locString = unsplitLocString.split(" ");
                     if(locString.length==4){
                         BlockState chest = new Location(Bukkit.getWorld(locString[0]), Double.parseDouble(locString[1]), Double.parseDouble(locString[2]), Double.parseDouble(locString[3])).getBlock().getState();
-                        if(chest instanceof Container) equipmentChest = ((Container)chest).getInventory();
+                        if(chest instanceof Container){
+                            equipmentChest = ((Container)chest).getInventory();
+                            Utils.notifyAdmins("Found equipment chest in tag "+tag.getName());
+                        } else Utils.notifyAdmins("Expected container, found "+chest.getType());
                     }
                 }
             }
