@@ -156,12 +156,15 @@ public class TaggedNPC extends Trait implements Taggable {
      * Tells this NPC to put on equipment from their equipment chest.
      */
     public void equip(){
+        Utils.notifyAdmins(npc.getFullName()+" is putting on equipment.");
         if(npc.getEntity() instanceof HumanEntity){
             HumanEntity entity = (HumanEntity)npc.getEntity();
 
             // Check equipment
             Inventory equipmentChest = getTag().getEquipmentChest();
             if(equipmentChest==null) return;
+
+            Utils.notifyAdmins(npc.getFullName()+" found their equipment chest.");
 
             // Equip a helmet
             if(entity.getEquipment().getHelmet()==null){
