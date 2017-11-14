@@ -159,7 +159,7 @@ public class TaggedNPC extends Trait implements Taggable {
      */
     public void equip(){
         if(npc.getEntity() instanceof HumanEntity){
-            HumanEntity entity = (HumanEntity)npc.getEntity();
+            //HumanEntity entity = (HumanEntity)npc.getEntity();
             Equipment equipment = npc.getTrait(Equipment.class);
 
             // Check equipment
@@ -167,7 +167,7 @@ public class TaggedNPC extends Trait implements Taggable {
             if(equipmentChest==null) return;
 
             // Equip a helmet
-            if(equipment.get(EquipmentSlot.HELMET)/*entity.getEquipment().getHelmet()*/==null){
+            if(equipment.get(EquipmentSlot.HELMET)==null){
                 // Find best helmet
                 int helmetSlot = -1;
                 if(helmetSlot==-1) helmetSlot = equipmentChest.first(Material.DIAMOND_HELMET);
@@ -180,12 +180,12 @@ public class TaggedNPC extends Trait implements Taggable {
 
                 // Put on helmet
                 if(helmetSlot!=-1){
-                    equipment.set(EquipmentSlot.HELMET,/*entity.getEquipment().setHelmet(*/equipmentChest.getItem(helmetSlot));
+                    equipment.set(EquipmentSlot.HELMET, equipmentChest.getItem(helmetSlot));
                     equipmentChest.clear(helmetSlot);
                 }
             }
             // Equip a chestplate
-            if(entity.getEquipment().getChestplate()==null){
+            if(equipment.get(EquipmentSlot.CHESTPLATE)==null){
                 // Find best chestplate
                 int chestplateSlot = -1;
                 if(chestplateSlot==-1) chestplateSlot = equipmentChest.first(Material.DIAMOND_CHESTPLATE);
@@ -196,12 +196,12 @@ public class TaggedNPC extends Trait implements Taggable {
 
                 // Put on chestplate
                 if(chestplateSlot!=-1){
-                    entity.getEquipment().setChestplate(equipmentChest.getItem(chestplateSlot));
+                    equipment.set(EquipmentSlot.CHESTPLATE, equipmentChest.getItem(chestplateSlot));
                     equipmentChest.clear(chestplateSlot);
                 }
             }
             // Equip leggings
-            if(entity.getEquipment().getLeggings()==null){
+            if(equipment.get(EquipmentSlot.LEGGINGS)==null){
                 // Find best leggings
                 int leggingsSlot = -1;
                 if(leggingsSlot==-1) leggingsSlot = equipmentChest.first(Material.DIAMOND_LEGGINGS);
@@ -212,12 +212,12 @@ public class TaggedNPC extends Trait implements Taggable {
 
                 // Put on leggings
                 if(leggingsSlot!=-1){
-                    entity.getEquipment().setLeggings(equipmentChest.getItem(leggingsSlot));
+                    equipment.set(EquipmentSlot.LEGGINGS, equipmentChest.getItem(leggingsSlot));
                     equipmentChest.clear(leggingsSlot);
                 }
             }
             // Equip boots
-            if(entity.getEquipment().getBoots()==null){
+            if(equipment.get(EquipmentSlot.BOOTS)==null){
                 // Find best boots
                 int bootsSlot = -1;
                 if(bootsSlot==-1) bootsSlot = equipmentChest.first(Material.DIAMOND_BOOTS);
@@ -228,12 +228,12 @@ public class TaggedNPC extends Trait implements Taggable {
 
                 // Put on boots
                 if(bootsSlot!=-1){
-                    entity.getEquipment().setBoots(equipmentChest.getItem(bootsSlot));
+                    equipment.set(EquipmentSlot.BOOTS, equipmentChest.getItem(bootsSlot));
                     equipmentChest.clear(bootsSlot);
                 }
             }
             // Equip weapon
-            if(entity.getEquipment().getItemInMainHand()==null){
+            if(equipment.get(EquipmentSlot.HAND)==null){
                 // Find first weapon
                 List<Material> weapons = Arrays.asList(
                     Material.DIAMOND_SWORD, Material.IRON_SWORD, Material.STONE_SWORD, Material.GOLD_SWORD, Material.WOOD_SWORD,
@@ -245,7 +245,7 @@ public class TaggedNPC extends Trait implements Taggable {
                 );
                 for(ItemStack item : equipmentChest){
                     if(weapons.contains(item.getType())){
-                        entity.getEquipment().setItemInMainHand(item);
+                        equipment.set(EquipmentSlot.HAND, item);
                         equipmentChest.removeItem(item);
                         break;
                     }
