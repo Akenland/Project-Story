@@ -22,6 +22,8 @@ import net.citizensnpcs.api.event.NPCRightClickEvent;
 import net.citizensnpcs.api.persistence.Persist;
 import net.citizensnpcs.api.trait.Trait;
 import net.citizensnpcs.api.trait.TraitName;
+import net.citizensnpcs.api.trait.trait.Equipment;
+import net.citizensnpcs.api.trait.trait.Equipment.EquipmentSlot;
 
 /**
  * Represents a Citizens NPC Trait with RealmsStory Tags.
@@ -158,14 +160,14 @@ public class TaggedNPC extends Trait implements Taggable {
     public void equip(){
         if(npc.getEntity() instanceof HumanEntity){
             HumanEntity entity = (HumanEntity)npc.getEntity();
+            Equipment equipment = npc.getTrait(Equipment.class);
 
             // Check equipment
             Inventory equipmentChest = getTag().getEquipmentChest();
             if(equipmentChest==null) return;
 
             // Equip a helmet
-            if(entity.getEquipment().getHelmet()==null){
-                Utils.notifyAdmins(npc.getFullName()+" is looking for a helmet.");
+            if(equipment.get(EquipmentSlot.HELMET)/*entity.getEquipment().getHelmet()*/==null){
                 // Find best helmet
                 int helmetSlot = -1;
                 if(helmetSlot==-1) helmetSlot = equipmentChest.first(Material.DIAMOND_HELMET);
@@ -178,8 +180,7 @@ public class TaggedNPC extends Trait implements Taggable {
 
                 // Put on helmet
                 if(helmetSlot!=-1){
-                    Utils.notifyAdmins(npc.getFullName()+" found a helmet.");
-                    entity.getEquipment().setHelmet(equipmentChest.getItem(helmetSlot));
+                    equipment.set(EquipmentSlot.HELMET,/*entity.getEquipment().setHelmet(*/equipmentChest.getItem(helmetSlot));
                     equipmentChest.clear(helmetSlot);
                 }
             }
