@@ -7,7 +7,9 @@ import java.util.List;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.command.CommandSender;
+import org.bukkit.entity.Entity;
 import org.bukkit.entity.HumanEntity;
+import org.bukkit.entity.LivingEntity;
 import org.bukkit.event.EventHandler;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
@@ -17,6 +19,8 @@ import com.KyleNecrowolf.RealmsCore.Prompts.Prompt;
 import com.KyleNecrowolf.RealmsCore.Prompts.PromptActionEvent;
 import com.kylenecrowolf.realmsstory.tags.NPCTag;
 import com.kylenecrowolf.realmsstory.tags.Tag;
+import com.kylenecrowolf.realmsstory.utils.SentinelNPC;
+
 import net.citizensnpcs.api.CitizensAPI;
 import net.citizensnpcs.api.event.NPCRightClickEvent;
 import net.citizensnpcs.api.persistence.Persist;
@@ -129,18 +133,57 @@ public class TaggedNPC extends Trait implements Taggable {
             String action[] = event.getAction().split("\\.", 2);
             TaggedNPC npc = getTaggedNPC(Integer.parseInt(action[0]));
             if(npc.getNPC() != this.getNPC()) return;
+            String npcAction = action[1];
 
             // Display prompt
-            ((NPCTag)npc.getTag()).displayConversation(event.getPlayer(), npc.getNPC(), action[1]);
+            ((NPCTag)npc.getTag()).displayConversation(event.getPlayer(), npc.getNPC(), npcAction);
 
             //// Extra actions
             // Get equipment
-            if(action[1].equalsIgnoreCase("equip")){
+            if(npcAction.equalsIgnoreCase("equip")){
                 equip();
             }
+            if(npcAction.equalsIgnoreCase("unequip")){
+                unequip();
+            }
             // Sentinel actions
-            if(action[1].startsWith("sentinel") && Bukkit.getPluginManager().isPluginEnabled("Sentinel")){
-                event.getPlayer().sendMessage("Not yet implemented.");
+            if(npcAction.startsWith("sentinel") && Bukkit.getPluginManager().isPluginEnabled("Sentinel")){
+                String sentinelAction = npcAction.split("_", 2)[1];
+                SentinelNPC sentinel = new SentinelNPC(getNPC());
+
+                // Guard player
+                if(sentinelAction.equalsIgnoreCase("guardPlayer")){
+                    sentinel.guard(event.getPlayer());
+                }
+                // Guard nearest player (except the one who chose this option)
+                if(sentinelAction.equalsIgnoreCase("guardNearest")){
+                    // Get entities in 3 radius
+                    List<Entity> near = getNPC().getEntity().getNearbyEntities(3, 3, 3);
+                    // Only look at players, and exclude sending player
+                    near.retainAll(Bukkit.getOnlinePlayers());
+                    near.remove(event.getPlayer());
+                    // If none found, guard spot
+                    if(!near.isEmpty()) sentinel.guard((LivingEntity)near.get(0));
+                    else sentinel.guard(null);
+                }
+                // Guard current location
+                if(sentinelAction.equalsIgnoreCase("guardSpot")){
+                    sentinel.guard(null);
+                }
+
+                // Attack nearest LivingEntity that isn't the player
+                if(sentinelAction.equalsIgnoreCase("attackNearest")){
+                    // Get entities in 50 radius
+                    List<Entity> near = getNPC().getEntity().getNearbyEntities(25, 25, 25);
+                    // Exclude sending player
+                    near.remove(event.getPlayer());
+                    for(Entity e:near){
+                        // Attack first entity found
+                        if(e instanceof LivingEntity){
+                            sentinel.attack((LivingEntity) e);
+                        }
+                    }
+                }
             }
         }
     }
@@ -159,12 +202,11 @@ public class TaggedNPC extends Trait implements Taggable {
      */
     public void equip(){
         if(npc.getEntity() instanceof HumanEntity){
-            //HumanEntity entity = (HumanEntity)npc.getEntity();
-            Equipment equipment = npc.getTrait(Equipment.class);
-
             // Check equipment
-            Inventory equipmentChest = getTag().getEquipmentChest();
+            final Inventory equipmentChest = getTag().getEquipmentChest();
             if(equipmentChest==null) return;
+
+            final Equipment equipment = npc.getTrait(Equipment.class);
 
             // Equip a helmet
             if(equipment.get(EquipmentSlot.HELMET)==null){
@@ -235,7 +277,7 @@ public class TaggedNPC extends Trait implements Taggable {
             // Equip weapon
             if(equipment.get(EquipmentSlot.HAND)==null){
                 // Find first weapon
-                List<Material> weapons = Arrays.asList(
+                final List<Material> weapons = Arrays.asList(
                     Material.DIAMOND_SWORD, Material.IRON_SWORD, Material.STONE_SWORD, Material.GOLD_SWORD, Material.WOOD_SWORD,
                     Material.DIAMOND_SPADE, Material.IRON_SPADE, Material.STONE_SPADE, Material.GOLD_SPADE, Material.WOOD_SPADE,
                     Material.DIAMOND_PICKAXE, Material.IRON_PICKAXE, Material.STONE_PICKAXE, Material.GOLD_PICKAXE, Material.WOOD_PICKAXE,
@@ -244,13 +286,31 @@ public class TaggedNPC extends Trait implements Taggable {
                     Material.BOW, Material.SPLASH_POTION, Material.LINGERING_POTION, Material.SNOW_BALL, Material.EGG
                 );
                 for(ItemStack item : equipmentChest){
-                    if(weapons.contains(item.getType())){
+                    if(item!=null && weapons.contains(item.getType())){
                         equipment.set(EquipmentSlot.HAND, item);
                         equipmentChest.removeItem(item);
                         break;
                     }
                 }
             }
+        }
+    }
+    /**
+     * Tells this NPC to drop their equipment on the ground.
+     */
+    public void unequip(){
+        if(!npc.isSpawned()) return;
+
+        final Equipment equipment = npc.getTrait(Equipment.class);
+
+        // Drop every item this NPC has equipped
+        for(ItemStack item : equipment.getEquipment()){
+            if(item!=null) npc.getEntity().getWorld().dropItemNaturally(npc.getEntity().getLocation(), item);
+        }
+
+        // Remove all equipment from NPC
+        for(EquipmentSlot slot : EquipmentSlot.values()){
+            equipment.set(slot, null);
         }
     }
 
