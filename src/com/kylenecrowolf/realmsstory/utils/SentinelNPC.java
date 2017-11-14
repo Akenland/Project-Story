@@ -35,7 +35,7 @@ public class SentinelNPC {
      */
     public void guard(LivingEntity entity){
         if(entity==null) trait.setGuarding(null);
-        trait.setGuarding(entity.getUniqueId());
+        else trait.setGuarding(entity.getUniqueId());
     }
 
 
