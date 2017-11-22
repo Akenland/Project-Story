@@ -321,7 +321,7 @@ public class TaggedNPC extends Trait implements Taggable {
      * Switches to the skin saved in the tags.
      */
     private void switchSkin(){
-        npc.data().set(NPC.PLAYER_SKIN_UUID_METADATA, getTag().getSkin());
+        npc.data().set(NPC.PLAYER_SKIN_UUID_METADATA, getTag().getSkin().toString());
     }
 
 
