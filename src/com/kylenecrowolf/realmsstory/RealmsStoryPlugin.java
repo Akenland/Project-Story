@@ -8,9 +8,10 @@ import org.bukkit.plugin.java.JavaPlugin;
 import com.kylenecrowolf.realmsstory.tags.Condition;
 import com.kylenecrowolf.realmsstory.tags.TagCommands;
 import com.kylenecrowolf.realmsstory.tags.taggable.TaggedNPC;
+import com.kylenecrowolf.realmsstory.utils.RealmsStorySentinelIntegration;
 import net.citizensnpcs.api.CitizensAPI;
 
-public final class Main extends JavaPlugin {
+public final class RealmsStoryPlugin extends JavaPlugin {
 
 	public static JavaPlugin plugin;
 
@@ -18,7 +19,12 @@ public final class Main extends JavaPlugin {
 	 * Whether the Citizens plugin is enabled.
 	 */
 	public static boolean citizensEnabled = false;
-	
+	/**
+	 * Whether the Sentinel plugin is enabled.
+	 */
+	public static boolean sentinelEnabled = false;
+
+
 	@Override
 	public void onEnable(){
 		plugin = this;
@@ -29,11 +35,14 @@ public final class Main extends JavaPlugin {
 		// Tag command
 		this.getCommand("tag").setExecutor(new TagCommands());
 
+
 		// Citizens NPCs integration
 		if(getServer().getPluginManager().getPlugin("Citizens")!=null){
 			getLogger().info("Enabling Citizens integration!");
-			net.citizensnpcs.api.CitizensAPI.getTraitFactory().registerTrait(net.citizensnpcs.api.trait.TraitInfo.create(com.kylenecrowolf.realmsstory.tags.taggable.TaggedNPC.class));
 			citizensEnabled = true;
+
+			// Register TaggedNPC trait
+			net.citizensnpcs.api.CitizensAPI.getTraitFactory().registerTrait(net.citizensnpcs.api.trait.TraitInfo.create(com.kylenecrowolf.realmsstory.tags.taggable.TaggedNPC.class));
 
 			// NPC markers
 			Bukkit.getScheduler().scheduleSyncRepeatingTask(plugin, () -> {
@@ -42,10 +51,7 @@ public final class Main extends JavaPlugin {
 						if(CitizensAPI.getNPCRegistry().isNPC(entity)){
 							TaggedNPC npcTrait = CitizensAPI.getNPCRegistry().getNPC(entity).getTrait(TaggedNPC.class);
 							if(npcTrait!=null && npcTrait.getTag()!=null && npcTrait.getTag().getMarkerConditions()!=null){
-								for(Condition c : 
-									npcTrait
-										.getTag()
-											.getMarkerConditions()){
+								for(Condition c : npcTrait.getTag().getMarkerConditions()){
 									if(c.eval(player)){
 										player.spawnParticle(Particle.NOTE, entity.getLocation().add(0, 2.75, 0), 1);
 										break;
@@ -56,6 +62,12 @@ public final class Main extends JavaPlugin {
 					}
 				}
 			}, 100, 40);
+
+
+			// Sentinel integration
+			if(getServer().getPluginManager().getPlugin("Sentinel")!=null){
+				sentinelEnabled = RealmsStorySentinelIntegration.addIntegration();
+			}
 		}
 	}
 }

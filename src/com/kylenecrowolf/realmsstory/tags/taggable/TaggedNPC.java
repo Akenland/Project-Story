@@ -17,12 +17,14 @@ import org.bukkit.inventory.ItemStack;
 import com.KyleNecrowolf.RealmsCore.Common.Utils;
 import com.KyleNecrowolf.RealmsCore.Prompts.Prompt;
 import com.KyleNecrowolf.RealmsCore.Prompts.PromptActionEvent;
+import com.kylenecrowolf.realmsstory.RealmsStoryPlugin;
 import com.kylenecrowolf.realmsstory.tags.NPCTag;
 import com.kylenecrowolf.realmsstory.tags.Tag;
 import com.kylenecrowolf.realmsstory.utils.SentinelNPC;
 
 import net.citizensnpcs.api.CitizensAPI;
 import net.citizensnpcs.api.event.NPCRightClickEvent;
+import net.citizensnpcs.api.npc.NPC;
 import net.citizensnpcs.api.persistence.Persist;
 import net.citizensnpcs.api.trait.Trait;
 import net.citizensnpcs.api.trait.TraitName;
@@ -147,7 +149,7 @@ public class TaggedNPC extends Trait implements Taggable {
                 unequip();
             }
             // Sentinel actions
-            if(npcAction.startsWith("sentinel") && Bukkit.getPluginManager().isPluginEnabled("Sentinel")){
+            if(npcAction.startsWith("sentinel") && RealmsStoryPlugin.sentinelEnabled){
                 String sentinelAction = npcAction.split("_", 2)[1];
                 SentinelNPC sentinel = new SentinelNPC(getNPC());
 
@@ -189,11 +191,12 @@ public class TaggedNPC extends Trait implements Taggable {
     }
 
     /**
-     * Equip this NPC on spawn.
+     * Runs when this NPC is spawned.
      */
     @Override
     public void onSpawn(){
         equip();
+        switchSkin();
     }
 
 
@@ -312,6 +315,13 @@ public class TaggedNPC extends Trait implements Taggable {
         for(EquipmentSlot slot : EquipmentSlot.values()){
             equipment.set(slot, null);
         }
+    }
+
+    /**
+     * Switches to the skin saved in the tags.
+     */
+    private void switchSkin(){
+        npc.data().set(NPC.PLAYER_SKIN_UUID_METADATA, getTag().getSkin());
     }
 
 

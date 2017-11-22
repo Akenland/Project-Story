@@ -19,7 +19,7 @@ public final class RealmsStoryCommands implements TabExecutor {
         // Version command
         if(args.length==0 || args[0].equalsIgnoreCase("version")){
             Prompt prompt = new Prompt();
-            prompt.addQuestion("RealmsStory "+Main.plugin.getDescription().getVersion()+" by Kyle Necrowolf");
+            prompt.addQuestion("&rRealmsStory "+RealmsStoryPlugin.plugin.getDescription().getVersion()+" by Kyle Necrowolf");
             prompt.addAnswer("Dynamic quests and characters, that are tailored to your world.","");
             prompt.addAnswer("Website: http://WolfiaMC.com/plugins", "url_http://WolfiaMC.com/plugins");
             prompt.display(sender);

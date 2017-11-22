@@ -13,7 +13,7 @@ import org.bukkit.entity.Player;
 
 import com.KyleNecrowolf.RealmsCore.Common.Error;
 import com.KyleNecrowolf.RealmsCore.Common.Utils;
-import com.kylenecrowolf.realmsstory.Main;
+import com.kylenecrowolf.realmsstory.RealmsStoryPlugin;
 import com.kylenecrowolf.realmsstory.tags.taggable.Taggable;
 import com.kylenecrowolf.realmsstory.tags.taggable.TaggedEntity;
 import com.kylenecrowolf.realmsstory.tags.taggable.TaggedNPC;
@@ -65,7 +65,7 @@ public final class TagCommands implements TabExecutor {
                 break;
 
             case "npc":
-                if(Main.citizensEnabled){
+                if(RealmsStoryPlugin.citizensEnabled){
                     NPC npc = (args.length<2 || args[1].equalsIgnoreCase("sel")) ? CitizensAPI.getDefaultNPCSelector().getSelected(sender) : CitizensAPI.getNPCRegistry().getById(Integer.parseInt(args[1]));
                     target = npc.getTrait(TaggedNPC.class);
                     break;
