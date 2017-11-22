@@ -38,10 +38,10 @@ public class RealmsStorySentinelIntegration extends SentinelIntegration {
     @Override
     public boolean isTarget(LivingEntity entity, String targetExpression){
         if(targetExpression.startsWith("tag:")){
-            targetExpression.replaceFirst("tag:", "");
+            targetExpression = targetExpression.replaceFirst("tag:", "");
             // Evaluate condition
             boolean isTarget = new Condition(targetExpression).eval(entity);
-            Utils.notifyAdmins("&8Evaluated "+targetExpression+" on "+entity.getName()+"... "+isTarget);
+            //Utils.notifyAdmins("&8Evaluated "+targetExpression+" on "+entity.getName()+"... "+isTarget);
             return isTarget;
         }
         return false;
