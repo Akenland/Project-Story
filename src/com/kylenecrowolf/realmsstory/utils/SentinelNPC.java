@@ -2,6 +2,9 @@ package com.kylenecrowolf.realmsstory.utils;
 
 import org.bukkit.entity.LivingEntity;
 import org.mcmonkey.sentinel.SentinelTrait;
+
+import com.KyleNecrowolf.RealmsCore.Common.Utils;
+
 import java.util.HashSet;
 import java.util.List;
 import net.citizensnpcs.api.npc.NPC;
@@ -214,6 +217,7 @@ public class SentinelNPC {
      */
     public void setOtherTargets(List<String> newTargets){
         trait.otherTargets = newTargets;
+        Utils.notifyAdmins("&8Set otherTargets to "+trait.otherTargets+" for Sentinel "+npc.getFullName());
     }
     /**
      * Gets the other (including Tag condition) ignores for this NPC.
