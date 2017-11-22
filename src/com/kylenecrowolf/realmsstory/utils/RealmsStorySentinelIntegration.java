@@ -40,9 +40,7 @@ public class RealmsStorySentinelIntegration extends SentinelIntegration {
         if(targetExpression.startsWith("tag:")){
             targetExpression = targetExpression.replaceFirst("tag:", "");
             // Evaluate condition
-            boolean isTarget = new Condition(targetExpression).eval(entity);
-            //Utils.notifyAdmins("&8Evaluated "+targetExpression+" on "+entity.getName()+"... "+isTarget);
-            return isTarget;
+            return new Condition(targetExpression).eval(entity);
         }
         return false;
     }

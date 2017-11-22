@@ -27,7 +27,7 @@ public final class TagCommands implements TabExecutor {
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args){
         // Check permissions
-        if(sender.hasPermission("story.tag")) return Error.NO_PERMISSION.displayChat(sender);
+        if(!sender.hasPermission("story.tag")) return Error.NO_PERMISSION.displayChat(sender);
         if(args.length==0) return Error.INVALID_ARGS.displayActionBar(sender);
 
         // If first arg is info, just display tag info
@@ -104,7 +104,7 @@ public final class TagCommands implements TabExecutor {
         
         if(args.length==1) return Arrays.asList("info","entity","player","npc");
         if(args.length==2 && args[0].equalsIgnoreCase("player")) return null;
-        if(args.length==3) return Arrays.asList("info","add","remove");
+        if(args.length==3) return Arrays.asList("info","add","remove","removeall");
 
         return Arrays.asList("");
     }

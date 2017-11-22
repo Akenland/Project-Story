@@ -185,6 +185,10 @@ public class TaggedNPC extends Trait implements Taggable {
                         }
                     }
                 }
+                // Stop attacking
+                if(sentinelAction.equalsIgnoreCase("stopAttack")){
+                    sentinel.stopAttack();
+                }
             }
         }
     }
@@ -196,6 +200,7 @@ public class TaggedNPC extends Trait implements Taggable {
     public void onSpawn(){
         equip();
         switchSkin();
+        setSentinelTargets();
     }
 
 
@@ -329,6 +334,25 @@ public class TaggedNPC extends Trait implements Taggable {
             // Respawn the NPC to apply the skin
             npc.despawn();
             npc.spawn(npc.getStoredLocation());
+        }
+    }
+
+    /**
+     * Set Sentinel targets from tags.
+     */
+    private void setSentinelTargets(){
+        // If Sentinel is enabled, get the SentinelNPC
+        if(RealmsStoryPlugin.sentinelEnabled){
+            SentinelNPC sentinel = new SentinelNPC(npc);
+
+            // Set targets
+            if(getTag().targets!=null) sentinel.setTargets(getTag().targets);
+            if(getTag().ignores!=null) sentinel.setIgnores(getTag().ignores);
+            if(getTag().heldItemTargets!=null) sentinel.setHeldItemTargets(getTag().heldItemTargets);
+            if(getTag().heldItemIgnores!=null) sentinel.setHeldItemIgnores(getTag().heldItemIgnores);
+            if(getTag().eventTargets!=null) sentinel.setEventTargets(getTag().eventTargets);
+            if(getTag().otherTargets!=null) sentinel.setOtherTargets(getTag().otherTargets);
+            if(getTag().otherIgnores!=null) sentinel.setOtherIgnores(getTag().otherIgnores);
         }
     }
 

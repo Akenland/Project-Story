@@ -1,10 +1,10 @@
 package com.kylenecrowolf.realmsstory.tags;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.UUID;
 
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -30,7 +30,7 @@ public class NPCTag extends Tag {
     private boolean loaded;
 
     //// CONVERSATIONS
-    Map<String,Prompt> prompts = new LinkedHashMap<String,Prompt>();
+    private Map<String,Prompt> prompts = new LinkedHashMap<String,Prompt>();
     
     //// REALMSCORE DATA
     // The title of NPCs with this tag
@@ -38,9 +38,22 @@ public class NPCTag extends Tag {
 
     //// NPC DATA
     // Equipment chest
-    Inventory equipmentChest;
+    private Inventory equipmentChest;
     // Skin username
-    String skinName;
+    private String skinName;
+
+    //// SENTINEL DATA
+    // Non-regex targets
+    public HashSet<String> targets;
+    public HashSet<String> ignores;
+    // Held item regex targets
+    public List<String> heldItemTargets;
+    public List<String> heldItemIgnores;
+    // Event targets
+    public List<String> eventTargets;
+    // Other/Tag targets
+    public List<String> otherTargets;
+    public List<String> otherIgnores;
 
 
     public NPCTag(String name){
@@ -85,6 +98,39 @@ public class NPCTag extends Tag {
 
             // Skin
             if(skinName==null) skinName = tag.getData().getString("skin");
+
+            // Sentinel targets
+            ConfigurationSection sentinelFile = tag.getData().getConfigurationSection("sentinel");
+            if(sentinelFile!=null){
+                if(sentinelFile.contains("targets")){
+                    if(targets==null) targets = new HashSet<String>();
+                    targets.addAll(sentinelFile.getStringList("targets"));
+                }
+                if(sentinelFile.contains("ignores")){
+                    if(ignores==null) ignores = new HashSet<String>();
+                    ignores.addAll(sentinelFile.getStringList("ignores"));
+                }
+                if(sentinelFile.contains("heldItemTargets")){
+                    if(heldItemTargets==null) heldItemTargets = new ArrayList<String>();
+                    heldItemTargets.addAll(sentinelFile.getStringList("heldItemTargets"));
+                }
+                if(sentinelFile.contains("heldItemIgnores")){
+                    if(heldItemIgnores==null) heldItemIgnores = new ArrayList<String>();
+                    heldItemIgnores.addAll(sentinelFile.getStringList("heldItemIgnores"));
+                }
+                if(sentinelFile.contains("eventTargets")){
+                    if(eventTargets==null) eventTargets = new ArrayList<String>();
+                    eventTargets.addAll(sentinelFile.getStringList("eventTargets"));
+                }
+                if(sentinelFile.contains("tagTargets")){
+                    if(otherTargets==null) otherTargets = new ArrayList<String>();
+                    otherTargets.addAll(sentinelFile.getStringList("tagTargets"));
+                }
+                if(sentinelFile.contains("tagIgnores")){
+                    if(otherIgnores==null) otherIgnores = new ArrayList<String>();
+                    otherIgnores.addAll(sentinelFile.getStringList("tagIgnores"));
+                }
+            }
         }
 
         loaded = true;
