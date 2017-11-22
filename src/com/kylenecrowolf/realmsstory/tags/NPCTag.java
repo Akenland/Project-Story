@@ -125,11 +125,13 @@ public class NPCTag extends Tag {
                 if(sentinelFile.contains("tagTargets")){
                     if(otherTargets==null) otherTargets = new ArrayList<String>();
                     otherTargets.addAll(sentinelFile.getStringList("tagTargets"));
+                    Utils.notifyAdmins("Tag targets for tag "+tag.getName()+": "+otherTargets);
                 }
                 if(sentinelFile.contains("tagIgnores")){
                     if(otherIgnores==null) otherIgnores = new ArrayList<String>();
                     otherIgnores.addAll(sentinelFile.getStringList("tagIgnores"));
                 }
+                Utils.notifyAdmins("Loaded targets for tag "+tag.getName());
             }
         }
 

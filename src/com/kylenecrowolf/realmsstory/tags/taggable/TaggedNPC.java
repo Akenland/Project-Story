@@ -353,6 +353,8 @@ public class TaggedNPC extends Trait implements Taggable {
             if(getTag().eventTargets!=null) sentinel.setEventTargets(getTag().eventTargets);
             if(getTag().otherTargets!=null) sentinel.setOtherTargets(getTag().otherTargets);
             if(getTag().otherIgnores!=null) sentinel.setOtherIgnores(getTag().otherIgnores);
+
+            Utils.notifyAdmins("Set targets for "+npc.getFullName());
         }
     }
 
