@@ -321,6 +321,9 @@ public class TaggedNPC extends Trait implements Taggable {
      * Switches to the skin saved in the tags.
      */
     private void switchSkin(){
+        // Don't switch skins if this NPC already has a skin.
+        if(npc.data().has(NPC.PLAYER_SKIN_UUID_METADATA)) return;
+
         String skinUUID = getTag().getSkin();
         if(skinUUID!=null){
             npc.data().set(NPC.PLAYER_SKIN_UUID_METADATA, skinUUID);
