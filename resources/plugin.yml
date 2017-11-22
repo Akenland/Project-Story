@@ -4,7 +4,7 @@ description: Dynamic quests and characters, that are tailored to your world.
 author: Kyle_Necrowolf
 website: http://WolfiaMC.com/plugins
 
-main: com.kylenecrowolf.realmsstory.Main
+main: com.kylenecrowolf.realmsstory.RealmsStoryPlugin
 depend: [RealmsCore, Citizens]
 
 commands:
