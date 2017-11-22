@@ -3,7 +3,6 @@ package com.kylenecrowolf.realmsstory.tags.taggable;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.UUID;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.command.CommandSender;

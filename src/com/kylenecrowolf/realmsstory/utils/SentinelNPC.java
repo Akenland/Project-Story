@@ -56,6 +56,13 @@ public class SentinelNPC {
     public void attack(LivingEntity entity){
         trait.tryAttack(entity);
     }
+    /**
+     * Tells the NPC to stop attacking.
+     */
+    public void stopAttack(){
+        trait.currentTargets.clear();
+        trait.chasing = null;
+    }
 
 
     /**
@@ -194,5 +201,30 @@ public class SentinelNPC {
      */
     public void setEventTargets(List<String> newTargets){
         trait.eventTargets = newTargets;
+    }
+
+    /**
+     * Gets the other (including Tag condition) targets for this NPC.
+     */
+    public List<String> getOtherTargets(){
+        return trait.otherTargets;
+    }
+    /**
+     * Sets the other (including Tag condition) targets for this NPC.
+     */
+    public void setOtherTargets(List<String> newTargets){
+        trait.otherTargets = newTargets;
+    }
+    /**
+     * Gets the other (including Tag condition) ignores for this NPC.
+     */
+    public List<String> getOtherIgnores(){
+        return trait.otherIgnores;
+    }
+    /**
+     * Sets the other (including Tag condition) ignores for this NPC.
+     */
+    public void setOtherIgnores(List<String> newIgnores){
+        trait.otherIgnores = newIgnores;
     }
 }
