@@ -44,16 +44,16 @@ public class NPCTag extends Tag {
 
     //// SENTINEL DATA
     // Non-regex targets
-    public HashSet<String> targets;
-    public HashSet<String> ignores;
+    private HashSet<String> targets;
+    private HashSet<String> ignores;
     // Held item regex targets
-    public List<String> heldItemTargets;
-    public List<String> heldItemIgnores;
+    private List<String> heldItemTargets;
+    private List<String> heldItemIgnores;
     // Event targets
-    public List<String> eventTargets;
+    private List<String> eventTargets;
     // Other/Tag targets
-    public List<String> otherTargets;
-    public List<String> otherIgnores;
+    private List<String> otherTargets;
+    private List<String> otherIgnores;
 
 
     public NPCTag(String name){
@@ -122,16 +122,14 @@ public class NPCTag extends Tag {
                     if(eventTargets==null) eventTargets = new ArrayList<String>();
                     eventTargets.addAll(sentinelFile.getStringList("eventTargets"));
                 }
-                if(sentinelFile.contains("tagTargets")){
+                if(sentinelFile.contains("otherTargets")){
                     if(otherTargets==null) otherTargets = new ArrayList<String>();
-                    otherTargets.addAll(sentinelFile.getStringList("tagTargets"));
-                    Utils.notifyAdmins("Tag targets for tag "+tag.getName()+": "+otherTargets);
+                    otherTargets.addAll(sentinelFile.getStringList("otherTargets"));
                 }
-                if(sentinelFile.contains("tagIgnores")){
+                if(sentinelFile.contains("otherIgnores")){
                     if(otherIgnores==null) otherIgnores = new ArrayList<String>();
-                    otherIgnores.addAll(sentinelFile.getStringList("tagIgnores"));
+                    otherIgnores.addAll(sentinelFile.getStringList("otherIgnores"));
                 }
-                Utils.notifyAdmins("Loaded targets for tag "+tag.getName());
             }
         }
 
@@ -255,4 +253,54 @@ public class NPCTag extends Tag {
         return skinName;
     }
 
+
+    /**
+     * Gets the Sentinel targets for NPCs with this tag.
+     */
+    public HashSet<String> getTargets(){
+        load();
+        return targets;
+    }
+    /**
+     * Gets the Sentinel ignores for NPCs with this tag.
+     */
+    public HashSet<String> getIgnores(){
+        load();
+        return ignores;
+    }
+    /**
+     * Gets the Sentinel heldItem targets for NPCs with this tag.
+     */
+    public List<String> getHeldItemTargets(){
+        load();
+        return heldItemTargets;
+    }
+    /**
+     * Gets the Sentinel heldItem ignores for NPCs with this tag.
+     */
+    public List<String> getHeldItemIgnores(){
+        load();
+        return heldItemIgnores;
+    }
+    /**
+     * Gets the Sentinel event targets for NPCs with this tag.
+     */
+    public List<String> getEventTargets(){
+        load();
+        return eventTargets;
+    }
+    /**
+     * Gets the Sentinel tag targets for NPCs with this tag.
+     */
+    public List<String> getTagTargets(){
+        load();
+        return otherTargets;
+    }
+    /**
+     * Gets the Sentinel tag ignores for NPCs with this tag.
+     */
+    public List<String> getTagIgnores(){
+        load();
+        return otherIgnores;
+    }
 }

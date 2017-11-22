@@ -217,7 +217,6 @@ public class SentinelNPC {
      */
     public void setOtherTargets(List<String> newTargets){
         trait.otherTargets = newTargets;
-        Utils.notifyAdmins("&8Set otherTargets to "+trait.otherTargets+" for Sentinel "+npc.getFullName());
     }
     /**
      * Gets the other (including Tag condition) ignores for this NPC.

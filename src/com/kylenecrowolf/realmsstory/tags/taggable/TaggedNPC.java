@@ -346,15 +346,13 @@ public class TaggedNPC extends Trait implements Taggable {
             SentinelNPC sentinel = new SentinelNPC(npc);
 
             // Set targets
-            if(getTag().targets!=null) sentinel.setTargets(getTag().targets);
-            if(getTag().ignores!=null) sentinel.setIgnores(getTag().ignores);
-            if(getTag().heldItemTargets!=null) sentinel.setHeldItemTargets(getTag().heldItemTargets);
-            if(getTag().heldItemIgnores!=null) sentinel.setHeldItemIgnores(getTag().heldItemIgnores);
-            if(getTag().eventTargets!=null) sentinel.setEventTargets(getTag().eventTargets);
-            if(getTag().otherTargets!=null) sentinel.setOtherTargets(getTag().otherTargets);
-            if(getTag().otherIgnores!=null) sentinel.setOtherIgnores(getTag().otherIgnores);
-
-            Utils.notifyAdmins("Set targets for "+npc.getFullName());
+            if(getTag().getTargets()!=null) sentinel.setTargets(getTag().getTargets());
+            if(getTag().getIgnores()!=null) sentinel.setIgnores(getTag().getIgnores());
+            if(getTag().getHeldItemTargets()!=null) sentinel.setHeldItemTargets(getTag().getHeldItemTargets());
+            if(getTag().getHeldItemIgnores()!=null) sentinel.setHeldItemIgnores(getTag().getHeldItemIgnores());
+            if(getTag().getEventTargets()!=null) sentinel.setEventTargets(getTag().getEventTargets());
+            if(getTag().getTagTargets()!=null) sentinel.setOtherTargets(getTag().getTagTargets());
+            if(getTag().getTagIgnores()!=null) sentinel.setOtherIgnores(getTag().getTagIgnores());
         }
     }
 
