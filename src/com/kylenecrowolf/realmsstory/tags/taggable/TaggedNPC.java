@@ -3,7 +3,7 @@ package com.kylenecrowolf.realmsstory.tags.taggable;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-
+import java.util.UUID;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.command.CommandSender;
@@ -321,7 +321,8 @@ public class TaggedNPC extends Trait implements Taggable {
      * Switches to the skin saved in the tags.
      */
     private void switchSkin(){
-        npc.data().set(NPC.PLAYER_SKIN_UUID_METADATA, getTag().getSkin().toString());
+        UUID skinUUID = getTag().getSkin();
+        if(skinUUID!=null) npc.data().set(NPC.PLAYER_SKIN_UUID_METADATA, skinUUID.toString());
     }
 
 
