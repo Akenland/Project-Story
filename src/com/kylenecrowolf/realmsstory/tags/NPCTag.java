@@ -40,7 +40,7 @@ public class NPCTag extends Tag {
     // Equipment chest
     Inventory equipmentChest;
     // Skin UUID
-    UUID skinUUID;
+    String skinUUID;
 
 
     public NPCTag(String name){
@@ -85,8 +85,9 @@ public class NPCTag extends Tag {
 
             // Skin UUID
             if(skinUUID==null){
-                String uuidString = tag.getData().getString("skin");
-                if(uuidString!=null) skinUUID = UUID.fromString(uuidString);
+                skinUUID = tag.getData().getString("skin");
+                //String uuidString = tag.getData().getString("skin");
+                //if(uuidString!=null) skinUUID = UUID.fromString(uuidString);
             }
         }
 
@@ -205,7 +206,7 @@ public class NPCTag extends Tag {
      * Gets the UUID for a skin.
      * @return the {@link UUID} of the player whose skin should be used on NPCs with this tag
      */
-    public UUID getSkin(){
+    public String getSkin(){
         load();
         return skinUUID;
     }
