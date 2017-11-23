@@ -183,7 +183,7 @@ public class NPCTag extends Tag {
         String npcName = npc.getFullName();
         String npcTitle = title!=null ? (title.length()>2 ? title : title+"citizen" ) : "citizen";
         String npcRealm = (getRealm()!=null && getRealm().exists()) ? getRealm().getFullName() : "Akenland";
-        String npcLoc = getLocationName()!=null ? getLocationName() : npcRealm;
+        String npcLoc = getLocationName()!=null ? getLocationName() : "the "+npcRealm;
 
         // Format questions
         List<String> questions = conversation.getQuestions();

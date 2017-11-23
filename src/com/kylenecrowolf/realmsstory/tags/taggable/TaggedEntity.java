@@ -96,7 +96,7 @@ public class TaggedEntity implements Taggable {
                 Inventory inv = ((HumanEntity)entity).getInventory();
 
                 // Split up the string
-                String[] itemString = text.replaceFirst("hasitem_", "").replaceFirst("takeitem_", "").split("*", 2);
+                String[] itemString = text.replaceFirst("hasitem_", "").replaceFirst("takeitem_", "").split("\\*", 2);
                 Material item = Material.matchMaterial(itemString[0]); if(item==null) return false;
                 int amount = itemString.length==2 ? Integer.parseInt(itemString[1]) : 1;
 

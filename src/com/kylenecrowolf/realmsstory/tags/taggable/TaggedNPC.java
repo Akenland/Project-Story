@@ -22,6 +22,7 @@ import com.kylenecrowolf.realmsstory.tags.Tag;
 import com.kylenecrowolf.realmsstory.utils.SentinelNPC;
 
 import net.citizensnpcs.api.CitizensAPI;
+import net.citizensnpcs.api.event.NPCDeathEvent;
 import net.citizensnpcs.api.event.NPCRightClickEvent;
 import net.citizensnpcs.api.npc.NPC;
 import net.citizensnpcs.api.persistence.Persist;
@@ -174,14 +175,15 @@ public class TaggedNPC extends Trait implements Taggable {
 
                 // Attack nearest LivingEntity that isn't the player
                 if(sentinelAction.equalsIgnoreCase("attackNearest")){
-                    // Get entities in 50 radius
-                    List<Entity> near = getNPC().getEntity().getNearbyEntities(25, 25, 25);
+                    // Get entities in 40 radius
+                    List<Entity> near = getNPC().getEntity().getNearbyEntities(20, 20, 20);
                     // Exclude sending player
                     near.remove(event.getPlayer());
                     for(Entity e:near){
                         // Attack first entity found
                         if(e instanceof LivingEntity){
                             sentinel.attack((LivingEntity) e);
+                            break;
                         }
                     }
                 }
@@ -191,6 +193,17 @@ public class TaggedNPC extends Trait implements Taggable {
                 }
             }
         }
+    }
+
+    /**
+     * Runs when this NPC dies.
+     */
+    @EventHandler
+    public void onDeath(NPCDeathEvent event){
+        if(event.getNPC() != this.getNPC()) return;
+
+        // If this NPC has an equipment chest, drop equipment on death
+        if(getTag().getEquipmentChest()!=null) unequip();
     }
 
     /**
