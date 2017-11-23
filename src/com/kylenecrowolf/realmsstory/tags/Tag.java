@@ -116,6 +116,14 @@ public class Tag {
     }
 
 
+    @Override
+    public boolean equals(Object object){
+        // If the object being compared is a Tag, check names only, as Tags are unique by names
+        if(object instanceof Tag) return name.equals(((Tag)object).getName());
+        return super.equals(object);
+    }
+
+
     /**
      * Gets directly inherited tags. Does not return indirectly inherited tags (tags inherited from other tags).
      * @return the inherited tags

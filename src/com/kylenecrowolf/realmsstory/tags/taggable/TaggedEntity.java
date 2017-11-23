@@ -4,9 +4,13 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
+import org.bukkit.Material;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Entity;
+import org.bukkit.entity.HumanEntity;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.Inventory;
+import org.bukkit.inventory.ItemStack;
 
 import com.KyleNecrowolf.RealmsCore.Common.Utils;
 import com.KyleNecrowolf.RealmsCore.Player.PlayerData;
@@ -54,10 +58,14 @@ public class TaggedEntity implements Taggable {
             // If it's a player, load realm and title
             if(entity instanceof Player){
                 PlayerData data = new PlayerData((Player)getEntity());
+                // Realm name
                 String realmName = data.getRealm().getName();
                 if(realmName!=null && realmName.length()>1) tags.addAll(new Tag(realmName).getTotalInheritedTags());
+                // Title
                 String title = data.getTitle();
                 if(title!=null && title.length()>1) tags.addAll(new Tag(title).getTotalInheritedTags());
+                // Realm officer
+                if(data.isRealmOfficer()) tags.add(new Tag("realmofficer"));
             }
         }
         return tags;       
@@ -73,6 +81,36 @@ public class TaggedEntity implements Taggable {
         for(Tag t : getTags()) tagNames.add(t.getName());
         List<String> checkTagNames = new ArrayList<String>();
         for(Tag t : tags) checkTagNames.add(t.getName());
+
+        // Filter out variable tags
+        for(Tag t : tags){
+            String text = t.getName();
+
+            // Player
+            if(text.equals("player") && !(entity instanceof Player)) return false;
+
+            // Has item, Take item
+            if(text.startsWith("hasitem_") || text.startsWith("takeitem_")){
+                // This condition fails instantly if entity is not a player
+                if(!(entity instanceof HumanEntity)) return false;
+                Inventory inv = ((HumanEntity)entity).getInventory();
+
+                // Split up the string
+                String[] itemString = text.replaceFirst("hasitem_", "").replaceFirst("takeitem_", "").split("*", 2);
+                Material item = Material.matchMaterial(itemString[0]); if(item==null) return false;
+                int amount = itemString.length==2 ? Integer.parseInt(itemString[1]) : 1;
+
+                // Check for the item
+                if(!inv.contains(item, amount)) return false;
+
+                // Take item
+                if(text.startsWith("takeitem_")) inv.removeItem(new ItemStack(item, amount));
+
+                // Remove tag from list to evaluate
+                checkTagNames.remove(text);
+            }
+
+        }
 
         // Return true if all tag names are found
         return tagNames.containsAll(checkTagNames);

@@ -130,6 +130,10 @@ public class NPCTag extends Tag {
                     if(otherIgnores==null) otherIgnores = new ArrayList<String>();
                     otherIgnores.addAll(sentinelFile.getStringList("otherIgnores"));
                 }
+                if(sentinelFile.contains("tagTargets")){
+                    if(otherTargets==null) otherTargets = new ArrayList<String>();
+                    for(String target:sentinelFile.getStringList("tagTargets")) otherTargets.add("tag:"+target);
+                }
             }
         }
 
@@ -156,6 +160,12 @@ public class NPCTag extends Tag {
         for(Map.Entry<String,Prompt> p : prompts.entrySet()){
             String s[] = p.getKey().split("cond:", 2);
             String newPromptName = s[0].trim();
+            
+            // Replace variables in condition
+            if(s.length==2){
+                s[1] = s[1].replace("NPC_REALM", getRealm()!=null ? getRealm().getName() : "norealm");
+            }
+
             // If condition is missing, or evaluates to true, add prompt to availablePrompts
             if(s.length==1 || new Condition(s[1]).eval(new TaggedEntity(player)))
                 availablePrompts.putIfAbsent(newPromptName, p.getValue());

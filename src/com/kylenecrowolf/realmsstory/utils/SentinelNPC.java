@@ -3,8 +3,6 @@ package com.kylenecrowolf.realmsstory.utils;
 import org.bukkit.entity.LivingEntity;
 import org.mcmonkey.sentinel.SentinelTrait;
 
-import com.KyleNecrowolf.RealmsCore.Common.Utils;
-
 import java.util.HashSet;
 import java.util.List;
 import net.citizensnpcs.api.npc.NPC;
