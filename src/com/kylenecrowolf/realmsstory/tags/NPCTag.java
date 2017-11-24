@@ -37,6 +37,8 @@ public class NPCTag extends Tag {
     private String title;
 
     //// NPC DATA
+    // Vulnerability
+    private boolean invulnerable;
     // Equipment chest
     private Inventory equipmentChest;
     // Skin username
@@ -82,6 +84,9 @@ public class NPCTag extends Tag {
 
             // Title
             if(title==null || title.isEmpty()) title = tag.getData().getString("data.title");
+
+            // Invulnerability
+            if(!invulnerable) invulnerable = tag.getData().getBoolean("invulnerable");
 
             // Equipment chest
             if(equipmentChest==null){
@@ -244,6 +249,14 @@ public class NPCTag extends Tag {
         displayConversation(player, npc, null);
     }
 
+
+    /**
+     * Gets whether this NPC is invulnerable/protected.
+     */
+    public boolean isInvulnerable(){
+        load();
+        return invulnerable;
+    }
 
     /**
      * Gets the equipment chest that NPCs with this tag can take from.

@@ -203,7 +203,10 @@ public class TaggedNPC extends Trait implements Taggable {
         if(event.getNPC() != this.getNPC()) return;
 
         // If this NPC has an equipment chest, drop equipment on death
-        if(getTag().getEquipmentChest()!=null) unequip();
+        if(getTag().getEquipmentChest()!=null){
+            Utils.notifyAdmins("NPC "+npc.getFullName()+" is dropping equipment on death!");
+            unequip();
+        } else Utils.notifyAdmins("NPC "+npc.getFullName()+" didn't have an equipment chest, Citizens will handle drops.");
     }
 
     /**
@@ -211,8 +214,9 @@ public class TaggedNPC extends Trait implements Taggable {
      */
     @Override
     public void onSpawn(){
-        equip();
         switchSkin();
+        npc.setProtected(getTag().isInvulnerable());
+        equip();
         setSentinelTargets();
     }
 
