@@ -9,6 +9,7 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.HumanEntity;
 import org.bukkit.entity.LivingEntity;
+import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
@@ -22,6 +23,7 @@ import com.kylenecrowolf.realmsstory.tags.Tag;
 import com.kylenecrowolf.realmsstory.utils.SentinelNPC;
 
 import net.citizensnpcs.api.CitizensAPI;
+import net.citizensnpcs.api.event.NPCDamageByEntityEvent;
 import net.citizensnpcs.api.event.NPCDeathEvent;
 import net.citizensnpcs.api.event.NPCRightClickEvent;
 import net.citizensnpcs.api.npc.NPC;
@@ -123,7 +125,12 @@ public class TaggedNPC extends Trait implements Taggable {
     @EventHandler
     public void onPlayerInteract(NPCRightClickEvent event){
         if(event.getNPC() != this.getNPC()) return;
-        ((NPCTag)getTag()).displayConversation(event.getClicker(), event.getNPC());
+        
+        // NPC should face the player
+        npc.faceLocation(event.getClicker().getEyeLocation());
+
+        // Display the conversation
+        getTag().displayConversation(event.getClicker(), event.getNPC());
     }
     /**
      * Player chat response event. Displays the requested prompt when player chooses a response to a previous conversation.
@@ -192,6 +199,19 @@ public class TaggedNPC extends Trait implements Taggable {
                     sentinel.stopAttack();
                 }
             }
+        }
+    }
+
+    /**
+     * Runs when this NPC is attacked.
+     */
+    @EventHandler
+    public void onAttacked(NPCDamageByEntityEvent event){
+        if(event.getNPC() != this.getNPC()) return;
+
+        // Show a conversation
+        if(event.getDamager() instanceof Player){
+            getTag().displayConversation((Player)event.getDamager(), npc, "onAttacked");
         }
     }
 
@@ -317,6 +337,18 @@ public class TaggedNPC extends Trait implements Taggable {
                     }
                 }
             }
+            // Equip shield
+            if(equipment.get(EquipmentSlot.OFF_HAND)==null){
+                // Find best off-hand item
+                int offHandSlot = -1;
+                if(offHandSlot==-1) offHandSlot = equipmentChest.first(Material.SHIELD);
+
+                // Equip in off-hand
+                if(offHandSlot!=-1){
+                    equipment.set(EquipmentSlot.OFF_HAND, equipmentChest.getItem(offHandSlot));
+                    equipmentChest.clear(offHandSlot);
+                }
+            }
         }
     }
     /**
@@ -373,10 +405,17 @@ public class TaggedNPC extends Trait implements Taggable {
         }
     }
 
-
     /**
-     * Gets the TaggedNPC {@link Trait} for an {@link net.citizensnpcs.api.npc.NPC}.
-     * @param npcID the ID of the {@link net.citizensnpcs.api.npc.NPC}
+     * Gets the TaggedNPC {@link Trait} for an {@link NPC}.
+     * @param npcID the {@link NPC}
+     * @return the TaggedNPC trait
+     */
+    public static TaggedNPC getTaggedNPC(NPC npc){
+        return npc.getTrait(TaggedNPC.class);
+    }
+    /**
+     * Gets the TaggedNPC {@link Trait} for an {@link NPC}.
+     * @param npcID the ID of the {@link NPC}
      * @return the TaggedNPC trait
      */
     public static TaggedNPC getTaggedNPC(int npcID){

@@ -1,11 +1,16 @@
 package com.kylenecrowolf.realmsstory.utils;
 
 import org.bukkit.entity.LivingEntity;
+import org.bukkit.entity.Player;
 import org.mcmonkey.sentinel.SentinelIntegration;
 import org.mcmonkey.sentinel.SentinelPlugin;
+import org.mcmonkey.sentinel.SentinelTrait;
 
 import com.KyleNecrowolf.RealmsCore.Common.Utils;
 import com.kylenecrowolf.realmsstory.tags.Condition;
+import com.kylenecrowolf.realmsstory.tags.taggable.TaggedNPC;
+
+import net.citizensnpcs.api.npc.NPC;
 
 /**
  * A SentinelIntegration that allows Sentinel NPCs to target entities based on their tags.
@@ -42,6 +47,21 @@ public class RealmsStorySentinelIntegration extends SentinelIntegration {
             // Evaluate condition
             return new Condition(targetExpression).eval(entity);
         }
+        return false;
+    }
+
+    /**
+     * Runs when a NPC attacks something.
+     */
+    @Override
+    public boolean tryAttack(SentinelTrait sentinel, LivingEntity entity){
+        // Show conversation to attacked player
+        if(entity instanceof Player){
+            NPC npc = sentinel.getNPC();
+            npc.getTrait(TaggedNPC.class).getTag().displayConversation((Player)entity, npc, "onAttack");
+        }
+
+        // Returning false tells Sentinel to proceed with normal attacks (true = cancel Sentinel's attack)
         return false;
     }
 }

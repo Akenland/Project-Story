@@ -137,7 +137,17 @@ public class NPCTag extends Tag {
                 }
                 if(sentinelFile.contains("tagTargets")){
                     if(otherTargets==null) otherTargets = new ArrayList<String>();
-                    for(String target:sentinelFile.getStringList("tagTargets")) otherTargets.add("tag:"+target);
+                    for(String target : sentinelFile.getStringList("tagTargets")){
+                        target = target.replace("NPC_REALM", getRealm()!=null ? getRealm().getName() : "norealm");
+                        otherTargets.add("tag:"+target);
+                    }
+                }
+                if(sentinelFile.contains("tagIgnores")){
+                    if(otherIgnores==null) otherIgnores = new ArrayList<String>();
+                    for(String target : sentinelFile.getStringList("tagIgnores")){
+                        target = target.replace("NPC_REALM", getRealm()!=null ? getRealm().getName() : "norealm");
+                        otherIgnores.add("tag:"+target);
+                    }
                 }
             }
         }
