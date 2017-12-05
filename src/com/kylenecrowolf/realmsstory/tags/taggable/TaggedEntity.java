@@ -15,6 +15,7 @@ import org.bukkit.inventory.ItemStack;
 import com.KyleNecrowolf.RealmsCore.Common.Utils;
 import com.KyleNecrowolf.RealmsCore.Player.PlayerData;
 import com.KyleNecrowolf.RealmsCore.Prompts.Prompt;
+import com.KyleNecrowolf.RealmsCore.Realm.Realm;
 import com.kylenecrowolf.realmsstory.tags.Tag;
 
 /**
@@ -64,8 +65,6 @@ public class TaggedEntity implements Taggable {
                 // Title - SECURITY ISSUE: Realm officers can set custom titles, allowing them to have any tag
                 //String title = data.getTitle();
                 //if(title!=null && title.length()>1) tags.addAll(new Tag(title).getTotalInheritedTags());
-                // Realm officer
-                if(data.isRealmOfficer()) tags.add(new Tag("realmofficer"));
             }
         }
         return tags;       
@@ -87,7 +86,7 @@ public class TaggedEntity implements Taggable {
             String text = t.getName();
 
             // Player
-            if(text.equals("player") && !(entity instanceof Player)) return false;
+            if(text.equals("player") && !(entity instanceof Player)) return false; else checkTagNames.remove(text);
 
             // Has item, Take item
             if(text.startsWith("hasitem_") || text.startsWith("takeitem_")){
@@ -108,6 +107,25 @@ public class TaggedEntity implements Taggable {
 
                 // Remove tag from list to evaluate
                 checkTagNames.remove(text);
+            }
+
+            // Realm officer
+            if(text.startsWith("realmofficer")){
+                // This condition fails instantly if entity is not a player
+                if(!(entity instanceof Player)) return false;
+
+                // Get their playerdata
+                PlayerData data = new PlayerData((Player)entity);
+
+                // If not a realm officer, condition fails
+                if(!data.isRealmOfficer()) return false;
+
+                // Otherwise check if they are officer in specified realm
+                String[] splitStrings = text.split("realmofficer_", 2);
+                if(splitStrings.length==2){
+                    Realm realm = new Realm(splitStrings[1]);
+                    if(!realm.exists() || !realm.isOfficer((Player)entity)) return false;
+                }
             }
 
         }
