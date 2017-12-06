@@ -9,7 +9,7 @@ import org.mcmonkey.sentinel.SentinelTrait;
 import com.KyleNecrowolf.RealmsCore.Common.Utils;
 import com.kylenecrowolf.realmsstory.tags.Condition;
 import com.kylenecrowolf.realmsstory.tags.taggable.TaggedNPC;
-
+import java.util.concurrent.ThreadLocalRandom;
 import net.citizensnpcs.api.npc.NPC;
 
 /**
@@ -55,8 +55,8 @@ public class RealmsStorySentinelIntegration extends SentinelIntegration {
      */
     @Override
     public boolean tryAttack(SentinelTrait sentinel, LivingEntity entity){
-        // Show conversation to attacked player
-        if(entity instanceof Player){
+        // Show conversation to attacked player, 20% of times
+        if(entity instanceof Player && ThreadLocalRandom.current().nextInt(10)<2){
             NPC npc = sentinel.getNPC();
             npc.getTrait(TaggedNPC.class).getTag().displayConversation((Player)entity, npc, "onAttack");
         }

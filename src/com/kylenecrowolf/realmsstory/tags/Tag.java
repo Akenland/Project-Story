@@ -6,6 +6,7 @@ import com.KyleNecrowolf.RealmsCore.Prompts.Prompt;
 import com.KyleNecrowolf.RealmsCore.Realm.Realm;
 import com.kylenecrowolf.realmsstory.RealmsStoryPlugin;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import org.bukkit.ChatColor;
@@ -16,6 +17,39 @@ import org.bukkit.configuration.file.FileConfiguration;
  * A tag that can be applied to game objects and used to identify their behavior.
  */
 public class Tag {
+
+    //// Tag registry
+    /**
+     * A collection of every Tag currently in use on this server.
+     */
+    private static final HashMap<String,Tag> tagRegistry = new HashMap<String,Tag>();
+
+    /**
+     * Gets a Tag that is in use on this server.
+     */
+    public static Tag get(String tagName){
+        // Removes spaces and color codes - tag names may not contain spaces
+        tagName = ChatColor.stripColor(tagName.toLowerCase().replace(" ", ""));
+
+        // Retrieve tag from registry
+        Tag tag = tagRegistry.get(tagName);
+
+        // If not present, load tag
+        if(tag==null){
+            tag = new Tag(tagName);
+            tagRegistry.put(tagName, tag);
+        }
+
+        return tag;
+    }
+
+    /**
+     * Reloads all tags.
+     */
+    public static void reloadAll(){
+        tagRegistry.clear();
+    }
+
 
     //// Tag properties
     /**
@@ -55,7 +89,7 @@ public class Tag {
      * Gets a Tag by name.
      * @param name the unique name of the tag
      */
-    public Tag(String name){
+    protected Tag(String name){
         this.name = ChatColor.stripColor(name.toLowerCase());
     }
     /**
@@ -81,7 +115,7 @@ public class Tag {
             file = new ConfigAccessor("tags\\"+name+".yml", RealmsStoryPlugin.plugin).getConfig();
 
             // Load inherited tags
-            for(String tagName : file.getStringList("inherit")) inheritedTags.add(new Tag(tagName));
+            for(String tagName : file.getStringList("inherit")) inheritedTags.add(Tag.get(tagName));
         }
 
         loaded = true;
@@ -103,7 +137,7 @@ public class Tag {
                     markerConditions.add(new Condition(c));
             }
         }
-        if(realm!=null && realm.exists()) if(!realm.getName().equalsIgnoreCase(name)) inheritedTags.add(new Tag(realm.getName()));
+        if(realm!=null && realm.exists()) if(!realm.getName().equalsIgnoreCase(name)) inheritedTags.add(Tag.get(realm.getName()));
     }
 
 

@@ -54,14 +54,14 @@ public class TaggedEntity implements Taggable {
         if(tags==null){
             tags = new ArrayList<Tag>();
             // Load tags from scoreboard
-            for(String tag : entity.getScoreboardTags()) tags.addAll(new Tag(tag).getTotalInheritedTags());
+            for(String tag : entity.getScoreboardTags()) tags.addAll(Tag.get(tag).getTotalInheritedTags());
 
             // If it's a player, load realm and title
             if(entity instanceof Player){
                 PlayerData data = new PlayerData((Player)getEntity());
                 // Realm name
                 String realmName = data.getRealm().getName();
-                if(realmName!=null && realmName.length()>1) tags.addAll(new Tag(realmName).getTotalInheritedTags());
+                if(realmName!=null && realmName.length()>1) tags.addAll(Tag.get(realmName).getTotalInheritedTags());
                 // Title - SECURITY ISSUE: Realm officers can set custom titles, allowing them to have any tag
                 //String title = data.getTitle();
                 //if(title!=null && title.length()>1) tags.addAll(new Tag(title).getTotalInheritedTags());

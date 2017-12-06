@@ -32,7 +32,7 @@ public final class TagCommands implements TabExecutor {
 
         // If first arg is info, just display tag info
         if(args[0].equalsIgnoreCase("info") && args.length==2){
-            new Tag(args[1]).displayInfo(sender);
+            Tag.get(args[1]).displayInfo(sender);
             return true;
         }
 
@@ -80,10 +80,10 @@ public final class TagCommands implements TabExecutor {
         if(args.length<3 || args[2].equalsIgnoreCase("info")){
             target.displayInfo(sender);
         } else if(args.length==4 && args[2].equalsIgnoreCase("add")){
-            target.addTag(new Tag(args[3]));
+            target.addTag(Tag.get(args[3]));
             sender.sendMessage(Utils.messageText+"Added tag "+args[3].toLowerCase()+" to "+target);
         } else if(args.length==4 && args[2].equalsIgnoreCase("remove")){
-            target.removeTag(new Tag(args[3]));
+            target.removeTag(Tag.get(args[3]));
             sender.sendMessage(Utils.messageText+"Removed tag "+args[3].toLowerCase()+" from "+target);
         } else if(args[2].equalsIgnoreCase("removeall")){
             target.removeAllTags();

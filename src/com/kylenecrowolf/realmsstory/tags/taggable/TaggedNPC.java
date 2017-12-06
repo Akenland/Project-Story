@@ -23,8 +23,9 @@ import com.kylenecrowolf.realmsstory.tags.Tag;
 import com.kylenecrowolf.realmsstory.utils.SentinelNPC;
 
 import net.citizensnpcs.api.CitizensAPI;
+import net.citizensnpcs.api.event.DespawnReason;
 import net.citizensnpcs.api.event.NPCDamageByEntityEvent;
-import net.citizensnpcs.api.event.NPCDeathEvent;
+import net.citizensnpcs.api.event.NPCDespawnEvent;
 import net.citizensnpcs.api.event.NPCRightClickEvent;
 import net.citizensnpcs.api.npc.NPC;
 import net.citizensnpcs.api.persistence.Persist;
@@ -59,7 +60,7 @@ public class TaggedNPC extends Trait implements Taggable {
         if(tags==null){
             tags = new ArrayList<Tag>();
             // Load tags from NPC saves
-            if(savedTags!=null) for(String tag : savedTags) tags.addAll(new Tag(tag).getTotalInheritedTags());
+            if(savedTags!=null) for(String tag : savedTags) tags.addAll(Tag.get(tag).getTotalInheritedTags());
 
             // Load other traits
             //for(Trait trait : getNPC().getTraits()) tags.addAll(new Tag(trait.getName()).getTotalInheritedTags());
@@ -105,6 +106,10 @@ public class TaggedNPC extends Trait implements Taggable {
 
     public void reload(){
         tags = null;
+
+        // Respawn the NPC
+        npc.despawn();
+        npc.spawn(npc.getStoredLocation());
     }
 
 
@@ -219,8 +224,8 @@ public class TaggedNPC extends Trait implements Taggable {
      * Runs when this NPC dies.
      */
     @EventHandler
-    public void onDeath(NPCDeathEvent event){
-        if(event.getNPC() != this.getNPC()) return;
+    public void onDeath(NPCDespawnEvent event){
+        if(event.getNPC()!=this.getNPC() || event.getReason()!=DespawnReason.DEATH) return;
 
         // If this NPC has an equipment chest, drop equipment on death
         if(getTag().getEquipmentChest()!=null){

@@ -96,7 +96,7 @@ public class NPCTag extends Tag {
                     if(locString.length==4){
                         BlockState chest = new Location(Bukkit.getWorld(locString[0]), Double.parseDouble(locString[1]), Double.parseDouble(locString[2]), Double.parseDouble(locString[3])).getBlock().getState();
                         if(chest instanceof Container) equipmentChest = ((Container)chest).getInventory();
-                        else Utils.notifyAdmins("Tag "+tag.getName()+": Expected container, found "+chest.getType());
+                        else Utils.notifyAdmins("Tag "+tag.getName()+" equipment chest: Expected container, found "+chest.getType());
                     }
                 }
             }
