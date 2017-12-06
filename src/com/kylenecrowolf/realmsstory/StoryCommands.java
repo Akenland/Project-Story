@@ -11,7 +11,7 @@ import com.KyleNecrowolf.RealmsCore.Common.Utils;
 import com.KyleNecrowolf.RealmsCore.Permissions.PermsUtils;
 import com.KyleNecrowolf.RealmsCore.Prompts.Prompt;
 
-public final class RealmsStoryCommands implements TabExecutor {
+public final class StoryCommands implements TabExecutor {
     
     //// Commands
     @Override
@@ -19,7 +19,7 @@ public final class RealmsStoryCommands implements TabExecutor {
         // Version command
         if(args.length==0 || args[0].equalsIgnoreCase("version")){
             Prompt prompt = new Prompt();
-            prompt.addQuestion("&rRealmsStory "+RealmsStoryPlugin.plugin.getDescription().getVersion()+" by Kyle Necrowolf");
+            prompt.addQuestion("&rRealmsStory "+StoryPlugin.plugin.getDescription().getVersion()+" by Kyle Necrowolf");
             prompt.addAnswer("Dynamic quests and characters, that are tailored to your world.","");
             prompt.addAnswer("Website: http://WolfiaMC.com/plugins", "url_http://WolfiaMC.com/plugins");
             prompt.display(sender);

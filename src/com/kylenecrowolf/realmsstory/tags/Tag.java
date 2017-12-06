@@ -4,7 +4,7 @@ import com.KyleNecrowolf.RealmsCore.Common.ConfigAccessor;
 import com.KyleNecrowolf.RealmsCore.Common.Utils;
 import com.KyleNecrowolf.RealmsCore.Prompts.Prompt;
 import com.KyleNecrowolf.RealmsCore.Realm.Realm;
-import com.kylenecrowolf.realmsstory.RealmsStoryPlugin;
+import com.kylenecrowolf.realmsstory.StoryPlugin;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -112,7 +112,7 @@ public class Tag {
 
         if(name!=null){
             // Get the file
-            file = new ConfigAccessor("tags\\"+name+".yml", RealmsStoryPlugin.plugin).getConfig();
+            file = new ConfigAccessor("tags\\"+name+".yml", StoryPlugin.plugin).getConfig();
 
             // Load inherited tags
             for(String tagName : file.getStringList("inherit")) inheritedTags.add(Tag.get(tagName));

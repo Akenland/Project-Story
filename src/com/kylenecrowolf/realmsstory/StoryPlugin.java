@@ -11,7 +11,7 @@ import com.kylenecrowolf.realmsstory.tags.taggable.TaggedNPC;
 import com.kylenecrowolf.realmsstory.utils.RealmsStorySentinelIntegration;
 import net.citizensnpcs.api.CitizensAPI;
 
-public final class RealmsStoryPlugin extends JavaPlugin {
+public final class StoryPlugin extends JavaPlugin {
 
 	public static JavaPlugin plugin;
 
@@ -30,7 +30,7 @@ public final class RealmsStoryPlugin extends JavaPlugin {
 		plugin = this;
 
 		// Version command
-		this.getCommand("realmsstory").setExecutor(new RealmsStoryCommands());
+		this.getCommand("realmsstory").setExecutor(new StoryCommands());
 
 		// Tag command
 		this.getCommand("tag").setExecutor(new TagCommands());

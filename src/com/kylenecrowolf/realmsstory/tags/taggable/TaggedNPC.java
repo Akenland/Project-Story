@@ -17,7 +17,7 @@ import org.bukkit.inventory.ItemStack;
 import com.KyleNecrowolf.RealmsCore.Common.Utils;
 import com.KyleNecrowolf.RealmsCore.Prompts.Prompt;
 import com.KyleNecrowolf.RealmsCore.Prompts.PromptActionEvent;
-import com.kylenecrowolf.realmsstory.RealmsStoryPlugin;
+import com.kylenecrowolf.realmsstory.StoryPlugin;
 import com.kylenecrowolf.realmsstory.tags.NPCTag;
 import com.kylenecrowolf.realmsstory.tags.Tag;
 import com.kylenecrowolf.realmsstory.utils.SentinelNPC;
@@ -161,7 +161,7 @@ public class TaggedNPC extends Trait implements Taggable {
                 unequip();
             }
             // Sentinel actions
-            if(npcAction.startsWith("sentinel") && RealmsStoryPlugin.sentinelEnabled){
+            if(npcAction.startsWith("sentinel") && StoryPlugin.sentinelEnabled){
                 String sentinelAction = npcAction.split("_", 2)[1];
                 SentinelNPC sentinel = new SentinelNPC(getNPC());
 
@@ -396,7 +396,7 @@ public class TaggedNPC extends Trait implements Taggable {
      */
     private void setSentinelTargets(){
         // If Sentinel is enabled, get the SentinelNPC
-        if(RealmsStoryPlugin.sentinelEnabled){
+        if(StoryPlugin.sentinelEnabled){
             SentinelNPC sentinel = new SentinelNPC(npc);
 
             // Set targets
