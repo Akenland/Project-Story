@@ -1,14 +1,14 @@
-package com.kylenecrowolf.realmsstory;
+package com.kylenanakdewa.realmsstory;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Particle;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
-import com.kylenecrowolf.realmsstory.tags.Condition;
-import com.kylenecrowolf.realmsstory.tags.TagCommands;
-import com.kylenecrowolf.realmsstory.tags.taggable.TaggedNPC;
-import com.kylenecrowolf.realmsstory.utils.RealmsStorySentinelIntegration;
+import com.kylenanakdewa.realmsstory.tags.Condition;
+import com.kylenanakdewa.realmsstory.tags.TagCommands;
+import com.kylenanakdewa.realmsstory.tags.taggable.TaggedNPC;
+import com.kylenanakdewa.realmsstory.utils.RealmsStorySentinelIntegration;
 import net.citizensnpcs.api.CitizensAPI;
 
 public final class StoryPlugin extends JavaPlugin {
@@ -42,7 +42,7 @@ public final class StoryPlugin extends JavaPlugin {
 			citizensEnabled = true;
 
 			// Register TaggedNPC trait
-			net.citizensnpcs.api.CitizensAPI.getTraitFactory().registerTrait(net.citizensnpcs.api.trait.TraitInfo.create(com.kylenecrowolf.realmsstory.tags.taggable.TaggedNPC.class));
+			net.citizensnpcs.api.CitizensAPI.getTraitFactory().registerTrait(net.citizensnpcs.api.trait.TraitInfo.create(com.kylenanakdewa.realmsstory.tags.taggable.TaggedNPC.class));
 
 			// NPC markers
 			Bukkit.getScheduler().scheduleSyncRepeatingTask(plugin, () -> {

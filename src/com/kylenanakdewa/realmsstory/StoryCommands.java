@@ -1,4 +1,4 @@
-package com.kylenecrowolf.realmsstory;
+package com.kylenanakdewa.realmsstory;
 
 import java.util.Arrays;
 import java.util.List;
@@ -19,7 +19,7 @@ public final class StoryCommands implements TabExecutor {
         // Version command
         if(args.length==0 || args[0].equalsIgnoreCase("version")){
             Prompt prompt = new Prompt();
-            prompt.addQuestion("&rRealmsStory "+StoryPlugin.plugin.getDescription().getVersion()+" by Kyle Necrowolf");
+            prompt.addQuestion("&rRealmsStory "+StoryPlugin.plugin.getDescription().getVersion()+" by Kyle Nanakdewa");
             prompt.addAnswer("Dynamic quests and characters, that are tailored to your world.","");
             prompt.addAnswer("Website: http://WolfiaMC.com/plugins", "url_http://WolfiaMC.com/plugins");
             prompt.display(sender);
@@ -30,12 +30,12 @@ public final class StoryCommands implements TabExecutor {
         if(args[0].equalsIgnoreCase("reload")){
             // Check permissions
             if(!sender.hasPermission("story.reload") || !PermsUtils.isDoubleCheckedAdmin(sender)){
-                Utils.notifyAdminsError(sender.getName()+Utils.errorText+" failed security check (reloading RealmsStory config).");
+                Utils.notifyAdminsError(sender.getName()+Utils.errorText+" failed security check (reloading Story config).");
                 return Error.NO_PERMISSION.displayChat(sender);
             }
 
             //ConfigValues.reloadConfig();
-            Utils.notifyAdmins(sender.getName()+Utils.messageText+" reloaded the RealmsStory config.");
+            Utils.notifyAdmins(sender.getName()+Utils.messageText+" reloaded the Story config.");
             return true;
         }
 

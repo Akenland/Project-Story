@@ -1,10 +1,10 @@
-package com.kylenecrowolf.realmsstory.tags;
+package com.kylenanakdewa.realmsstory.tags;
 
 import com.KyleNecrowolf.RealmsCore.Common.ConfigAccessor;
 import com.KyleNecrowolf.RealmsCore.Common.Utils;
 import com.KyleNecrowolf.RealmsCore.Prompts.Prompt;
 import com.KyleNecrowolf.RealmsCore.Realm.Realm;
-import com.kylenecrowolf.realmsstory.StoryPlugin;
+import com.kylenanakdewa.realmsstory.StoryPlugin;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;

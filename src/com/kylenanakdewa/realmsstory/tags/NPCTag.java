@@ -1,4 +1,4 @@
-package com.kylenecrowolf.realmsstory.tags;
+package com.kylenanakdewa.realmsstory.tags;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -18,7 +18,7 @@ import org.bukkit.inventory.Inventory;
 import com.KyleNecrowolf.RealmsCore.Common.Utils;
 import com.KyleNecrowolf.RealmsCore.Player.PlayerData;
 import com.KyleNecrowolf.RealmsCore.Prompts.Prompt;
-import com.kylenecrowolf.realmsstory.tags.taggable.TaggedEntity;
+import com.kylenanakdewa.realmsstory.tags.taggable.TaggedEntity;
 import net.citizensnpcs.api.npc.NPC;
 
 /**

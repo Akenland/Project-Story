@@ -1,10 +1,10 @@
-package com.kylenecrowolf.realmsstory.tags.taggable;
+package com.kylenanakdewa.realmsstory.tags.taggable;
 
 import java.util.List;
 
 import org.bukkit.command.CommandSender;
 
-import com.kylenecrowolf.realmsstory.tags.Tag;
+import com.kylenanakdewa.realmsstory.tags.Tag;
 
 /**
  * Represents an object that can have RealmsStory tags applied to it.

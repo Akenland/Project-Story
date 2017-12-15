@@ -1,4 +1,4 @@
-package com.kylenecrowolf.realmsstory.tags.taggable;
+package com.kylenanakdewa.realmsstory.tags.taggable;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -16,7 +16,7 @@ import com.KyleNecrowolf.RealmsCore.Common.Utils;
 import com.KyleNecrowolf.RealmsCore.Player.PlayerData;
 import com.KyleNecrowolf.RealmsCore.Prompts.Prompt;
 import com.KyleNecrowolf.RealmsCore.Realm.Realm;
-import com.kylenecrowolf.realmsstory.tags.Tag;
+import com.kylenanakdewa.realmsstory.tags.Tag;
 
 /**
  * Represents an entity with RealmsStory Tags. 

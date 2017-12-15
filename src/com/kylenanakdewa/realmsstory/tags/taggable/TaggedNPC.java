@@ -1,4 +1,4 @@
-package com.kylenecrowolf.realmsstory.tags.taggable;
+package com.kylenanakdewa.realmsstory.tags.taggable;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -17,10 +17,10 @@ import org.bukkit.inventory.ItemStack;
 import com.KyleNecrowolf.RealmsCore.Common.Utils;
 import com.KyleNecrowolf.RealmsCore.Prompts.Prompt;
 import com.KyleNecrowolf.RealmsCore.Prompts.PromptActionEvent;
-import com.kylenecrowolf.realmsstory.StoryPlugin;
-import com.kylenecrowolf.realmsstory.tags.NPCTag;
-import com.kylenecrowolf.realmsstory.tags.Tag;
-import com.kylenecrowolf.realmsstory.utils.SentinelNPC;
+import com.kylenanakdewa.realmsstory.StoryPlugin;
+import com.kylenanakdewa.realmsstory.tags.NPCTag;
+import com.kylenanakdewa.realmsstory.tags.Tag;
+import com.kylenanakdewa.realmsstory.utils.SentinelNPC;
 
 import net.citizensnpcs.api.CitizensAPI;
 import net.citizensnpcs.api.event.DespawnReason;

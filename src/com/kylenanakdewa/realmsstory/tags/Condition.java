@@ -1,4 +1,4 @@
-package com.kylenecrowolf.realmsstory.tags;
+package com.kylenanakdewa.realmsstory.tags;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -6,8 +6,8 @@ import java.util.List;
 
 import org.bukkit.entity.Entity;
 
-import com.kylenecrowolf.realmsstory.tags.taggable.Taggable;
-import com.kylenecrowolf.realmsstory.tags.taggable.TaggedEntity;
+import com.kylenanakdewa.realmsstory.tags.taggable.Taggable;
+import com.kylenanakdewa.realmsstory.tags.taggable.TaggedEntity;
 
 /**
  * A tag condition that can be evaluated.
