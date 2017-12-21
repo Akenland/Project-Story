@@ -55,7 +55,7 @@ public class Condition {
 
             // If Tag has this tag, return true
             if(target.hasTag(tagArray)){
-                Utils.notifyAdmins("Target "+target+" meets condition: "+expression);
+                //Utils.notifyAdmins("Target "+target+" meets condition: "+expression);
                 return true;
             }
         }

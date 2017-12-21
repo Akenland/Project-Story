@@ -86,7 +86,10 @@ public class TaggedEntity implements Taggable {
             String text = t.getName();
 
             // Player
-            if(text.equals("player") && !(entity instanceof Player)) return false; else checkTagNames.remove(text);
+            if(text.equals("player")){
+                if(!(entity instanceof Player)) return false;
+                else checkTagNames.remove(text);
+            }
 
             // Has item, Take item
             if(text.startsWith("hasitem_") || text.startsWith("takeitem_")){
