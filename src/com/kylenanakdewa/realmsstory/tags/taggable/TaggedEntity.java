@@ -124,7 +124,7 @@ public class TaggedEntity implements Taggable {
                 if(!data.isRealmOfficer()) return false;
 
                 // Otherwise check if they are officer in specified realm
-                String[] splitStrings = text.split("realmofficer_", 2);
+                String[] splitStrings = text.split("_", 2);
                 if(splitStrings.length==2){
                     Realm realm = new Realm(splitStrings[1]);
                     if(!realm.exists() || !realm.isOfficer((Player)entity)) return false;
