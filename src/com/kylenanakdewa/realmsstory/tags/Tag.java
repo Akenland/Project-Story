@@ -47,6 +47,7 @@ public class Tag {
      * Reloads all tags.
      */
     public static void reloadAll(){
+        for(Tag tag : tagRegistry.values()) tag.loaded = false;
         tagRegistry.clear();
     }
 
