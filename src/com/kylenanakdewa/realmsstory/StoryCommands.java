@@ -10,6 +10,7 @@ import com.KyleNecrowolf.RealmsCore.Common.Error;
 import com.KyleNecrowolf.RealmsCore.Common.Utils;
 import com.KyleNecrowolf.RealmsCore.Permissions.PermsUtils;
 import com.KyleNecrowolf.RealmsCore.Prompts.Prompt;
+import com.kylenanakdewa.realmsstory.tags.Tag;
 
 public final class StoryCommands implements TabExecutor {
     
@@ -30,12 +31,14 @@ public final class StoryCommands implements TabExecutor {
         if(args[0].equalsIgnoreCase("reload")){
             // Check permissions
             if(!sender.hasPermission("story.reload") || !PermsUtils.isDoubleCheckedAdmin(sender)){
-                Utils.notifyAdminsError(sender.getName()+Utils.errorText+" failed security check (reloading Story config).");
+                Utils.notifyAdminsError(sender.getName()+Utils.errorText+" failed security check (reloading Story).");
                 return Error.NO_PERMISSION.displayChat(sender);
             }
 
             //ConfigValues.reloadConfig();
-            Utils.notifyAdmins(sender.getName()+Utils.messageText+" reloaded the Story config.");
+            Tag.reloadAll();
+
+            Utils.notifyAdmins(sender.getName()+Utils.messageText+" reloaded Story.");
             return true;
         }
 

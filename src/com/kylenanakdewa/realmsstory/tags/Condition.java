@@ -6,6 +6,7 @@ import java.util.List;
 
 import org.bukkit.entity.Entity;
 
+import com.KyleNecrowolf.RealmsCore.Common.Utils;
 import com.kylenanakdewa.realmsstory.tags.taggable.Taggable;
 import com.kylenanakdewa.realmsstory.tags.taggable.TaggedEntity;
 
@@ -53,7 +54,10 @@ public class Condition {
             Tag tagArray[] = tagList.toArray(new Tag[tagList.size()]);
 
             // If Tag has this tag, return true
-            if(target.hasTag(tagArray)) return true;
+            if(target.hasTag(tagArray)){
+                Utils.notifyAdmins("Target "+target+" meets condition: "+expression);
+                return true;
+            }
         }
         return false;
     }
