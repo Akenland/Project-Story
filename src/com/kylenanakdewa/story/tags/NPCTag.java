@@ -229,8 +229,8 @@ public class NPCTag extends Tag {
                 .replaceText("NPC_LOCATION", npcLoc + ChatColor.GRAY)
 
                 // Replace THISNPC with npc_ID in all actions
-                .replaceAction("thisnpc", "npc_"+npc.getId());
-                .replaceAction("thisNPC", "npc_"+npc.getId());
+                .replaceAction("thisnpc", "npc_"+npc.getId())
+                .replaceAction("thisNPC", "npc_"+npc.getId())
                 .replaceAction("THISNPC", "npc_"+npc.getId());
         });
 
