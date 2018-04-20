@@ -1,10 +1,11 @@
-package com.kylenanakdewa.realmsstory.tags;
+package com.kylenanakdewa.story.tags;
 
-import com.KyleNecrowolf.RealmsCore.Common.ConfigAccessor;
-import com.KyleNecrowolf.RealmsCore.Common.Utils;
-import com.KyleNecrowolf.RealmsCore.Prompts.Prompt;
-import com.KyleNecrowolf.RealmsCore.Realm.Realm;
-import com.kylenanakdewa.realmsstory.StoryPlugin;
+import com.kylenanakdewa.core.CorePlugin;
+import com.kylenanakdewa.core.common.ConfigAccessor;
+import com.kylenanakdewa.core.common.Utils;
+import com.kylenanakdewa.core.common.prompts.Prompt;
+import com.kylenanakdewa.core.realms.Realm;
+import com.kylenanakdewa.story.StoryPlugin;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -125,7 +126,7 @@ public class Tag {
             // Load Realm
             if(realm==null){
                 String realmName = tag.getData().getString("data.realm");
-                if(realmName!=null) realm = new Realm(realmName);
+                if(realmName!=null) realm = CorePlugin.getServerRealmProvider().getRealm(realmName);
             }
             // Load location name
             if(locationName==null) locationName = tag.getData().getString("data.location");
@@ -138,7 +139,7 @@ public class Tag {
                     markerConditions.add(new Condition(c));
             }
         }
-        if(realm!=null && realm.exists()) if(!realm.getName().equalsIgnoreCase(name)) inheritedTags.add(Tag.get(realm.getName()));
+        if(realm!=null) if(!realm.getName().equalsIgnoreCase(name)) inheritedTags.add(Tag.get(realm.getName()));
     }
 
 
