@@ -230,6 +230,8 @@ public class NPCTag extends Tag {
 
                 // Replace THISNPC with npc_ID in all actions
                 .replaceAction("thisnpc", "npc_"+npc.getId());
+                .replaceAction("thisNPC", "npc_"+npc.getId());
+                .replaceAction("THISNPC", "npc_"+npc.getId());
         });
 
         // Prepare the prompt
