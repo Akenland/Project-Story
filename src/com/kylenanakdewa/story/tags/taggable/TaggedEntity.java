@@ -1,6 +1,7 @@
 package com.kylenanakdewa.story.tags.taggable;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import java.util.Set;
 
@@ -61,7 +62,11 @@ public class TaggedEntity implements Taggable {
             if(entity instanceof Player){
                 PlayerCharacter character = PlayerCharacter.getCharacter((Player)getEntity());
                 // Realm name
-                if(character.getRealm()!=null) tags.addAll(Tag.get(character.getRealm().getIdentifier()).getTotalInheritedTags());
+                if(character.getRealm()!=null){
+                    Collection<Tag> realmTags = Tag.get(character.getRealm().getIdentifier()).getTotalInheritedTags();
+                    character.getRealm().getAllParentRealms().forEach(parentRealm -> realmTags.addAll(Tag.get(parentRealm.getIdentifier()).getTotalInheritedTags()));
+                    tags.addAll(realmTags);
+                }
                 // Title - SECURITY ISSUE: Realm officers can set custom titles, allowing them to have any tag
                 //String title = data.getTitle();
                 //if(title!=null && title.length()>1) tags.addAll(new Tag(title).getTotalInheritedTags());
