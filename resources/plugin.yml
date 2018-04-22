@@ -1,15 +1,15 @@
-name: RealmsStory
+name: ProjectStory
 version: 1.0pre
 description: Dynamic quests and characters, that are tailored to your world.
 author: Kyle Nanakdewa
-website: http://WolfiaMC.com/plugins
+website: http://plugins.akenland.com
 
-main: com.kylenanakdewa.realmsstory.StoryPlugin
-depend: [RealmsCore, Citizens]
+main: com.kylenanakdewa.story.StoryPlugin
+depend: [CoRE, Citizens]
 
 commands:
-  realmsstory:
-    description: Display Realms plugin version
+  story:
+    description: Display Project Story plugin version
 
   tag:
     description: Manage tags for objects

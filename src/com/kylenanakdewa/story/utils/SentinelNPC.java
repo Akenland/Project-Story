@@ -1,4 +1,4 @@
-package com.kylenanakdewa.realmsstory.utils;
+package com.kylenanakdewa.story.utils;
 
 import org.bukkit.entity.LivingEntity;
 import org.mcmonkey.sentinel.SentinelTrait;

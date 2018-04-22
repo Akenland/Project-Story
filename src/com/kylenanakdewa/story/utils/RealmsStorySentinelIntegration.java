@@ -1,4 +1,4 @@
-package com.kylenanakdewa.realmsstory.utils;
+package com.kylenanakdewa.story.utils;
 
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
@@ -6,9 +6,9 @@ import org.mcmonkey.sentinel.SentinelIntegration;
 import org.mcmonkey.sentinel.SentinelPlugin;
 import org.mcmonkey.sentinel.SentinelTrait;
 
-import com.KyleNecrowolf.RealmsCore.Common.Utils;
-import com.kylenanakdewa.realmsstory.tags.Condition;
-import com.kylenanakdewa.realmsstory.tags.taggable.TaggedNPC;
+import com.kylenanakdewa.core.common.Utils;
+import com.kylenanakdewa.story.tags.Condition;
+import com.kylenanakdewa.story.tags.taggable.TaggedNPC;
 import java.util.concurrent.ThreadLocalRandom;
 import net.citizensnpcs.api.npc.NPC;
 

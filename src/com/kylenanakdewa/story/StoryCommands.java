@@ -1,4 +1,4 @@
-package com.kylenanakdewa.realmsstory;
+package com.kylenanakdewa.story;
 
 import java.util.Arrays;
 import java.util.List;
@@ -6,11 +6,11 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.TabExecutor;
 
-import com.KyleNecrowolf.RealmsCore.Common.Error;
-import com.KyleNecrowolf.RealmsCore.Common.Utils;
-import com.KyleNecrowolf.RealmsCore.Permissions.PermsUtils;
-import com.KyleNecrowolf.RealmsCore.Prompts.Prompt;
-import com.kylenanakdewa.realmsstory.tags.Tag;
+import com.kylenanakdewa.core.common.Error;
+import com.kylenanakdewa.core.common.Utils;
+import com.kylenanakdewa.core.Permissions.PermsUtils;
+import com.kylenanakdewa.core.common.prompts.Prompt;
+import com.kylenanakdewa.story.tags.Tag;
 
 public final class StoryCommands implements TabExecutor {
     
@@ -20,9 +20,9 @@ public final class StoryCommands implements TabExecutor {
         // Version command
         if(args.length==0 || args[0].equalsIgnoreCase("version")){
             Prompt prompt = new Prompt();
-            prompt.addQuestion("&rRealmsStory "+StoryPlugin.plugin.getDescription().getVersion()+" by Kyle Nanakdewa");
+            prompt.addQuestion("&6Project Story "+StoryPlugin.plugin.getDescription().getVersion()+" by Kyle Nanakdewa");
             prompt.addAnswer("Dynamic quests and characters, that are tailored to your world.","");
-            prompt.addAnswer("Website: http://WolfiaMC.com/plugins", "url_http://WolfiaMC.com/plugins");
+            prompt.addAnswer("Website: http://plugins.akenland.com", "url_http://plugins.akenland.com/");
             prompt.display(sender);
 			return true;
         }

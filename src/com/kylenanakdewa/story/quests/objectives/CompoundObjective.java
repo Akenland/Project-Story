@@ -1,0 +1,71 @@
+package com.kylenanakdewa.story.quests.objectives;
+
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.Set;
+
+/**
+ * An objective made up of several sub-objectives. 
+ * This objective is complete when all of its sub-objectives are complete.
+ * @author Kyle Nanakdewa
+ */
+public class CompoundObjective extends Objective {
+
+    /** The sub-objectives. */
+    private Set<Objective> subObjectives;
+    /** The description of this objective. If null, sub-objective descriptions are used instead. */
+    private String description;
+
+
+    /**
+     * Creates a CompoundObjective.
+     * @param subObjectives a set of sub-objectives
+     */
+    public CompoundObjective(Set<Objective> subObjectives) {
+        this.subObjectives = subObjectives;
+    }
+    /**
+     * Creates a CompoundObjective.
+     * @param subObjectives an array of sub-objectives
+     */
+    public CompoundObjective(Objective... subObjectives) {
+        this.subObjectives = new HashSet<Objective>(Arrays.asList(subObjectives));
+    }
+
+
+	@Override
+	public boolean isCompleted() {
+        // Return false if any sub-objective is incomplete
+		for(Objective objective : subObjectives){
+            if(!objective.isCompleted()) return false;
+        }
+        return true;
+	}
+
+	@Override
+	public boolean isFailed() {
+        // Return true if any sub-objective is failed
+		for(Objective objective : subObjectives){
+            if(objective.isFailed()) return true;
+        }
+        return false;
+	}
+
+
+	@Override
+	public String getDescription() {
+        if(description!=null) return description;
+
+        String desc = "";
+        for(Objective objective : subObjectives){
+            if(objective.getDescription()!=null){
+                desc+= objective.getDescription() + ", ";
+            }
+        }
+        return desc;
+    }
+    @Override
+    public void setDescription(String description) {
+        this.description = description;
+    }
+}

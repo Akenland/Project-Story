@@ -1,4 +1,4 @@
-package com.kylenanakdewa.realmsstory.tags;
+package com.kylenanakdewa.story.tags;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -15,10 +15,11 @@ import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 
-import com.KyleNecrowolf.RealmsCore.Common.Utils;
-import com.KyleNecrowolf.RealmsCore.Player.PlayerData;
-import com.KyleNecrowolf.RealmsCore.Prompts.Prompt;
-import com.kylenanakdewa.realmsstory.tags.taggable.TaggedEntity;
+import com.kylenanakdewa.core.characters.players.PlayerCharacter;
+import com.kylenanakdewa.core.common.Utils;
+import com.kylenanakdewa.story.tags.taggable.TaggedEntity;
+import com.kylenanakdewa.story.tags.taggable.TempNPC;
+
 import net.citizensnpcs.api.npc.NPC;
 
 /**
@@ -30,7 +31,7 @@ public class NPCTag extends Tag {
     private boolean loaded;
 
     //// CONVERSATIONS
-    private Map<String,Prompt> prompts = new LinkedHashMap<String,Prompt>();
+    private Map<String,Interaction> prompts = new LinkedHashMap<String,Interaction>();
     
     //// REALMSCORE DATA
     // The title of NPCs with this tag
@@ -77,7 +78,7 @@ public class NPCTag extends Tag {
             ConfigurationSection promptFile = tag.getData().getConfigurationSection("prompts");
             if(promptFile!=null){
                 for(String key : promptFile.getKeys(false)){
-                    Prompt prompt = new Prompt(promptFile.getConfigurationSection(key));
+                    Interaction prompt = Interaction.getFromConfig(promptFile.getConfigurationSection(key));
                     prompts.putIfAbsent(key, prompt);
                 }
             }
@@ -171,8 +172,8 @@ public class NPCTag extends Tag {
         promptName = (promptName!=null) ? promptName : "onInteract";
 
         // Get a list of available prompts, based on conditions
-        Map<String,Prompt> availablePrompts = new LinkedHashMap<String,Prompt>();
-        for(Map.Entry<String,Prompt> p : prompts.entrySet()){
+        Map<String,Interaction> availablePrompts = new LinkedHashMap<String,Interaction>();
+        for(Map.Entry<String,Interaction> p : prompts.entrySet()){
             String s[] = p.getKey().split("cond:", 2);
             String newPromptName = s[0].trim();
             
@@ -186,18 +187,18 @@ public class NPCTag extends Tag {
                 availablePrompts.putIfAbsent(newPromptName, p.getValue());
         }
 
-        Prompt conversation = availablePrompts.get(promptName);
+        Interaction conversation = availablePrompts.get(promptName);
         if(conversation==null) return;
 
 
         // Format all strings with player and NPC name
-        PlayerData data = new PlayerData(player);
+        PlayerCharacter character = PlayerCharacter.getCharacter(player);
         String playerName = player.getDisplayName();
-        String playerTitle = data.getTitle(); playerTitle = playerTitle.length()<2 ? "explorer" : playerTitle;
-        String playerRealm = (data.getRealm()!=null && data.getRealm().exists()) ? data.getRealm().getFullName() : "Akenland";
+        String playerTitle = character.getTitle().length()<2 ? "explorer" : character.getTitle();
+        String playerRealm = character.getRealm()!=null ? character.getRealm().getName() : "Akenland";
         String npcName = npc.getFullName();
         String npcTitle = title!=null ? (title.length()>2 ? title : title+"citizen" ) : "citizen";
-        String npcRealm = (getRealm()!=null && getRealm().exists()) ? getRealm().getFullName() : "Akenland";
+        String npcRealm = getRealm()!=null ? getRealm().getName() : "Akenland";
         String npcLoc = getLocationName()!=null ? getLocationName() : "the "+npcRealm;
 
         // Format questions
@@ -217,38 +218,25 @@ public class NPCTag extends Tag {
         }
         conversation.setQuestions(questions);
         // Format answers
-        Map<String,String> promptAnswers = conversation.getAnswers();
-        List<String> answers = new ArrayList<String>(promptAnswers.keySet());
-        List<String> actions = new ArrayList<String>(promptAnswers.values());
-        for(int i=0; i<answers.size(); i++){
-            String answer = answers.get(i);
-            answers.remove(i);
-            answer = answer
-                .replace("PLAYER_NAME", playerName + ChatColor.GRAY)
-                .replace("PLAYER_TITLE", playerTitle + ChatColor.GRAY)
-                .replace("PLAYER_REALM", playerRealm + ChatColor.GRAY)
-                .replace("NPC_NAME", npcName + ChatColor.GRAY)
-                .replace("NPC_TITLE", npcTitle + ChatColor.GRAY)
-                .replace("NPC_REALM", npcRealm + ChatColor.GRAY)
-                .replace("NPC_LOCATION", npcLoc + ChatColor.GRAY);
-            answers.add(i, answer);
+        conversation.getAnswers().forEach(answer -> {
+            answer
+                .replaceText("PLAYER_NAME", playerName + ChatColor.GRAY)
+                .replaceText("PLAYER_TITLE", playerTitle + ChatColor.GRAY)
+                .replaceText("PLAYER_REALM", playerRealm + ChatColor.GRAY)
+                .replaceText("NPC_NAME", npcName + ChatColor.GRAY)
+                .replaceText("NPC_TITLE", npcTitle + ChatColor.GRAY)
+                .replaceText("NPC_REALM", npcRealm + ChatColor.GRAY)
+                .replaceText("NPC_LOCATION", npcLoc + ChatColor.GRAY)
 
-            // Replace THISNPC with npc_ID in all actions
-            String action = actions.get(i).toLowerCase();
-            actions.remove(i);
-            action = action.replace("thisnpc", "npc_"+npc.getId());
-            actions.add(i, action);
-        }
-        conversation.setAnswers(answers, actions);
-
-        // Format NPC name
-        ChatColor realmColor = getRealm()!=null ? getRealm().getColor() : ChatColor.GRAY;
-        ChatColor topRealmColor = getRealm()!=null ? getRealm().getTopParent().getColor() : realmColor;
-        String formattedTitle = title!=null ? (title.length()>2 ? title+" " : title) : "";
-        String formattedNPCName = topRealmColor+"<"+realmColor+formattedTitle+npcName+topRealmColor+"> ";
+                // Replace THISNPC with npc_ID in all actions
+                .replaceAction("thisnpc", "npc_"+npc.getId())
+                .replaceAction("thisNPC", "npc_"+npc.getId())
+                .replaceAction("THISNPC", "npc_"+npc.getId());
+        });
 
         // Prepare the prompt
-        conversation.display(player, formattedNPCName);
+        conversation.setCharacter(new TempNPC(npc));
+        conversation.display(player);
     }
     /**
      * Display the appropriate conversation to a {@link Player}.
@@ -335,5 +323,10 @@ public class NPCTag extends Tag {
     public List<String> getTagIgnores(){
         load();
         return otherIgnores;
+    }
+
+
+    public String getTitle(){
+        return title;
     }
 }

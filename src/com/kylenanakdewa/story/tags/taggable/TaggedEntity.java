@@ -1,4 +1,4 @@
-package com.kylenanakdewa.realmsstory.tags.taggable;
+package com.kylenanakdewa.story.tags.taggable;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -12,11 +12,12 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 
-import com.KyleNecrowolf.RealmsCore.Common.Utils;
-import com.KyleNecrowolf.RealmsCore.Player.PlayerData;
-import com.KyleNecrowolf.RealmsCore.Prompts.Prompt;
-import com.KyleNecrowolf.RealmsCore.Realm.Realm;
-import com.kylenanakdewa.realmsstory.tags.Tag;
+import com.kylenanakdewa.core.common.CommonColors;
+import com.kylenanakdewa.core.CorePlugin;
+import com.kylenanakdewa.core.characters.players.PlayerCharacter;
+import com.kylenanakdewa.core.common.prompts.Prompt;
+import com.kylenanakdewa.core.realms.Realm;
+import com.kylenanakdewa.story.tags.Tag;
 
 /**
  * Represents an entity with RealmsStory Tags. 
@@ -58,10 +59,9 @@ public class TaggedEntity implements Taggable {
 
             // If it's a player, load realm and title
             if(entity instanceof Player){
-                PlayerData data = new PlayerData((Player)getEntity());
+                PlayerCharacter character = PlayerCharacter.getCharacter((Player)getEntity());
                 // Realm name
-                String realmName = data.getRealm().getName();
-                if(realmName!=null && realmName.length()>1) tags.addAll(Tag.get(realmName).getTotalInheritedTags());
+                if(character.getRealm()!=null) tags.addAll(Tag.get(character.getRealm().getIdentifier()).getTotalInheritedTags());
                 // Title - SECURITY ISSUE: Realm officers can set custom titles, allowing them to have any tag
                 //String title = data.getTitle();
                 //if(title!=null && title.length()>1) tags.addAll(new Tag(title).getTotalInheritedTags());
@@ -118,7 +118,7 @@ public class TaggedEntity implements Taggable {
                 if(!(entity instanceof Player)) return false;
 
                 // Get their playerdata
-                PlayerData data = new PlayerData((Player)entity);
+                PlayerCharacter data = PlayerCharacter.getCharacter((Player)entity);
 
                 // If not a realm officer, condition fails
                 if(!data.isRealmOfficer()) return false;
@@ -126,8 +126,8 @@ public class TaggedEntity implements Taggable {
                 // Otherwise check if they are officer in specified realm
                 String[] splitStrings = text.split("_", 2);
                 if(splitStrings.length==2){
-                    Realm realm = new Realm(splitStrings[1]);
-                    if(!realm.exists() || !realm.isOfficer((Player)entity)) return false;
+                    Realm realm = CorePlugin.getServerRealmProvider().getRealm(splitStrings[1]);
+                    if(realm==null || !data.isRealmOfficer()) return false;
                 }
             }
 
@@ -165,8 +165,8 @@ public class TaggedEntity implements Taggable {
 
     public void displayInfo(CommandSender sender){
         Prompt prompt = new Prompt();
-        prompt.addQuestion(Utils.infoText+"--- Entity: "+Utils.messageText+entity.getName()+Utils.infoText+" ---");
-        prompt.addQuestion(Utils.infoText+"Has the following tags:");
+        prompt.addQuestion(CommonColors.INFO+"--- Entity: "+CommonColors.MESSAGE+entity.getName()+CommonColors.INFO+" ---");
+        prompt.addQuestion(CommonColors.INFO+"Has the following tags:");
         for(Tag tag : getTags()){
             prompt.addAnswer(tag.getName(),"");
         }

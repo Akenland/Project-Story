@@ -1,4 +1,4 @@
-package com.kylenanakdewa.realmsstory.tags;
+package com.kylenanakdewa.story.tags;
 
 import java.util.Arrays;
 import java.util.List;
@@ -11,12 +11,12 @@ import org.bukkit.command.TabExecutor;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 
-import com.KyleNecrowolf.RealmsCore.Common.Error;
-import com.KyleNecrowolf.RealmsCore.Common.Utils;
-import com.kylenanakdewa.realmsstory.StoryPlugin;
-import com.kylenanakdewa.realmsstory.tags.taggable.Taggable;
-import com.kylenanakdewa.realmsstory.tags.taggable.TaggedEntity;
-import com.kylenanakdewa.realmsstory.tags.taggable.TaggedNPC;
+import com.kylenanakdewa.core.common.Error;
+import com.kylenanakdewa.core.common.Utils;
+import com.kylenanakdewa.story.StoryPlugin;
+import com.kylenanakdewa.story.tags.taggable.Taggable;
+import com.kylenanakdewa.story.tags.taggable.TaggedEntity;
+import com.kylenanakdewa.story.tags.taggable.TaggedNPC;
 
 import net.citizensnpcs.api.CitizensAPI;
 import net.citizensnpcs.api.npc.NPC;
