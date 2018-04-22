@@ -193,7 +193,7 @@ public class NPCTag extends Tag {
 
         // Format all strings with player and NPC name
         PlayerCharacter character = PlayerCharacter.getCharacter(player);
-        String playerName = player.getDisplayName();
+        String playerName = character.getName();
         String playerTitle = character.getTitle().length()<2 ? "explorer" : character.getTitle();
         String playerRealm = character.getRealm()!=null ? character.getRealm().getName() : "Akenland";
         String npcName = npc.getFullName();
@@ -231,7 +231,8 @@ public class NPCTag extends Tag {
                 // Replace THISNPC with npc_ID in all actions
                 .replaceAction("thisnpc", "npc_"+npc.getId())
                 .replaceAction("thisNPC", "npc_"+npc.getId())
-                .replaceAction("THISNPC", "npc_"+npc.getId());
+                .replaceAction("THISNPC", "npc_"+npc.getId())
+                .replaceAction("PLAYER_USERNAME", player.getName());
         });
 
         // Prepare the prompt
