@@ -17,7 +17,7 @@ public final class JournalListener implements Listener {
 	 * Checks if an item is a Journal.
 	 * @return true if item is a journal
 	 */
-	public boolean isJournal(ItemStack item){
+	public static boolean isJournal(ItemStack item){
 		return item!=null && item.getType().equals(Material.WRITTEN_BOOK) && item.getItemMeta().getDisplayName().equals(ChatColor.DARK_PURPLE+"Journal");
 	}
 
