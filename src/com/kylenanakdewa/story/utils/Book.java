@@ -33,7 +33,7 @@ public class Book {
 	 */
 	public String getJsonString(){
 		String pageString = "";
-		for(String page : pages) pageString += "\"[{"+page+"}]\",";
+		for(String page : pages) pageString += "\"{"+page+"}\",";
 		pageString = pageString.substring(0, pageString.length());
 
 		return "{author:\""+author+"\",title:\""+title+"\",pages:["+pageString+"]}";
