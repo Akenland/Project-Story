@@ -5,6 +5,7 @@ import com.kylenanakdewa.core.common.Utils;
 
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
+import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.EquipmentSlot;
@@ -21,10 +22,11 @@ public final class JournalListener implements Listener {
 	 * @return true if item is a journal
 	 */
 	public static boolean isJournal(ItemStack item){
-		return item!=null && item.getType().equals(Material.WRITTEN_BOOK) && ChatColor.stripColor(((BookMeta)item.getItemMeta()).getTitle()).equals("Journal");
+		return item!=null && item.getType().equals(Material.WRITTEN_BOOK) && ((BookMeta)item.getItemMeta()).getTitle().equals(ChatColor.DARK_PURPLE+"Journal");
 	}
 
 
+	@EventHandler
 	public void onJournalOpen(PlayerInteractEvent event){
 		ItemStack item = event.getItem();
 		if(isJournal(item)){
