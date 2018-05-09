@@ -33,7 +33,7 @@ public class Book {
 	 */
 	public String getJsonString(){
 		String pageString = "";
-		for(String page : pages) pageString += "\"{"+page+"}\",";
+		for(String page : pages) pageString += page+",";
 		pageString = pageString.substring(0, pageString.length());
 
 		return "{author:\""+author+"\",title:\""+title+"\",pages:["+pageString+"]}";
@@ -98,7 +98,7 @@ public class Book {
 	 * @param content the plain text for this page
 	 */
 	public void addSimplePage(String text){
-		addRawPage("text:\""+text+"\"");
+		addRawPage("\""+text+"\"");
 	}
 	/**
 	 * Adds a page to this book.
