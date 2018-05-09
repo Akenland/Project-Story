@@ -4,6 +4,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 import com.kylenanakdewa.core.characters.Character;
+import com.kylenanakdewa.story.quests.objectives.DummyObjective;
 import com.kylenanakdewa.story.quests.objectives.Objective;
 import com.kylenanakdewa.story.utils.Book;
 
@@ -30,6 +31,9 @@ public class Journal {
 	public Journal(Character character){
 		this.character = character;
 		objectives = new HashSet<Objective>();
+		
+		objectives.add(new DummyObjective("Test objective for "+character.getFormattedName()));
+		objectives.add(new DummyObjective("Another fun objective!"));
 	}
 
 
