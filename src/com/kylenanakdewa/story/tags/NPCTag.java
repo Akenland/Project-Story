@@ -236,8 +236,7 @@ public class NPCTag extends Tag {
         });
 
         // Prepare the prompt
-        conversation.setCharacter(new TempNPC(npc));
-        conversation.display(player);
+        conversation.start(player, new TempNPC(npc));
     }
     /**
      * Display the appropriate conversation to a {@link Player}.

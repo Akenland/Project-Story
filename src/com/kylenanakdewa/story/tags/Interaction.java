@@ -3,10 +3,14 @@ package com.kylenanakdewa.story.tags;
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.ConfigurationSection;
+import org.bukkit.entity.Player;
+import org.bukkit.inventory.ItemStack;
 
 import com.kylenanakdewa.core.characters.Character;
 import com.kylenanakdewa.core.common.prompts.Prompt;
+import com.kylenanakdewa.core.common.prompts.PromptActionEvent;
 import com.kylenanakdewa.story.StoryPlugin;
+import com.kylenanakdewa.story.quests.objectives.Objective;
 
 /**
  * Represents a interaction with an NPC.
@@ -15,6 +19,13 @@ public class Interaction extends Prompt {
 
     /** The Character that this Interaction is with. */
     private Character character;
+    /** Items to be given the player in this Interaction. */
+    private ItemStack[] items;
+    /** An objective to be given to the player in this Interaction. */
+    private Objective objective;
+    /** A prompt action to run when this Interaction starts. The action is run from the player. */
+    private String action;
+
 
     /**
      * Creates a blank interaction.
@@ -44,7 +55,10 @@ public class Interaction extends Prompt {
 			// Load the data from file
 			interaction.setQuestions(config.getStringList("questions"));
 			interaction.setRandomQuestions(config.getBoolean("randomQuestions"));
-			interaction.setAnswers(config.getStringList("answers"), config.getStringList("actions"), config.getStringList("conditions"));
+            interaction.setAnswers(config.getStringList("answers"), config.getStringList("actions"), config.getStringList("conditions"));
+            interaction.setObjective(null); //TODO
+            interaction.setAction(config.getString("action"));
+            interaction.setItems(config.getItemStack("item"));
 		} else return null;
 
 		return interaction;
@@ -68,6 +82,77 @@ public class Interaction extends Prompt {
         return character;
     }
 
+    /**
+     * Sets the objective to be given for this Interaction.
+     * @param objective the objective
+     */
+    public void setObjective(Objective objective){
+        this.objective = objective;
+    }
+    /**
+     * Gets the objective to be given for this Interaction.
+     * @return the objective
+     */
+    public Objective getObjective(){
+        return objective;
+    }
+
+    /**
+     * Sets the prompt action to run during this Interaction.
+     * @param action a valid prompt action
+     */
+    public void setAction(String action){
+        this.action = action;
+    }
+    /**
+     * Gets the prompt action to run during this Interaction.
+     * @return a prompt action
+     */
+    public String getAction(){
+        return action;
+    }
+
+    /**
+     * Sets the items to give during this Interaction.
+     * @param items the ItemStack(s) to give to the player
+     */
+    public void setItems(ItemStack... items){
+        this.items = items;
+    }
+    /**
+     * Gets the items to give during this Interaction.
+     * @return the ItemStack(s) to give to the player
+     */
+    public ItemStack[] getItems(){
+        return items;
+    }
+
+
+    /**
+     * Starts this Interaction between the specified Player and Character.
+     */
+    public void start(Player player, Character character){
+        setCharacter(character);
+
+        int delay = isRandomQuestions() ? 0 : (getQuestions().size()-1)*30;
+        Bukkit.getScheduler().scheduleSyncDelayedTask(StoryPlugin.plugin, () -> {
+            // Action
+		    Bukkit.getServer().getPluginManager().callEvent(new PromptActionEvent(player, action));
+
+            // Items
+            player.getInventory().addItem(items);
+
+            // Objective
+            // TODO
+        }, delay);
+
+        super.display(player);
+    }
+    @Override
+    public void display(CommandSender target){
+        if(target instanceof Player) start((Player)target, character);
+    }
+
 
     @Override
     protected void displayQuestion(CommandSender target, String question){
@@ -81,13 +166,13 @@ public class Interaction extends Prompt {
 
             Bukkit.getScheduler().scheduleSyncDelayedTask(StoryPlugin.plugin, () -> displayQuestion(target, question), delay);
 
-            delay+=20;
+            delay+=30;
 
         }
     }
     @Override
     protected void displayAnswers(CommandSender target){
-        int delay = isRandomQuestions() ? 0 : (getQuestions().size()-1)*20;
+        int delay = isRandomQuestions() ? 0 : (getQuestions().size()-1)*30;
         Bukkit.getScheduler().scheduleSyncDelayedTask(StoryPlugin.plugin, () -> super.displayAnswers(target), delay);
     }
 

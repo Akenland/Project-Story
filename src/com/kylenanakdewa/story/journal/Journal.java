@@ -20,8 +20,12 @@ public class Journal {
 	/** The character that this journal is for. */
 	private final Character character;
 
-	/** The objectives in this journal. */
-	private final Set<Objective> objectives;
+	/** The active objectives in this journal. */
+	private final Set<Objective> activeObjectives;
+	/** The discovered objectives in this journal. */
+	private final Set<Objective> discoveredObjectives;
+	/** The completed objectives in this journal. */
+	private final Set<Objective> completedObjectives;
 
 
 	/**
@@ -30,10 +34,18 @@ public class Journal {
 	 */
 	public Journal(Character character){
 		this.character = character;
-		objectives = new HashSet<Objective>();
-		
-		objectives.add(new DummyObjective("Test objective for "+character.getFormattedName()));
-		objectives.add(new DummyObjective("Another fun objective!"));
+		activeObjectives = new HashSet<Objective>();
+		discoveredObjectives = new HashSet<Objective>();
+		completedObjectives = new HashSet<Objective>();
+
+		activeObjectives.add(new DummyObjective("Talk to NPCs to find things to do"));
+		activeObjectives.add(new DummyObjective("Explore the world"));
+
+		discoveredObjectives.add(new DummyObjective("Learn about the Aunix"));
+		discoveredObjectives.add(new DummyObjective("Talk to the Waramon researcher"));
+
+		completedObjectives.add(new DummyObjective("View your journal"));
+		completedObjectives.add(new DummyObjective("Talk to the Greeter"));
 	}
 
 
@@ -42,10 +54,25 @@ public class Journal {
 	 */
 	public ItemStack getJournalItem(){
 		Book book = new Book(ChatColor.DARK_PURPLE+"Journal", character.getName());
-		for(Objective objective : objectives){
-			book.addSimplePage(objective.getDescription());
+
+		String activePage = ChatColor.DARK_GREEN+"Active Objectives:\n";
+		for(Objective objective : activeObjectives){
+			activePage += "- "+objective.getDescription()+"\n";
 		}
-		book.addSimplePage(ChatColor.DARK_GRAY+"Talk to NPCs, read books, and explore the world, to find more things to do.");
+		book.addSimplePage(activePage);
+
+		String discoveredPage = ChatColor.DARK_PURPLE+"Discoveries:\n";
+		for(Objective objective : discoveredObjectives){
+			discoveredPage += "- "+objective.getDescription()+"\n";
+		}
+		book.addSimplePage(discoveredPage);
+
+		String completedPage = ChatColor.DARK_RED+"Completed Objectives:\n";
+		for(Objective objective : completedObjectives){
+			completedPage += "- "+objective.getDescription()+"\n";
+		}
+		book.addSimplePage(completedPage);
+		//book.addSimplePage(ChatColor.DARK_GRAY+"Talk to NPCs, read books, and explore the world, to find more things to do.");
 		return book.getItem();
 	}
 }

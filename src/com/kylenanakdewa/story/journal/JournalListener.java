@@ -1,8 +1,6 @@
 package com.kylenanakdewa.story.journal;
 
 import com.kylenanakdewa.core.characters.players.PlayerCharacter;
-import com.kylenanakdewa.core.common.Utils;
-
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.event.EventHandler;
@@ -30,8 +28,6 @@ public final class JournalListener implements Listener {
 	public void onJournalOpen(PlayerInteractEvent event){
 		ItemStack item = event.getItem();
 		if(isJournal(item)){
-
-			Utils.notifyAdmins("Found valid journal");
 
 			ItemStack journal = new Journal(PlayerCharacter.getCharacter(event.getPlayer())).getJournalItem();
 
