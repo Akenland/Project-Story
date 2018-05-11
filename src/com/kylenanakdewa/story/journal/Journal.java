@@ -57,19 +57,19 @@ public class Journal {
 
 		String activePage = ChatColor.DARK_GREEN+"Active Objectives:\n";
 		for(Objective objective : activeObjectives){
-			activePage += "- "+objective.getDescription()+"\n";
+			activePage += ChatColor.RESET+"- "+objective.getDescription()+"\n";
 		}
 		book.addSimplePage(activePage);
 
 		String discoveredPage = ChatColor.DARK_PURPLE+"Discoveries:\n";
 		for(Objective objective : discoveredObjectives){
-			discoveredPage += "- "+objective.getDescription()+"\n";
+			discoveredPage += ChatColor.RESET+"- "+objective.getDescription()+"\n";
 		}
 		book.addSimplePage(discoveredPage);
 
 		String completedPage = ChatColor.DARK_RED+"Completed Objectives:\n";
 		for(Objective objective : completedObjectives){
-			completedPage += "- "+objective.getDescription()+"\n";
+			completedPage += ChatColor.RESET+"- "+objective.getDescription()+"\n";
 		}
 		book.addSimplePage(completedPage);
 		//book.addSimplePage(ChatColor.DARK_GRAY+"Talk to NPCs, read books, and explore the world, to find more things to do.");

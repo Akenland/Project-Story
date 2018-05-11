@@ -11,15 +11,6 @@ public class DummyObjective extends Objective {
         this.description = description;
     }
 
-	@Override
-	public boolean isCompleted() {
-		return false;
-	}
-
-	@Override
-	public boolean isFailed() {
-		return false;
-	}
 
 	@Override
 	public String getDescription() {

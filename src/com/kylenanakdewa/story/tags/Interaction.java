@@ -137,13 +137,13 @@ public class Interaction extends Prompt {
         int delay = isRandomQuestions() ? 0 : (getQuestions().size()-1)*30;
         Bukkit.getScheduler().scheduleSyncDelayedTask(StoryPlugin.plugin, () -> {
             // Action
-		    Bukkit.getServer().getPluginManager().callEvent(new PromptActionEvent(player, action));
+		    if(action!=null) Bukkit.getServer().getPluginManager().callEvent(new PromptActionEvent(player, action));
 
             // Items
-            player.getInventory().addItem(items);
+            if(items!=null) player.getInventory().addItem(items);
 
             // Objective
-            // TODO
+            if(objective!=null){}// TODO
         }, delay);
 
         super.display(player);

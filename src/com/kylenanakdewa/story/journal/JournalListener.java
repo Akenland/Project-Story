@@ -1,6 +1,8 @@
 package com.kylenanakdewa.story.journal;
 
 import com.kylenanakdewa.core.characters.players.PlayerCharacter;
+import com.kylenanakdewa.story.quests.objectives.ObjectiveStatusEvent;
+
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.event.EventHandler;
@@ -38,6 +40,12 @@ public final class JournalListener implements Listener {
 
 		}
 
+	}
+
+
+	@EventHandler
+	public void onObjectiveStatusChange(ObjectiveStatusEvent event){
+		
 	}
 
 }

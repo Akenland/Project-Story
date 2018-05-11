@@ -35,6 +35,7 @@ public class CompoundObjective extends Objective {
 
 	@Override
 	public boolean isCompleted() {
+        if(super.isCompleted()) return true;
         // Return false if any sub-objective is incomplete
 		for(Objective objective : subObjectives){
             if(!objective.isCompleted()) return false;
@@ -44,6 +45,7 @@ public class CompoundObjective extends Objective {
 
 	@Override
 	public boolean isFailed() {
+        if(super.isFailed()) return true;
         // Return true if any sub-objective is failed
 		for(Objective objective : subObjectives){
             if(objective.isFailed()) return true;

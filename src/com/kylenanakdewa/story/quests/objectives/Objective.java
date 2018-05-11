@@ -6,18 +6,56 @@ package com.kylenanakdewa.story.quests.objectives;
  */
 public abstract class Objective {
 
+    private Status status;
+
+    /**
+     * Represents the status of an Objective.
+     */
+    public enum Status {
+        /** The objective is active, and can successfully be completed. */
+        ACTIVE,
+        /** The objective has been fully completed. */
+        COMPLETED,
+        /** The objective has been failed, and is no longer possible to complete. */
+        FAILED;
+    }
+
+    /**
+     * Returns the Status of this Objective.
+     * @return the status
+     */
+    public Status getStatus(){
+        return status;
+    }
+
     /**
      * Returns true if this objective has been fully completed.
      * @return true if the objective is complete, otherwise false
      */
-    public abstract boolean isCompleted();
+    public boolean isCompleted(){
+        return status.equals(Status.COMPLETED);
+    }
+    /**
+     * Marks this objective as fully completed.
+     */
+    public void setCompleted(){
+        status = Status.COMPLETED;
+    }
 
     /**
      * Returns true if this objective can no longer be successfully completed. 
      * The Character is considered to have failed the objective.
      * @return true if the objective is impossible to complete, otherwise false
      */
-    public abstract boolean isFailed();
+    public boolean isFailed(){
+        return status.equals(Status.FAILED);
+    }
+    /**
+     * Marks this objective as failed (cannot be successfully completed).
+     */
+    public void setFailed(){
+        status = Status.FAILED;
+    }
 
 
     /**
