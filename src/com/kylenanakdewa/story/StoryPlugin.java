@@ -15,7 +15,7 @@ import net.citizensnpcs.api.CitizensAPI;
 
 public final class StoryPlugin extends JavaPlugin {
 
-	@Deprecated
+	//@Deprecated
 	public static StoryPlugin plugin;
 
 	/**

@@ -1,13 +1,17 @@
 package com.kylenanakdewa.story.journal;
 
 import com.kylenanakdewa.core.characters.players.PlayerCharacter;
+import com.kylenanakdewa.core.common.prompts.PromptActionEvent;
+import com.kylenanakdewa.story.quests.objectives.Objective;
 import com.kylenanakdewa.story.quests.objectives.ObjectiveStatusEvent;
 
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerInteractEvent;
+import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.BookMeta;
@@ -44,8 +48,26 @@ public final class JournalListener implements Listener {
 
 
 	@EventHandler
+	public void onServerEmpty(PlayerQuitEvent event){
+		if(Bukkit.getOnlinePlayers().isEmpty()) Journal.updateJournals();
+	}
+
+
+	@EventHandler
 	public void onObjectiveStatusChange(ObjectiveStatusEvent event){
-		
+		Journal.playerJournals.values().forEach(journal -> {
+			journal.objectiveStatusUpdate(event);
+		});
+	}
+
+
+	@EventHandler
+	public void onPromptAction(PromptActionEvent event){
+		if(event.isType("completeObjective")){
+			Journal journal = Journal.get(PlayerCharacter.getCharacter(event.getPlayer()));
+			Objective objective = journal.getActiveObjective(event.getAction());
+			if(objective!=null) journal.completeObjective(objective);
+		}
 	}
 
 }

@@ -51,7 +51,13 @@ public class CompoundObjective extends Objective {
             if(objective.isFailed()) return true;
         }
         return false;
-	}
+    }
+
+
+    @Override
+    public String getIdentifier() {
+        return null;
+    }
 
 
 	@Override

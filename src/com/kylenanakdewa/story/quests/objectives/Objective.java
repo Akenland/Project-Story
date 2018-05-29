@@ -59,6 +59,12 @@ public abstract class Objective {
 
 
     /**
+     * Gets the unique identifier for this Objective.
+     */
+    public abstract String getIdentifier();
+
+
+    /**
      * Gets a concise (one-line) description of how to complete this objective.
      * @return the description of this objective
      */

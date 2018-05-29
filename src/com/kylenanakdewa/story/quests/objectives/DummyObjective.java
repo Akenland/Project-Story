@@ -5,11 +5,19 @@ package com.kylenanakdewa.story.quests.objectives;
  */
 public class DummyObjective extends Objective {
 
+	private String identifier;
     private String description;
 
-    public DummyObjective(String description) {
+    public DummyObjective(String identifier, String description) {
+		this.identifier = identifier;
         this.description = description;
-    }
+	}
+	
+
+	@Override
+	public String getIdentifier() {
+		return identifier;
+	}
 
 
 	@Override
