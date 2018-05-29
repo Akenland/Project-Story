@@ -195,7 +195,7 @@ public class Journal {
 		Player player = (Player)character.getPlayer();
 
 		if(event.getNewStatus().equals(Status.COMPLETED)){
-			player.sendTitle(ChatColor.DARK_GREEN+"✓", event.getObjective().getDescription(), -1, -1, -1);
+			player.sendTitle(ChatColor.DARK_GREEN+"\u2713", event.getObjective().getDescription(), -1, -1, -1);
 			completedObjectives.add(event.getObjective());
 		}
 		else if(event.getNewStatus().equals(Status.FAILED)){
