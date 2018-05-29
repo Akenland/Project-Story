@@ -147,7 +147,7 @@ public class Interaction extends Prompt {
 			if(action!=null) Bukkit.getServer().getPluginManager().callEvent(new PromptActionEvent(player, action));
 
 			// Items
-			if(items!=null) player.getInventory().addItem(items);
+			if(items!=null && items.length>0) player.getInventory().addItem(items);
 
 			// Objective
 			if(objective!=null) Journal.get(PlayerCharacter.getCharacter(player)).addObjective(objective);

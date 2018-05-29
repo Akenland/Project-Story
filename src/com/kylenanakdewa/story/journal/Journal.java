@@ -162,7 +162,7 @@ public class Journal {
 	public Objective getActiveObjective(String identifier){
 		Objective objective = null;
 		for(Objective i : getActiveObjectives()){
-			if(i.getIdentifier().equalsIgnoreCase(identifier)){
+			if(i.getIdentifier()!=null && i.getIdentifier().equalsIgnoreCase(identifier)){
 				objective = i;
 				break;
 			}
