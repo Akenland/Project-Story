@@ -35,7 +35,7 @@ public final class JournalListener implements Listener {
 		ItemStack item = event.getItem();
 		if(isJournal(item)){
 
-			ItemStack journal = new Journal(PlayerCharacter.getCharacter(event.getPlayer())).getJournalItem();
+			ItemStack journal = Journal.get(PlayerCharacter.getCharacter(event.getPlayer())).getJournalItem();
 
 			if(event.getHand().equals(EquipmentSlot.HAND))
 				event.getPlayer().getEquipment().setItemInMainHand(journal);

@@ -7,9 +7,11 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
 import com.kylenanakdewa.core.characters.Character;
+import com.kylenanakdewa.core.characters.players.PlayerCharacter;
 import com.kylenanakdewa.core.common.prompts.Prompt;
 import com.kylenanakdewa.core.common.prompts.PromptActionEvent;
 import com.kylenanakdewa.story.StoryPlugin;
+import com.kylenanakdewa.story.journal.Journal;
 import com.kylenanakdewa.story.quests.objectives.DummyObjective;
 import com.kylenanakdewa.story.quests.objectives.Objective;
 
@@ -148,7 +150,7 @@ public class Interaction extends Prompt {
 			if(items!=null) player.getInventory().addItem(items);
 
 			// Objective
-			if(objective!=null){}// TODO
+			if(objective!=null) Journal.get(PlayerCharacter.getCharacter(player)).addObjective(objective);
 		}, delay);
 
 		super.display(player);

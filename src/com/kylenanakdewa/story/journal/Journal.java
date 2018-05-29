@@ -42,7 +42,7 @@ public class Journal {
 	 * Gets a character's journal.
 	 * @param character the character to get a journal for
 	 */
-	Journal(PlayerCharacter character){
+	private Journal(PlayerCharacter character){
 		this.character = character;
 		activeObjectives = new HashSet<Objective>();
 		discoveredObjectives = new HashSet<Objective>();
