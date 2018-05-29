@@ -61,7 +61,7 @@ public class Interaction extends Prompt {
 			interaction.setAnswers(config.getStringList("answers"), config.getStringList("actions"), config.getStringList("conditions"));
 			String objectiveString = config.getString("objective");
 			if(objectiveString!=null){
-				String[] splitObjective = objectiveString.split(":", 2);
+				String[] splitObjective = objectiveString.split("_", 2);
 				interaction.setObjective(new DummyObjective(splitObjective[0], splitObjective[1])); //TODO
 			}
 			interaction.setAction(config.getString("action"));
@@ -143,14 +143,22 @@ public class Interaction extends Prompt {
 
 		int delay = isRandomQuestions() ? 0 : (getQuestions().size()-1)*30;
 		Bukkit.getScheduler().scheduleSyncDelayedTask(StoryPlugin.plugin, () -> {
+
 			// Action
-			if(action!=null) Bukkit.getServer().getPluginManager().callEvent(new PromptActionEvent(player, action));
+			if(getAction()!=null){
+				Bukkit.getServer().getPluginManager().callEvent(new PromptActionEvent(player, getAction()));
+			}
 
 			// Items
-			if(items!=null && items.length>0) player.getInventory().addItem(items);
+			if(getItems()!=null && getItems().length>0){
+				player.getInventory().addItem(getItems());
+			}
 
 			// Objective
-			if(objective!=null) Journal.get(PlayerCharacter.getCharacter(player)).addObjective(objective);
+			if(getObjective()!=null){
+				Journal.get(PlayerCharacter.getCharacter(player)).addObjective(getObjective());
+			}
+
 		}, delay);
 
 		super.display(player);
