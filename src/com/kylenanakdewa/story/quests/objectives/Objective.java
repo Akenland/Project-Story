@@ -1,5 +1,7 @@
 package com.kylenanakdewa.story.quests.objectives;
 
+import org.bukkit.Bukkit;
+
 /**
  * Represents an Objective that can be completed by a Character.
  * @author Kyle Nanakdewa
@@ -39,6 +41,7 @@ public abstract class Objective {
      * Marks this objective as fully completed.
      */
     public void setCompleted(){
+        Bukkit.getServer().getPluginManager().callEvent(new ObjectiveStatusEvent(this, getStatus()));
         status = Status.COMPLETED;
     }
 
@@ -54,6 +57,7 @@ public abstract class Objective {
      * Marks this objective as failed (cannot be successfully completed).
      */
     public void setFailed(){
+        Bukkit.getServer().getPluginManager().callEvent(new ObjectiveStatusEvent(this, getStatus()));
         status = Status.FAILED;
     }
 
