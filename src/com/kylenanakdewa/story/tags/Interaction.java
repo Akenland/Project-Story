@@ -151,7 +151,8 @@ public class Interaction extends Prompt {
 
 			// Items
 			if(getItems()!=null && getItems().length>0){
-				player.getInventory().addItem(getItems());
+				try{player.getInventory().addItem(getItems());}
+				catch(IllegalArgumentException e){}
 			}
 
 			// Objective
