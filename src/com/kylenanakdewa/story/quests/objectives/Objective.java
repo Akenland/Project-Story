@@ -8,7 +8,7 @@ import org.bukkit.Bukkit;
  */
 public abstract class Objective {
 
-    private Status status;
+    private Status status = Status.ACTIVE;
 
     /**
      * Represents the status of an Objective.

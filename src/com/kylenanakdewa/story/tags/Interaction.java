@@ -156,9 +156,11 @@ public class Interaction extends Prompt {
 			}
 
 			// Objective
-			if(getObjective()!=null){
-				Journal.get(PlayerCharacter.getCharacter(player)).addObjective(getObjective());
-			}
+			Bukkit.getScheduler().scheduleSyncDelayedTask(StoryPlugin.plugin, () -> {
+				if(getObjective()!=null){
+					Journal.get(PlayerCharacter.getCharacter(player)).addObjective(getObjective());
+				}
+			}, 30);
 
 		}, delay);
 
