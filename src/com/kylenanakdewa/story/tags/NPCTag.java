@@ -87,7 +87,9 @@ public class NPCTag extends Tag {
             if(title==null || title.isEmpty()) title = tag.getData().getString("data.title");
 
             // Invulnerability
-            if(!invulnerable) invulnerable = tag.getData().getBoolean("invulnerable");
+            if(tag.getData().isBoolean("invulnerable")){
+                invulnerable = tag.getData().getBoolean("invulnerable");
+            }
 
             // Equipment chest
             if(equipmentChest==null){
