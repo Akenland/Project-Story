@@ -14,6 +14,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 
+import com.kylenanakdewa.core.common.CommonColors;
 import com.kylenanakdewa.core.common.Utils;
 import com.kylenanakdewa.core.common.prompts.Prompt;
 import com.kylenanakdewa.core.common.prompts.PromptActionEvent;
@@ -115,8 +116,8 @@ public class TaggedNPC extends Trait implements Taggable {
 
     public void displayInfo(CommandSender sender){
         Prompt prompt = new Prompt();
-        prompt.addQuestion(Utils.infoText+"--- NPC: "+Utils.messageText+getNPC().getFullName()+Utils.infoText+" "+getNPC().getId()+" ---");
-        prompt.addQuestion(Utils.infoText+"Has the following tags:");
+        prompt.addQuestion(CommonColors.INFO+"--- NPC: "+CommonColors.MESSAGE+getNPC().getFullName()+CommonColors.INFO+" "+getNPC().getId()+" ---");
+        prompt.addQuestion(CommonColors.INFO+"Has the following tags:");
         for(Tag tag : getTags()){
             prompt.addAnswer(tag.getName(),"");
         }
@@ -344,14 +345,16 @@ public class TaggedNPC extends Trait implements Taggable {
             }
             // Equip shield
             if(equipment.get(EquipmentSlot.OFF_HAND)==null){
-                // Find best off-hand item
-                int offHandSlot = -1;
-                if(offHandSlot==-1) offHandSlot = equipmentChest.first(Material.SHIELD);
+                // Find first shield or torch
+                final List<Material> offHandItems = Arrays.asList(Material.SHIELD, Material.TORCH);
 
                 // Equip in off-hand
-                if(offHandSlot!=-1){
-                    equipment.set(EquipmentSlot.OFF_HAND, equipmentChest.getItem(offHandSlot));
-                    equipmentChest.clear(offHandSlot);
+                for(ItemStack item : equipmentChest){
+                    if(item!=null && offHandItems.contains(item.getType())){
+                        equipment.set(EquipmentSlot.OFF_HAND, item);
+                        equipmentChest.removeItem(item);
+                        break;
+                    }
                 }
             }
         }
@@ -360,7 +363,10 @@ public class TaggedNPC extends Trait implements Taggable {
      * Tells this NPC to drop their equipment on the ground.
      */
     public void unequip(){
-        if(!npc.isSpawned()) return;
+        if(!npc.isSpawned()){
+            Utils.notifyAdmins("NPC "+npc.getFullName()+" could not drop equipment because they are not spawned!");
+            return;
+        }
 
         final Equipment equipment = npc.getTrait(Equipment.class);
 
