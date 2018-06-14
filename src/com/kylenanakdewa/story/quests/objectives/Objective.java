@@ -41,8 +41,8 @@ public abstract class Objective {
      * Marks this objective as fully completed.
      */
     public void setCompleted(){
-        Bukkit.getServer().getPluginManager().callEvent(new ObjectiveStatusEvent(this, getStatus()));
         status = Status.COMPLETED;
+        Bukkit.getServer().getPluginManager().callEvent(new ObjectiveStatusEvent(this, getStatus()));
     }
 
     /**
@@ -57,8 +57,8 @@ public abstract class Objective {
      * Marks this objective as failed (cannot be successfully completed).
      */
     public void setFailed(){
-        Bukkit.getServer().getPluginManager().callEvent(new ObjectiveStatusEvent(this, getStatus()));
         status = Status.FAILED;
+        Bukkit.getServer().getPluginManager().callEvent(new ObjectiveStatusEvent(this, getStatus()));
     }
 
 

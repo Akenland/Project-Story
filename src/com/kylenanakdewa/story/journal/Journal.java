@@ -140,7 +140,7 @@ public class Journal {
 		discoveredObjectives.add(objective);
 		if(character.isOnline()){
 			Player player = (Player)character.getPlayer();
-			player.sendTitle(ChatColor.DARK_GRAY+"!", objective.getDescription(), -1, -1, -1);
+			player.sendTitle(ChatColor.DARK_PURPLE+"?", objective.getDescription(), -1, -1, -1);
 			Utils.sendActionBar(player, "Added to Journal");
 		}
 	}
