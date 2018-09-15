@@ -2,7 +2,11 @@ package com.kylenanakdewa.story.quests.objectives;
 
 import java.util.Arrays;
 import java.util.HashSet;
+import java.util.Map;
 import java.util.Set;
+
+import com.kylenanakdewa.story.tags.Condition;
+import com.kylenanakdewa.story.tags.Interaction;
 
 /**
  * An objective made up of several sub-objectives. 
