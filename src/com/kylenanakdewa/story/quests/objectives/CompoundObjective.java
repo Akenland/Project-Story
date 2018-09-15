@@ -76,4 +76,15 @@ public class CompoundObjective extends Objective {
     public void setDescription(String description) {
         this.description = description;
     }
+
+    @Override
+	public Map<Condition, Interaction> getInteractions() {
+		return null;
+	}
+
+
+	@Override
+	public void setInteractions(Map<Condition, Interaction> interactions) {
+		
+	}
 }
