@@ -22,10 +22,10 @@ public class RealmsStorySentinelIntegration extends SentinelIntegration {
      */
     public static boolean addIntegration(){
         if(SentinelPlugin.integrations.add(new RealmsStorySentinelIntegration())){
-            Utils.notifyAdmins("RealmsStory has integrated with Sentinel, allowing NPCs to target entities based on tags.");
+            Utils.notifyAdmins("Project Story has integrated with Sentinel, allowing NPCs to target entities based on tags.");
             return true;
         }
-        Utils.notifyAdminsError("RealmsStory failed to integrate with Sentinel.");
+        Utils.notifyAdminsError("Project Story failed to integrate with Sentinel.");
         return false;
     }
 

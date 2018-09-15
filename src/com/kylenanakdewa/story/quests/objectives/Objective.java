@@ -1,5 +1,10 @@
 package com.kylenanakdewa.story.quests.objectives;
 
+import java.util.Map;
+
+import com.kylenanakdewa.story.tags.Condition;
+import com.kylenanakdewa.story.tags.Interaction;
+
 import org.bukkit.Bukkit;
 
 /**
@@ -65,19 +70,47 @@ public abstract class Objective {
     /**
      * Gets the unique identifier for this Objective.
      */
+    @Deprecated
     public abstract String getIdentifier();
 
 
     /**
      * Gets a concise (one-line) description of how to complete this objective.
-     * @return the description of this objective
+     * @return the short description of this objective
      */
     public abstract String getDescription();
 
     /**
      * Sets a concise (one-line) description of how to complete this objective.
-     * @param description the new description for this objective, or null to clear
+     * @param description the new short description for this objective, or null to clear
      */
     public abstract void setDescription(String description);
 
+
+    /**
+     * Gets a long description of how to complete this objective.
+     * @return the long description of this objective
+     */
+    //public abstract String getLongDescription();
+
+    /**
+     * Sets a long description of how to complete this objective.
+     * @param description the new long description for this objective, or null to clear
+     */
+    //public abstract void setLongDescription(String description);
+
+
+    /**
+     * Gets the interactions that are shown to characters with this objective.
+     * The condition is on which to display the interaction.
+     * @return the interactions for this objective, or null if none are set
+     */
+    public abstract Map<Condition,Interaction> getInteractions();
+
+    /**
+     * Sets the interactions that are shown to characters with this objective.
+     * The condition is on which to display the interaction.
+     * @param interactions the new interactions for this objective, or null to clear
+     */
+    public abstract void setInteractions(Map<Condition,Interaction> interactions);
 }

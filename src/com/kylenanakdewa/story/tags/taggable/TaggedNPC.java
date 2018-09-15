@@ -3,6 +3,8 @@ package com.kylenanakdewa.story.tags.taggable;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Random;
+
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.command.CommandSender;
@@ -19,6 +21,7 @@ import com.kylenanakdewa.core.common.Utils;
 import com.kylenanakdewa.core.common.prompts.Prompt;
 import com.kylenanakdewa.core.common.prompts.PromptActionEvent;
 import com.kylenanakdewa.story.StoryPlugin;
+import com.kylenanakdewa.story.tags.Condition;
 import com.kylenanakdewa.story.tags.NPCTag;
 import com.kylenanakdewa.story.tags.Tag;
 import com.kylenanakdewa.story.utils.SentinelNPC;
@@ -54,6 +57,19 @@ public class TaggedNPC extends Trait implements Taggable {
 
     public TaggedNPC(){
         super("tags");
+    }
+
+
+    /**
+     * Gets a random NPC that meets the specified condition.
+     */
+    public static TaggedNPC getRandomNPC(Condition condition){
+        List<NPC> npcs = new ArrayList<NPC>();
+        CitizensAPI.getNPCRegistry().forEach(npc -> {
+            if(npc.hasTrait(TaggedNPC.class) && condition.eval(npc.getTrait(TaggedNPC.class))) npcs.add(npc);
+        });
+
+        return npcs.get(new Random().nextInt(npcs.size())).getTrait(TaggedNPC.class);
     }
 
 
@@ -241,7 +257,7 @@ public class TaggedNPC extends Trait implements Taggable {
     @Override
     public void onSpawn(){
         switchSkin();
-        npc.setProtected(getTag().isInvulnerable());
+        if(!npc.isProtected()) npc.setProtected(getTag().isInvulnerable());
         equip();
         setSentinelTargets();
     }

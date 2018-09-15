@@ -1,5 +1,10 @@
 package com.kylenanakdewa.story.quests.objectives;
 
+import java.util.Map;
+
+import com.kylenanakdewa.story.tags.Condition;
+import com.kylenanakdewa.story.tags.Interaction;
+
 /**
  * DummyObjective
  */
@@ -29,5 +34,17 @@ public class DummyObjective extends Objective {
 	public void setDescription(String description) {
 		this.description = description;
     }
+
+
+	@Override
+	public Map<Condition, Interaction> getInteractions() {
+		return null;
+	}
+
+
+	@Override
+	public void setInteractions(Map<Condition, Interaction> interactions) {
+		
+	}
 
 }
