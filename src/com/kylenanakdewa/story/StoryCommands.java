@@ -6,6 +6,7 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.TabExecutor;
 
+import com.kylenanakdewa.core.common.CommonColors;
 import com.kylenanakdewa.core.common.Error;
 import com.kylenanakdewa.core.common.Utils;
 import com.kylenanakdewa.core.Permissions.PermsUtils;
@@ -31,14 +32,14 @@ public final class StoryCommands implements TabExecutor {
         if(args[0].equalsIgnoreCase("reload")){
             // Check permissions
             if(!sender.hasPermission("story.reload") || !PermsUtils.isDoubleCheckedAdmin(sender)){
-                Utils.notifyAdminsError(sender.getName()+Utils.errorText+" failed security check (reloading Story).");
+                Utils.notifyAdminsError(sender.getName()+CommonColors.ERROR+" failed security check (reloading Story).");
                 return Error.NO_PERMISSION.displayChat(sender);
             }
 
             //ConfigValues.reloadConfig();
             Tag.reloadAll();
 
-            Utils.notifyAdmins(sender.getName()+Utils.messageText+" reloaded Story.");
+            Utils.notifyAdmins(sender.getName()+CommonColors.MESSAGE+" reloaded Story.");
             return true;
         }
 
