@@ -1,5 +1,6 @@
 package com.kylenanakdewa.story.journal;
 
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
@@ -9,8 +10,10 @@ import com.kylenanakdewa.core.characters.players.PlayerCharacter;
 import com.kylenanakdewa.core.common.Utils;
 import com.kylenanakdewa.core.common.savedata.PlayerSaveDataSection;
 import com.kylenanakdewa.story.StoryPlugin;
+import com.kylenanakdewa.story.quests.objectives.CompoundObjective;
 import com.kylenanakdewa.story.quests.objectives.Objective;
 import com.kylenanakdewa.story.quests.objectives.ObjectiveStatusEvent;
+import com.kylenanakdewa.story.quests.objectives.Quest;
 import com.kylenanakdewa.story.quests.objectives.Objective.Status;
 import com.kylenanakdewa.story.tags.Interaction;
 import com.kylenanakdewa.story.utils.Book;
@@ -159,6 +162,11 @@ public class Journal extends PlayerSaveDataSection {
 		Set<Objective> objectives = new HashSet<Objective>();
 		objectives.addAll(activeObjectives);
 		objectives.addAll(discoveredObjectives);
+		// Add sub-objectives
+		objectives.forEach(objective -> {
+			if(objective instanceof Quest) ((Quest)objective).getSubObjectives().forEach(subObjective -> objectives.add(subObjective));
+			if(objective instanceof CompoundObjective) ((CompoundObjective)objective).getSubObjectives().forEach(subObjective -> objectives.add(subObjective));
+		});
 		objectives.removeIf(objective -> objective==null);
 		return objectives;
 	}
@@ -181,13 +189,8 @@ public class Journal extends PlayerSaveDataSection {
 	 * @return all active and discovered objectives
 	 */
 	public Set<Objective> getActiveTypeObjectives(String identifierType){
-		Set<Objective> objectives = new HashSet<Objective>();
-		activeObjectives.forEach(objective -> {
-			if(objective.getIdentifier().split("_",2)[0].equalsIgnoreCase(identifierType)) objectives.add(objective);
-		});
-		discoveredObjectives.forEach(objective -> {
-			if(objective.getIdentifier().split("_",2)[0].equalsIgnoreCase(identifierType)) objectives.add(objective);
-		});
+		Set<Objective> objectives = new HashSet<Objective>(getActiveObjectives());
+		objectives.removeIf(objective -> !objective.getIdentifier().split("_",2)[0].equalsIgnoreCase(identifierType));
 		return objectives;
 	}
 	/**

@@ -75,6 +75,7 @@ public class AutoQuest extends Quest {
             subObjectives.add(npcObjective);
         }
 
+        Utils.notifyAdmins("[Story] AutoQuest generated with "+subObjectives.size()+" objectives.");
         setSubObjectives(subObjectives);
     }
     /**
@@ -88,7 +89,7 @@ public class AutoQuest extends Quest {
 
     @Override
     public String getIdentifier() {
-        return super.getIdentifier().replaceFirst("quest", "autoquest");
+        return npc==null ? super.getIdentifier().replaceFirst("quest", "autoquest") : "autoquest_npc_"+npc.getId();
     }
 
 }

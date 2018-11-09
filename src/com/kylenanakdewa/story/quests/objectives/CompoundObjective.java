@@ -6,7 +6,7 @@ import java.util.Set;
 
 /**
  * An objective made up of several sub-objectives. 
- * This objective is complete when all of its sub-objectives are complete.
+ * This objective is complete when all of its sub-objectives are complete. Objectives can be completed in any order.
  * @author Kyle Nanakdewa
  */
 public class CompoundObjective extends Objective {
@@ -28,6 +28,15 @@ public class CompoundObjective extends Objective {
      */
     public CompoundObjective(Objective... subObjectives) {
         this.subObjectives = new HashSet<Objective>(Arrays.asList(subObjectives));
+    }
+
+
+    /**
+     * Gets a list of the sub-objectives in this objective.
+     * @return the sub-objectives
+     */
+    public Set<Objective> getSubObjectives(){
+        return subObjectives;
     }
 
 

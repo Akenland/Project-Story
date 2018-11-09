@@ -67,12 +67,15 @@ public class TaggedNPC extends Trait implements Taggable {
 
     /**
      * Gets a random NPC that meets the specified condition.
+     * @return a random NPC, or null if no NPCs met the condition
      */
     public static TaggedNPC getRandomNPC(Condition condition){
         List<NPC> npcs = new ArrayList<NPC>();
         CitizensAPI.getNPCRegistry().forEach(npc -> {
             if(npc.hasTrait(TaggedNPC.class) && condition.eval(npc.getTrait(TaggedNPC.class))) npcs.add(npc);
         });
+
+        if(npcs.isEmpty()) return null;
 
         return npcs.get(new Random().nextInt(npcs.size())).getTrait(TaggedNPC.class);
     }
@@ -184,14 +187,17 @@ public class TaggedNPC extends Trait implements Taggable {
             if(npc.getNPC() != this.getNPC()) return;
             String npcAction = action[1];
 
+            // AutoQuest
+            if(npcAction.equalsIgnoreCase("autoquest")){
+                Journal journal = Journal.get(PlayerCharacter.getCharacter(event.getPlayer()));
+                if(journal.getActiveObjective("autoquest_npc_"+npc.getNPC().getId())!=null) npcAction = "autoquestAlreadyExists";
+                journal.addObjective(new AutoQuest(getTags()));
+            }
+
             // Display prompt
             ((NPCTag)npc.getTag()).displayConversation(event.getPlayer(), npc.getNPC(), npcAction);
 
             //// Extra actions
-            // AutoQuest
-            if(npcAction.equalsIgnoreCase("autoquest")){
-                Journal.get(PlayerCharacter.getCharacter(event.getPlayer())).addObjective(new AutoQuest(getTags()));
-            }
             // Get equipment
             if(npcAction.equalsIgnoreCase("equip")){
                 equip();

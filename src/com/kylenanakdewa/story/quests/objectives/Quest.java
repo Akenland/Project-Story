@@ -65,6 +65,13 @@ public class Quest extends Objective {
             previous = current;
         }
     }
+    /**
+     * Gets a list of the sub-objectives in this quest, in the order they must be completed in.
+     * @return the sub-objectives
+     */
+    public List<Objective> getSubObjectives(){
+        return subObjectives;
+    }
 
 
 	@Override

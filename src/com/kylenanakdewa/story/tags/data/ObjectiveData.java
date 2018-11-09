@@ -7,9 +7,12 @@ import java.util.Set;
 
 import com.kylenanakdewa.story.StoryPlugin;
 import com.kylenanakdewa.story.quests.objectives.GoToLocationObjective;
+import com.kylenanakdewa.story.quests.objectives.NPCTalkObjective;
 import com.kylenanakdewa.story.quests.objectives.Objective;
+import com.kylenanakdewa.story.tags.Condition;
 import com.kylenanakdewa.story.tags.Tag;
 import com.kylenanakdewa.story.tags.TagDataSection;
+import com.kylenanakdewa.story.tags.taggable.TaggedNPC;
 
 import org.bukkit.configuration.ConfigurationSection;
 
@@ -49,6 +52,12 @@ public class ObjectiveData extends TagDataSection {
             // Add location objective
             if(tag.getLocationData().getPrimaryLocationBeacon()!=null){
                 objectives.add(new GoToLocationObjective(tag));
+            }
+
+            // Add some random NPC objectives
+            for(int i=0; i<5; i++){
+                TaggedNPC npc = TaggedNPC.getRandomNPC(new Condition(tag.getName()));
+                if(npc!=null) objectives.add(new NPCTalkObjective(npc.getNPC()));
             }
 
         }
