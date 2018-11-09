@@ -162,9 +162,11 @@ public class TaggedNPC extends Trait implements Taggable {
         Objective objective = Journal.get(player).getActiveObjective("talknpc_" + npc.getId());
         if(objective!=null && objective instanceof NPCTalkObjective){
             // Set the NPC for the completion interaction
-            if(objective.getCompletionInteraction()!=null) objective.getCompletionInteraction().setCharacter(new TempNPC(npc));
             objective.setCompleted();
-            return;
+            if(objective.getCompletionInteraction()!=null){
+                objective.getCompletionInteraction().setCharacter(new TempNPC(npc));
+                return;
+            }
         }
 
         // Display the conversation

@@ -175,7 +175,7 @@ public class Interaction extends Prompt {
 	public void start(Player player, Character character){
 		setCharacter(character);
 		if(character==null){
-			Utils.notifyAdminsError("[Story] Interaction for "+player.getDisplayName()+CommonColors.ERROR+" failed because there is no character.");
+			//Utils.notifyAdminsError("[Story] Interaction for "+player.getDisplayName()+CommonColors.ERROR+" failed because there is no character.");
 			return;
 		}
 
