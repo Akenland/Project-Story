@@ -50,15 +50,10 @@ public class ObjectiveData extends TagDataSection {
             }
 
             // Add location objective
-            if(tag.getLocationData().getPrimaryLocationBeacon()!=null){
-                objectives.add(new GoToLocationObjective(tag));
-            }
-
+            if(tag.getLocationData().getPrimaryLocationBeacon()!=null) objectives.add(new GoToLocationObjective(tag));
             // Add some random NPC objectives
-            for(int i=0; i<5; i++){
-                TaggedNPC npc = TaggedNPC.getRandomNPC(new Condition(tag.getName()));
-                if(npc!=null) objectives.add(new NPCTalkObjective(npc.getNPC()));
-            }
+            TaggedNPC npc = TaggedNPC.getRandomNPC(new Condition(tag.getName()));
+            if(npc!=null) objectives.add(new NPCTalkObjective(npc.getNPC()));
 
         }
 
