@@ -1,6 +1,5 @@
 package com.kylenanakdewa.story.journal;
 
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
@@ -163,10 +162,12 @@ public class Journal extends PlayerSaveDataSection {
 		objectives.addAll(activeObjectives);
 		objectives.addAll(discoveredObjectives);
 		// Add sub-objectives
+		Set<Objective> subObjectives = new HashSet<Objective>();
 		objectives.forEach(objective -> {
-			if(objective instanceof Quest) ((Quest)objective).getSubObjectives().forEach(subObjective -> objectives.add(subObjective));
-			if(objective instanceof CompoundObjective) ((CompoundObjective)objective).getSubObjectives().forEach(subObjective -> objectives.add(subObjective));
+			if(objective instanceof Quest) ((Quest)objective).getSubObjectives().forEach(subObjective -> subObjectives.add(subObjective));
+			if(objective instanceof CompoundObjective) ((CompoundObjective)objective).getSubObjectives().forEach(subObjective -> subObjectives.add(subObjective));
 		});
+		objectives.addAll(subObjectives);
 		objectives.removeIf(objective -> objective==null);
 		return objectives;
 	}

@@ -13,8 +13,6 @@ import java.util.List;
 
 import com.kylenanakdewa.core.characters.Character;
 import com.kylenanakdewa.core.characters.players.PlayerCharacter;
-import com.kylenanakdewa.core.common.CommonColors;
-import com.kylenanakdewa.core.common.Utils;
 import com.kylenanakdewa.core.common.prompts.Prompt;
 import com.kylenanakdewa.core.common.prompts.PromptActionEvent;
 import com.kylenanakdewa.story.StoryPlugin;
