@@ -109,7 +109,7 @@ public class Interaction extends Prompt {
 	 * @param objective the objective
 	 */
 	public void setObjective(Objective objective){
-		objectives = Arrays.asList(objective);
+		objectives = objective!=null ? Arrays.asList(objective) : objectives;
 	}
 	/**
 	 * Sets the objectives to be given for this Interaction.
@@ -118,6 +118,7 @@ public class Interaction extends Prompt {
 	 */
 	public void setObjectives(Collection<Objective> objectives){
 		this.objectives = objectives;
+		if(objectives!=null) objectives.removeIf(objective -> objective==null);
 	}
 	/**
 	 * Gets the objectives to be given for this Interaction.
@@ -133,7 +134,7 @@ public class Interaction extends Prompt {
 	 * @param action a valid prompt action
 	 */
 	public void setAction(String action){
-		actions = Arrays.asList(action);
+		actions = action!=null ? Arrays.asList(action) : actions;
 	}
 	/**
 	 * Sets the prompt actions to run during this Interaction.
@@ -142,6 +143,7 @@ public class Interaction extends Prompt {
 	 */
 	public void setActions(Collection<String> actions){
 		this.actions = actions;
+		if(actions!=null) actions.removeIf(action -> action==null);
 	}
 	/**
 	 * Gets the prompt actions to run during this Interaction.
