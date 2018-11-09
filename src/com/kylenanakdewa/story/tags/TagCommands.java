@@ -11,6 +11,7 @@ import org.bukkit.command.TabExecutor;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 
+import com.kylenanakdewa.core.common.CommonColors;
 import com.kylenanakdewa.core.common.Error;
 import com.kylenanakdewa.core.common.Utils;
 import com.kylenanakdewa.story.StoryPlugin;
@@ -81,16 +82,16 @@ public final class TagCommands implements TabExecutor {
             target.displayInfo(sender);
         } else if(args.length==4 && args[2].equalsIgnoreCase("add")){
             target.addTag(Tag.get(args[3]));
-            sender.sendMessage(Utils.messageText+"Added tag "+args[3].toLowerCase()+" to "+target);
+            sender.sendMessage(CommonColors.MESSAGE+"Added tag "+args[3].toLowerCase()+" to "+target);
         } else if(args.length==4 && args[2].equalsIgnoreCase("remove")){
             target.removeTag(Tag.get(args[3]));
-            sender.sendMessage(Utils.messageText+"Removed tag "+args[3].toLowerCase()+" from "+target);
+            sender.sendMessage(CommonColors.MESSAGE+"Removed tag "+args[3].toLowerCase()+" from "+target);
         } else if(args[2].equalsIgnoreCase("removeall")){
             target.removeAllTags();
-            sender.sendMessage(Utils.messageText+"Removed all tags from "+target);
+            sender.sendMessage(CommonColors.MESSAGE+"Removed all tags from "+target);
         } else if(args[2].equalsIgnoreCase("reload")){
             target.reload();
-            sender.sendMessage(Utils.messageText+"Reloaded tags for "+target);
+            sender.sendMessage(CommonColors.MESSAGE+"Reloaded tags for "+target);
         }
 
         return true;

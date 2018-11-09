@@ -2,11 +2,7 @@ package com.kylenanakdewa.story.quests.objectives;
 
 import java.util.Arrays;
 import java.util.HashSet;
-import java.util.Map;
 import java.util.Set;
-
-import com.kylenanakdewa.story.tags.Condition;
-import com.kylenanakdewa.story.tags.Interaction;
 
 /**
  * An objective made up of several sub-objectives. 
@@ -16,9 +12,7 @@ import com.kylenanakdewa.story.tags.Interaction;
 public class CompoundObjective extends Objective {
 
     /** The sub-objectives. */
-    private Set<Objective> subObjectives;
-    /** The description of this objective. If null, sub-objective descriptions are used instead. */
-    private String description;
+    protected Set<Objective> subObjectives;
 
 
     /**
@@ -60,7 +54,11 @@ public class CompoundObjective extends Objective {
 
     @Override
     public String getIdentifier() {
-        return null;
+        String identifier = "compound[";
+        for(Objective objective : subObjectives) identifier += objective.getIdentifier()+",";
+        if(identifier.endsWith(",")) identifier = identifier.substring(0, identifier.length());
+        identifier += "]";
+        return identifier;
     }
 
 
@@ -76,19 +74,5 @@ public class CompoundObjective extends Objective {
         }
         return desc;
     }
-    @Override
-    public void setDescription(String description) {
-        this.description = description;
-    }
 
-    @Override
-	public Map<Condition, Interaction> getInteractions() {
-		return null;
-	}
-
-
-	@Override
-	public void setInteractions(Map<Condition, Interaction> interactions) {
-		
-	}
 }

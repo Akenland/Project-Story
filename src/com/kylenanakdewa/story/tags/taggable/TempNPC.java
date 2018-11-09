@@ -10,6 +10,9 @@ import net.citizensnpcs.api.npc.NPC;
 
 /**
  * TempNPC
+ * This is just because TaggedNPC can't implement Character (conflicting methods with Trait).
+ * Eventually there needs to be a better solution.
+ * @author Kyle Nanakdewa
  */
 public class TempNPC implements Character {
 

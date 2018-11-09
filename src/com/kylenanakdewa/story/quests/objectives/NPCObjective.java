@@ -1,5 +1,7 @@
 package com.kylenanakdewa.story.quests.objectives;
 
+import com.kylenanakdewa.story.tags.taggable.TaggedNPC;
+
 import net.citizensnpcs.api.npc.NPC;
 
 /**
@@ -8,12 +10,15 @@ import net.citizensnpcs.api.npc.NPC;
  */
 public abstract class NPCObjective extends Objective {
 
-	/** The NPC involved in this objective. */
-	private NPC npc;
+	/** The Citizens NPC involved in this objective. */
+	protected NPC npc;
+	/** The TaggedNPC involved in this objective. */
+	protected TaggedNPC taggedNPC;
 
 
 	public NPCObjective(NPC npc){
 		this.npc = npc;
+		taggedNPC = TaggedNPC.getTaggedNPC(npc);
 	}
 
 }

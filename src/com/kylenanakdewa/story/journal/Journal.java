@@ -7,10 +7,13 @@ import java.util.Set;
 
 import com.kylenanakdewa.core.characters.players.PlayerCharacter;
 import com.kylenanakdewa.core.common.Utils;
+import com.kylenanakdewa.core.common.savedata.PlayerSaveDataSection;
+import com.kylenanakdewa.story.StoryPlugin;
 import com.kylenanakdewa.story.quests.objectives.DummyObjective;
 import com.kylenanakdewa.story.quests.objectives.Objective;
 import com.kylenanakdewa.story.quests.objectives.ObjectiveStatusEvent;
 import com.kylenanakdewa.story.quests.objectives.Objective.Status;
+import com.kylenanakdewa.story.tags.Interaction;
 import com.kylenanakdewa.story.utils.Book;
 
 import org.bukkit.ChatColor;
@@ -21,14 +24,14 @@ import org.bukkit.inventory.ItemStack;
  * A journal for a Character, containing objectives that they have yet to complete.
  * @author Kyle Nanakdewa
  */
-public class Journal {
+public class Journal extends PlayerSaveDataSection {
 
 	/** The journals of logged in players. */
 	static final Map<PlayerCharacter,Journal> playerJournals = new HashMap<PlayerCharacter,Journal>();
 
 
 	/** The character that this journal is for. */
-	private final PlayerCharacter character;
+	//private final PlayerCharacter character;
 
 	/** The active objectives in this journal. */
 	private final Set<Objective> activeObjectives;
@@ -43,7 +46,7 @@ public class Journal {
 	 * @param character the character to get a journal for
 	 */
 	private Journal(PlayerCharacter character){
-		this.character = character;
+		super(character, StoryPlugin.plugin);
 		activeObjectives = new HashSet<Objective>();
 		discoveredObjectives = new HashSet<Objective>();
 		completedObjectives = new HashSet<Objective>();
@@ -52,10 +55,10 @@ public class Journal {
 
 		activeObjectives.add(new DummyObjective(null, "Talk to NPCs to find things to do"));
 		activeObjectives.add(new DummyObjective(null, "Explore the world"));
-		activeObjectives.add(new DummyObjective("talk-greeter", "Talk to the Greeter"));
+		activeObjectives.add(new DummyObjective("talknpc_231", "Talk to the Greeter"));
 
 		discoveredObjectives.add(new DummyObjective("library-aunix", "Learn about the Aunix"));
-		discoveredObjectives.add(new DummyObjective("library-researcher", "Talk to the Waramon researcher"));
+		discoveredObjectives.add(new DummyObjective("talknpc_278", "Talk to the Waramon researcher"));
 
 		completedObjectives.add(new DummyObjective(null, "View your journal"));
 	}
@@ -128,6 +131,8 @@ public class Journal {
 			Player player = (Player)character.getPlayer();
 			player.sendTitle(ChatColor.DARK_PURPLE+"!", objective.getDescription(), -1, -1, -1);
 			Utils.sendActionBar(player, "Added to Journal");
+			Interaction startInteraction = objective.getStartInteraction();
+			if(startInteraction!=null) startInteraction.display(player);
 		}
 	}
 	/**
@@ -142,6 +147,8 @@ public class Journal {
 			Player player = (Player)character.getPlayer();
 			player.sendTitle(ChatColor.DARK_PURPLE+"?", objective.getDescription(), -1, -1, -1);
 			Utils.sendActionBar(player, "Added to Journal");
+			Interaction startInteraction = objective.getStartInteraction();
+			if(startInteraction!=null) startInteraction.display(player);
 		}
 	}
 
@@ -170,6 +177,20 @@ public class Journal {
 		return objective;
 	}
 	/**
+	 * Gets all active objective with the specified identifier type.
+	 * @return all active and discovered objectives
+	 */
+	public Set<Objective> getActiveTypeObjectives(String identifierType){
+		Set<Objective> objectives = new HashSet<Objective>();
+		activeObjectives.forEach(objective -> {
+			if(objective.getIdentifier().split("_",2)[0].equalsIgnoreCase(identifierType)) objectives.add(objective);
+		});
+		discoveredObjectives.forEach(objective -> {
+			if(objective.getIdentifier().split("_",2)[0].equalsIgnoreCase(identifierType)) objectives.add(objective);
+		});
+		return objectives;
+	}
+	/**
 	 * Checks if this Journal contains the specified Objective.
 	 * @return true if this Journal contains the specified objective, otherwise false
 	 */
@@ -196,10 +217,14 @@ public class Journal {
 
 		if(event.getNewStatus().equals(Status.COMPLETED)){
 			player.sendTitle(ChatColor.DARK_GREEN+"\u2713", event.getObjective().getDescription(), -1, -1, -1);
+			Interaction completionInteraction = event.getObjective().getCompletionInteraction();
+			if(completionInteraction!=null) completionInteraction.display(player);
 			completedObjectives.add(event.getObjective());
 		}
 		else if(event.getNewStatus().equals(Status.FAILED)){
 			player.sendTitle(ChatColor.DARK_RED+"x", event.getObjective().getDescription(), -1, -1, -1);
+			Interaction failInteraction = event.getObjective().getFailInteraction();
+			if(failInteraction!=null) failInteraction.display(player);
 		}
 
 		activeObjectives.remove(event.getObjective());

@@ -17,6 +17,7 @@ import org.bukkit.inventory.Inventory;
 
 import com.kylenanakdewa.core.characters.players.PlayerCharacter;
 import com.kylenanakdewa.core.common.Utils;
+import com.kylenanakdewa.story.StoryPlugin;
 import com.kylenanakdewa.story.tags.taggable.TaggedEntity;
 import com.kylenanakdewa.story.tags.taggable.TempNPC;
 
@@ -201,7 +202,8 @@ public class NPCTag extends Tag {
         String npcName = npc.getFullName();
         String npcTitle = title!=null ? (title.length()>2 ? title : title+"citizen" ) : "citizen";
         String npcRealm = getRealm()!=null ? getRealm().getName() : "Akenland";
-        String npcLoc = getLocationName()!=null ? getLocationName() : "the "+npcRealm;
+        String npcLoc = !getLocationData().getDisplayNames().isEmpty() ? getLocationData().getDisplayName() : "the "+npcRealm;
+        String npcLocDirection = !getLocationData().getDirectionalNames().isEmpty() ? getLocationData().getDirectionalName() : "in the "+npcRealm;
 
         // Format questions
         List<String> questions = conversation.getQuestions();
@@ -215,7 +217,8 @@ public class NPCTag extends Tag {
                 .replace("NPC_NAME", npcName + ChatColor.WHITE)
                 .replace("NPC_TITLE", npcTitle + ChatColor.WHITE)
                 .replace("NPC_REALM", npcRealm + ChatColor.WHITE)
-                .replace("NPC_LOCATION", npcLoc + ChatColor.WHITE);
+                .replace("NPC_LOCATION", npcLoc + ChatColor.WHITE)
+                .replace("NPC_LOCATION_DESCRIPTION", npcLocDirection + ChatColor.WHITE);
             questions.add(i, ChatColor.WHITE + question);
         }
         conversation.setQuestions(questions);
@@ -229,6 +232,7 @@ public class NPCTag extends Tag {
                 .replaceText("NPC_TITLE", npcTitle + ChatColor.GRAY)
                 .replaceText("NPC_REALM", npcRealm + ChatColor.GRAY)
                 .replaceText("NPC_LOCATION", npcLoc + ChatColor.GRAY)
+                .replaceText("NPC_LOCATION_DESCRIPTION", npcLocDirection + ChatColor.GRAY)
 
                 // Replace THISNPC with npc_ID in all actions
                 .replaceAction("thisnpc", "npc_"+npc.getId())
@@ -239,6 +243,13 @@ public class NPCTag extends Tag {
 
         // Prepare the prompt
         conversation.start(player, new TempNPC(npc));
+
+        // Pause the NPC's movement
+        if(!npc.getNavigator().isPaused()){
+            npc.getNavigator().setPaused(true);
+            int delay = conversation.isRandomQuestions() ? 30 : (conversation.getQuestions().size())*30;
+            Bukkit.getScheduler().scheduleSyncDelayedTask(StoryPlugin.plugin, () -> npc.getNavigator().setPaused(false), delay);
+        }
     }
     /**
      * Display the appropriate conversation to a {@link Player}.

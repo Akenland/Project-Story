@@ -16,11 +16,16 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 
+import com.kylenanakdewa.core.characters.players.PlayerCharacter;
 import com.kylenanakdewa.core.common.CommonColors;
 import com.kylenanakdewa.core.common.Utils;
 import com.kylenanakdewa.core.common.prompts.Prompt;
 import com.kylenanakdewa.core.common.prompts.PromptActionEvent;
 import com.kylenanakdewa.story.StoryPlugin;
+import com.kylenanakdewa.story.journal.Journal;
+import com.kylenanakdewa.story.quests.objectives.AutoQuest;
+import com.kylenanakdewa.story.quests.objectives.NPCTalkObjective;
+import com.kylenanakdewa.story.quests.objectives.Objective;
 import com.kylenanakdewa.story.tags.Condition;
 import com.kylenanakdewa.story.tags.NPCTag;
 import com.kylenanakdewa.story.tags.Tag;
@@ -147,9 +152,21 @@ public class TaggedNPC extends Trait implements Taggable {
     @EventHandler
     public void onPlayerInteract(NPCRightClickEvent event){
         if(event.getNPC() != this.getNPC()) return;
+
+        PlayerCharacter player = PlayerCharacter.getCharacter(event.getClicker());
         
         // NPC should face the player
         npc.faceLocation(event.getClicker().getEyeLocation());
+
+        // Clear the objective
+        Objective objective = Journal.get(player).getActiveObjective("talknpc_" + npc.getId());
+        if(!(objective instanceof NPCTalkObjective)) objective = Objective.loadObjective(objective.getIdentifier());
+        if(objective!=null){
+            // Set the NPC for the completion interaction
+            if(objective.getCompletionInteraction()!=null) objective.getCompletionInteraction().setCharacter(new TempNPC(npc));
+            objective.setCompleted();
+            return;
+        }
 
         // Display the conversation
         getTag().displayConversation(event.getClicker(), event.getNPC());
@@ -170,6 +187,10 @@ public class TaggedNPC extends Trait implements Taggable {
             ((NPCTag)npc.getTag()).displayConversation(event.getPlayer(), npc.getNPC(), npcAction);
 
             //// Extra actions
+            // AutoQuest
+            if(npcAction.equalsIgnoreCase("autoquest")){
+                Journal.get(PlayerCharacter.getCharacter(event.getPlayer())).addObjective(new AutoQuest(getTags()));
+            }
             // Get equipment
             if(npcAction.equalsIgnoreCase("equip")){
                 equip();

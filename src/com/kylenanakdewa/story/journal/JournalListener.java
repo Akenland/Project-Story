@@ -2,6 +2,7 @@ package com.kylenanakdewa.story.journal;
 
 import com.kylenanakdewa.core.characters.players.PlayerCharacter;
 import com.kylenanakdewa.core.common.prompts.PromptActionEvent;
+import com.kylenanakdewa.story.quests.objectives.GoToLocationObjective;
 import com.kylenanakdewa.story.quests.objectives.Objective;
 import com.kylenanakdewa.story.quests.objectives.ObjectiveStatusEvent;
 
@@ -9,8 +10,10 @@ import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerInteractEvent;
+import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemStack;
@@ -47,7 +50,7 @@ public final class JournalListener implements Listener {
 	}
 
 
-	@EventHandler
+	@EventHandler(priority = EventPriority.LOW)
 	public void onServerEmpty(PlayerQuitEvent event){
 		if(Bukkit.getOnlinePlayers().isEmpty()) Journal.updateJournals();
 	}
@@ -70,4 +73,18 @@ public final class JournalListener implements Listener {
 		}
 	}
 
+
+	@EventHandler
+	public void onPlayerLocation(PlayerMoveEvent event){
+		if(event.getFrom().distanceSquared(event.getTo()) < 0.02) return;
+
+		PlayerCharacter player = PlayerCharacter.getCharacter(event.getPlayer());
+
+		for(Objective objective : Journal.get(player).getActiveTypeObjectives("gotoloc")){
+			if(!(objective instanceof GoToLocationObjective)) objective = Objective.loadObjective(objective.getIdentifier());
+			if(((GoToLocationObjective)objective).isWithinLocation(event.getTo())){
+				objective.setCompleted();
+			}
+		}
+	}
 }

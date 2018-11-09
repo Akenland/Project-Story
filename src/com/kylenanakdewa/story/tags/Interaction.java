@@ -6,13 +6,19 @@ import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.List;
+
 import com.kylenanakdewa.core.characters.Character;
 import com.kylenanakdewa.core.characters.players.PlayerCharacter;
+import com.kylenanakdewa.core.common.CommonColors;
+import com.kylenanakdewa.core.common.Utils;
 import com.kylenanakdewa.core.common.prompts.Prompt;
 import com.kylenanakdewa.core.common.prompts.PromptActionEvent;
 import com.kylenanakdewa.story.StoryPlugin;
 import com.kylenanakdewa.story.journal.Journal;
-import com.kylenanakdewa.story.quests.objectives.DummyObjective;
 import com.kylenanakdewa.story.quests.objectives.Objective;
 
 /**
@@ -24,10 +30,10 @@ public class Interaction extends Prompt {
 	private Character character;
 	/** Items to be given the player in this Interaction. */
 	private ItemStack[] items;
-	/** An objective to be given to the player in this Interaction. */
-	private Objective objective;
-	/** A prompt action to run when this Interaction starts. The action is run from the player. */
-	private String action;
+	/** Objectives to be given to the player in this Interaction. */
+	private Collection<Objective> objectives;
+	/** Prompt actions to run when this Interaction starts. The action is run from the player. */
+	private Collection<String> actions;
 
 
 	/**
@@ -59,12 +65,20 @@ public class Interaction extends Prompt {
 			interaction.setQuestions(config.getStringList("questions"));
 			interaction.setRandomQuestions(config.getBoolean("randomQuestions"));
 			interaction.setAnswers(config.getStringList("answers"), config.getStringList("actions"), config.getStringList("conditions"));
-			String objectiveString = config.getString("objective");
-			if(objectiveString!=null){
-				String[] splitObjective = objectiveString.split("_", 2);
-				interaction.setObjective(new DummyObjective(splitObjective[0], splitObjective[1])); //TODO
+			List<String> objectiveList = config.getStringList("objectives");
+			if(objectiveList!=null && !objectiveList.isEmpty()){
+				interaction.setObjectives(new ArrayList<Objective>());
+				objectiveList.forEach(objectiveString -> interaction.getObjectives().add(Objective.loadObjective(objectiveString)));
+			} else {
+				String objectiveString = config.getString("objective");
+				if(objectiveString!=null) interaction.setObjective(Objective.loadObjective(objectiveString));
 			}
-			interaction.setAction(config.getString("action"));
+			List<String> actionList = config.getStringList("runActions");
+			if(actionList!=null && !actionList.isEmpty()){
+				interaction.setActions(actionList);
+			} else {
+				interaction.setAction(config.getString("action"));
+			}
 			interaction.setItems(config.getItemStack("item"));
 		} else return null;
 
@@ -90,33 +104,51 @@ public class Interaction extends Prompt {
 	}
 
 	/**
-	 * Sets the objective to be given for this Interaction.
+	 * Sets a single objective to be given for this Interaction.
+	 * This overwrites all existing objectives.
 	 * @param objective the objective
 	 */
 	public void setObjective(Objective objective){
-		this.objective = objective;
+		objectives = Arrays.asList(objective);
 	}
 	/**
-	 * Gets the objective to be given for this Interaction.
-	 * @return the objective
+	 * Sets the objectives to be given for this Interaction.
+	 * This overwrites all existing objectives.
+	 * @param objectives the objectives
 	 */
-	public Objective getObjective(){
-		return objective;
+	public void setObjectives(Collection<Objective> objectives){
+		this.objectives = objectives;
+	}
+	/**
+	 * Gets the objectives to be given for this Interaction.
+	 * @return the objectives
+	 */
+	public Collection<Objective> getObjectives(){
+		return objectives;
 	}
 
 	/**
-	 * Sets the prompt action to run during this Interaction.
+	 * Sets a single prompt action to run during this Interaction.
+	 * This overwrites all existing actions.
 	 * @param action a valid prompt action
 	 */
 	public void setAction(String action){
-		this.action = action;
+		actions = Arrays.asList(action);
 	}
 	/**
-	 * Gets the prompt action to run during this Interaction.
-	 * @return a prompt action
+	 * Sets the prompt actions to run during this Interaction.
+	 * This overwrites all existing objectives.
+	 * @param actions valid prompt actions
 	 */
-	public String getAction(){
-		return action;
+	public void setActions(Collection<String> actions){
+		this.actions = actions;
+	}
+	/**
+	 * Gets the prompt actions to run during this Interaction.
+	 * @return the prompt actions
+	 */
+	public Collection<String> getActions(){
+		return actions;
 	}
 
 	/**
@@ -140,13 +172,17 @@ public class Interaction extends Prompt {
 	 */
 	public void start(Player player, Character character){
 		setCharacter(character);
+		if(character==null){
+			Utils.notifyAdminsError("[Story] Interaction for "+player.getDisplayName()+CommonColors.ERROR+" failed because there is no character.");
+			return;
+		}
 
 		int delay = isRandomQuestions() ? 0 : (getQuestions().size()-1)*30;
 		Bukkit.getScheduler().scheduleSyncDelayedTask(StoryPlugin.plugin, () -> {
 
-			// Action
-			if(getAction()!=null){
-				Bukkit.getServer().getPluginManager().callEvent(new PromptActionEvent(player, getAction()));
+			// Actions
+			if(getActions()!=null){
+				getActions().forEach(action -> Bukkit.getServer().getPluginManager().callEvent(new PromptActionEvent(player, action)));
 			}
 
 			// Items
@@ -155,10 +191,10 @@ public class Interaction extends Prompt {
 				catch(IllegalArgumentException e){}
 			}
 
-			// Objective
+			// Objectives
 			Bukkit.getScheduler().scheduleSyncDelayedTask(StoryPlugin.plugin, () -> {
-				if(getObjective()!=null){
-					Journal.get(PlayerCharacter.getCharacter(player)).addObjective(getObjective());
+				if(getObjectives()!=null){
+					getObjectives().forEach(objective -> Journal.get(PlayerCharacter.getCharacter(player)).addObjective(objective));
 				}
 			}, 30);
 

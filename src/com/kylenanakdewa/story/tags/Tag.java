@@ -1,18 +1,24 @@
 package com.kylenanakdewa.story.tags;
 
 import com.kylenanakdewa.core.CorePlugin;
+import com.kylenanakdewa.core.common.CommonColors;
 import com.kylenanakdewa.core.common.ConfigAccessor;
-import com.kylenanakdewa.core.common.Utils;
 import com.kylenanakdewa.core.common.prompts.Prompt;
+import com.kylenanakdewa.core.common.savedata.SaveDataSection;
 import com.kylenanakdewa.core.realms.Realm;
 import com.kylenanakdewa.story.StoryPlugin;
+import com.kylenanakdewa.story.tags.data.LocationData;
+import com.kylenanakdewa.story.tags.data.ObjectiveData;
+
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
-import org.bukkit.configuration.file.FileConfiguration;
+import org.bukkit.configuration.ConfigurationSection;
+import org.bukkit.plugin.Plugin;
 
 /**
  * A tag that can be applied to game objects and used to identify their behavior.
@@ -63,9 +69,9 @@ public class Tag {
      */
     private boolean loaded;
     /**
-     * The FileConfiguration for this tag.
+     * The ConfigurationSection for this tag.
      */
-    private FileConfiguration file;
+    private ConfigurationSection data;
     /**
      * All tags inherited by this tag, in order of priority. When defining behaviors for tagged objects, start with this tag, then iterate through the inherited tags.
      */
@@ -114,10 +120,10 @@ public class Tag {
 
         if(name!=null){
             // Get the file
-            file = new ConfigAccessor("tags\\"+name+".yml", StoryPlugin.plugin).getConfig();
+            data = new ConfigAccessor("tags\\"+name+".yml", StoryPlugin.plugin).getConfig();
 
             // Load inherited tags
-            for(String tagName : file.getStringList("inherit")) inheritedTags.add(Tag.get(tagName));
+            for(String tagName : data.getStringList("inherit")) inheritedTags.add(Tag.get(tagName));
         }
 
         loaded = true;
@@ -188,8 +194,8 @@ public class Tag {
      */
     public void displayInfo(CommandSender sender){
         Prompt prompt = new Prompt();
-        prompt.addQuestion(Utils.infoText+"--- Tag: "+Utils.messageText+name+Utils.infoText+" ---");
-        prompt.addQuestion(Utils.infoText+"Inherits the following tags:");
+        prompt.addQuestion(CommonColors.INFO+"--- Tag: "+CommonColors.MESSAGE+name+CommonColors.INFO+" ---");
+        prompt.addQuestion(CommonColors.INFO+"Inherits the following tags:");
         for(Tag tag : getTotalInheritedTags()){
             prompt.addAnswer(tag.name, "");
         }
@@ -198,11 +204,43 @@ public class Tag {
 
 
     /**
-     * Gets the {@link FileConfiguration} for this Tag.
+     * Gets the {@link ConfigurationSection} for this Tag.
      */
-    public FileConfiguration getData(){
+    public ConfigurationSection getData(){
         load();
-        return file;
+        return data;
+    }
+	/**
+	 * Gets a plugin's data section for this Tag.
+	 * Plugins can use this to save extra data for this Tag.
+	 * @param plugin the plugin to get data for
+	 * @return the data section
+	 */
+    public SaveDataSection getData(Plugin plugin){
+        List<Tag> tags = getTotalInheritedTags();
+        Collections.reverse(tags);
+        List<SaveDataSection> datas = new ArrayList<SaveDataSection>();
+        for(Tag tag : tags){
+            ConfigurationSection pluginData = plugin.equals(StoryPlugin.plugin) ? tag.getData() : tag.getData().getConfigurationSection(plugin.getName());
+		    if(pluginData==null) pluginData = data.createSection(plugin.getName());
+		    datas.add(new SaveDataSection(pluginData, plugin));
+        }
+        return SaveDataSection.mergeData(datas.toArray(new SaveDataSection[0]));
+    }
+
+    /**
+     * Gets the location data for this Tag.
+     * @return the location data
+     */
+    public LocationData getLocationData(){
+        return new LocationData(this);
+    }
+    /**
+     * Gets the objective data for this Tag.
+     * @return the objective data
+     */
+    public ObjectiveData getObjectiveData(){
+        return new ObjectiveData(this);
     }
 
 
@@ -218,6 +256,7 @@ public class Tag {
      * Gets the location name associated with this Tag. Can be any string.
      * @return the location name, or null if one was not found
      */
+    @Deprecated
     public String getLocationName(){
         load();
         return locationName;
