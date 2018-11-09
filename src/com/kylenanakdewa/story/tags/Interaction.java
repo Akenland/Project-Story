@@ -13,6 +13,8 @@ import java.util.List;
 
 import com.kylenanakdewa.core.characters.Character;
 import com.kylenanakdewa.core.characters.players.PlayerCharacter;
+import com.kylenanakdewa.core.common.CommonColors;
+import com.kylenanakdewa.core.common.Utils;
 import com.kylenanakdewa.core.common.prompts.Prompt;
 import com.kylenanakdewa.core.common.prompts.PromptActionEvent;
 import com.kylenanakdewa.story.StoryPlugin;
@@ -173,7 +175,7 @@ public class Interaction extends Prompt {
 	public void start(Player player, Character character){
 		setCharacter(character);
 		if(character==null){
-			//Utils.notifyAdminsError("[Story] Interaction for "+player.getDisplayName()+CommonColors.ERROR+" failed because there is no character.");
+			Utils.notifyAdminsError("[Story] Interaction for "+player.getDisplayName()+CommonColors.ERROR+" failed because there is no character.");
 			return;
 		}
 

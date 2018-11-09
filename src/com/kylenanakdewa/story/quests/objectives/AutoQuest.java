@@ -76,6 +76,7 @@ public class AutoQuest extends Quest {
         }
 
         Utils.notifyAdmins("[Story] AutoQuest generated with "+subObjectives.size()+" objectives.");
+        subObjectives.forEach(obj -> Utils.notifyAdmins("[Story] - "+obj.getIdentifier()+" - "+obj.getDescription()));
         setSubObjectives(subObjectives);
     }
     /**
