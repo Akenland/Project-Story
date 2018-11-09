@@ -20,7 +20,7 @@ import org.bukkit.configuration.ConfigurationSection;
 public class ObjectiveData extends TagDataSection {
 
     /** The objective data. */
-    private final ConfigurationSection data = super.data.getConfigurationSection("location");
+    private final ConfigurationSection data = super.data.getConfigurationSection("objectives");
 
     /** The objectives in the tag's data. */
     private Set<Objective> objectives;
