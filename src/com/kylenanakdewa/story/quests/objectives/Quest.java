@@ -45,13 +45,19 @@ public class Quest extends Objective {
             Objective current = iterator.next();
             if(previous!=null){
                 Interaction completion = current.getCompletionInteraction();
-                if(completion==null) current.setCompletionInteraction(new Interaction());
+                if(completion==null){
+                    completion = new Interaction();
+                    current.setCompletionInteraction(completion);
+                }
                 Collection<Objective> objectives = completion.getObjectives();
                 if(objectives==null) completion.setObjective(previous);
                 else objectives.add(previous);
             } else {
                 Interaction start = getStartInteraction();
-                if(start==null) setStartInteraction(new Interaction());
+                if(start==null){
+                    start = new Interaction();
+                    setStartInteraction(start);
+                }
                 Collection<Objective> objectives = start.getObjectives();
                 if(objectives==null) start.setObjective(current);
                 else objectives.add(current);
