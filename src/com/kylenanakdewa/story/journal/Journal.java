@@ -9,7 +9,6 @@ import com.kylenanakdewa.core.characters.players.PlayerCharacter;
 import com.kylenanakdewa.core.common.Utils;
 import com.kylenanakdewa.core.common.savedata.PlayerSaveDataSection;
 import com.kylenanakdewa.story.StoryPlugin;
-import com.kylenanakdewa.story.quests.objectives.DummyObjective;
 import com.kylenanakdewa.story.quests.objectives.Objective;
 import com.kylenanakdewa.story.quests.objectives.ObjectiveStatusEvent;
 import com.kylenanakdewa.story.quests.objectives.Objective.Status;
@@ -53,14 +52,14 @@ public class Journal extends PlayerSaveDataSection {
 
 		//ConfigurationSection data = character.getData(StoryPlugin.plugin).getData();
 
-		activeObjectives.add(new DummyObjective(null, "Talk to NPCs to find things to do"));
-		activeObjectives.add(new DummyObjective(null, "Explore the world"));
-		activeObjectives.add(new DummyObjective("talknpc_231", "Talk to the Greeter"));
+		//activeObjectives.add(new DummyObjective(null, "Talk to NPCs to find things to do"));
+		//activeObjectives.add(new DummyObjective(null, "Explore the world"));
+		//activeObjectives.add(new DummyObjective("talknpc_231", "Talk to the Greeter"));
 
-		discoveredObjectives.add(new DummyObjective("library-aunix", "Learn about the Aunix"));
-		discoveredObjectives.add(new DummyObjective("talknpc_278", "Talk to the Waramon researcher"));
+		//discoveredObjectives.add(new DummyObjective("library-aunix", "Learn about the Aunix"));
+		//discoveredObjectives.add(new DummyObjective("talknpc_278", "Talk to the Waramon researcher"));
 
-		completedObjectives.add(new DummyObjective(null, "View your journal"));
+		//completedObjectives.add(new DummyObjective(null, "View your journal"));
 	}
 	/**
 	 * Gets a character's journal.
@@ -124,7 +123,7 @@ public class Journal extends PlayerSaveDataSection {
 	 * @param objective the objective to add
 	 */
 	public void addObjective(Objective objective){
-		if(hasObjective(objective)) return;
+		if(objective==null || hasObjective(objective)) return;
 
 		activeObjectives.add(objective);
 		if(character.isOnline()){
@@ -140,7 +139,7 @@ public class Journal extends PlayerSaveDataSection {
 	 * @param objective the objective to add
 	 */
 	public void addDiscoveredObjective(Objective objective){
-		if(hasObjective(objective)) return;
+		if(objective==null || hasObjective(objective)) return;
 
 		discoveredObjectives.add(objective);
 		if(character.isOnline()){
@@ -160,6 +159,7 @@ public class Journal extends PlayerSaveDataSection {
 		Set<Objective> objectives = new HashSet<Objective>();
 		objectives.addAll(activeObjectives);
 		objectives.addAll(discoveredObjectives);
+		objectives.removeIf(objective -> objective==null);
 		return objectives;
 	}
 	/**

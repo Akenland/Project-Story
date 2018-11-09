@@ -81,8 +81,7 @@ public final class JournalListener implements Listener {
 		PlayerCharacter player = PlayerCharacter.getCharacter(event.getPlayer());
 
 		for(Objective objective : Journal.get(player).getActiveTypeObjectives("gotoloc")){
-			if(!(objective instanceof GoToLocationObjective)) objective = Objective.loadObjective(objective.getIdentifier());
-			if(((GoToLocationObjective)objective).isWithinLocation(event.getTo())){
+			if(objective instanceof GoToLocationObjective && ((GoToLocationObjective)objective).isWithinLocation(event.getTo())){
 				objective.setCompleted();
 			}
 		}
