@@ -67,6 +67,18 @@ public class Quest extends Objective {
             }
             previous = current;
         }
+        // Complete the quest at the end of the final objective
+        if(!subObjectives.isEmpty()){
+            Objective finalObjective = subObjectives.get(subObjectives.size()-1);
+            Interaction completion = finalObjective.getCompletionInteraction();
+            if(completion==null){
+                completion = new Interaction();
+                finalObjective.setCompletionInteraction(completion);
+            }
+            Collection<String> actions = completion.getActions();
+            if(actions==null) completion.setAction("completeObjective_"+getIdentifier());
+            else actions.add("completeObjective_"+getIdentifier());
+        } else setCompleted();
     }
     /**
      * Gets a list of the sub-objectives in this quest, in the order they must be completed in.

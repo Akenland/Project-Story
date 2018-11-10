@@ -168,8 +168,12 @@ public class Journal extends PlayerSaveDataSection {
 		// Add sub-objectives
 		Set<Objective> subObjectives = new HashSet<Objective>();
 		objectives.forEach(objective -> {
-			if(objective instanceof Quest) ((Quest)objective).getSubObjectives().forEach(subObjective -> subObjectives.add(subObjective));
-			if(objective instanceof CompoundObjective) ((CompoundObjective)objective).getSubObjectives().forEach(subObjective -> subObjectives.add(subObjective));
+			if(objective instanceof Quest) ((Quest)objective).getSubObjectives().forEach(subObjective -> {
+				if(subObjective.getStatus().equals(Status.ACTIVE)) subObjectives.add(subObjective);
+			});
+			if(objective instanceof CompoundObjective) ((CompoundObjective)objective).getSubObjectives().forEach(subObjective -> {
+				if(subObjective.getStatus().equals(Status.ACTIVE)) subObjectives.add(subObjective);
+			});
 		});
 		objectives.addAll(subObjectives);
 		objectives.removeIf(objective -> objective==null);

@@ -3,6 +3,8 @@ package com.kylenanakdewa.story.quests.objectives;
 import com.kylenanakdewa.story.tags.Interaction;
 import com.kylenanakdewa.story.tags.taggable.TempNPC;
 
+import org.bukkit.ChatColor;
+
 import net.citizensnpcs.api.npc.NPC;
 
 /**
@@ -27,7 +29,13 @@ public class NPCTalkObjective extends NPCObjective {
 
     @Override
     public String getDescription() {
-        return super.getDescription()==null ? "Talk to "+new TempNPC(npc).getFormattedName() : super.getDescription();
+        if(super.getDescription()!=null) return super.getDescription();
+
+        TempNPC npcCharacter = new TempNPC(npc);
+        String location = taggedNPC.getTag().getLocationData().getDisplayName();
+        if(location==null && npcCharacter.getRealm()!=null) location = "the "+npcCharacter.getRealm().getName();
+        location = location!=null ? ChatColor.RESET+" in "+location : "";
+        return "Talk to "+npcCharacter.getFormattedName()+location;
     }
 
     @Override
@@ -51,6 +59,14 @@ public class NPCTalkObjective extends NPCObjective {
         interaction.addQuestion("Go meet with "+name+". They're in "+location+".");
         interaction.addQuestion("I'd like you to meet with "+name+". You'll find them in "+location+".");
         interaction.setRandomQuestions(true);
+        return interaction;
+    }
+
+    @Override
+    public Interaction getCompletionInteraction() {
+        if(super.getCompletionInteraction()!=null) return super.getCompletionInteraction();
+        Interaction interaction = new Interaction();
+        interaction.setCharacter(new TempNPC(npc));
         return interaction;
     }
 }
