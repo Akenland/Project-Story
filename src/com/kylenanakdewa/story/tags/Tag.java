@@ -84,10 +84,6 @@ public class Tag {
      */
     private Realm realm;
     /**
-     * A location name associated with this Tag. Can be any string.
-     */
-    private String locationName;
-    /**
      * Conditions on which to display marker icons above tagged objects.
      */
     private List<Condition> markerConditions;
@@ -134,8 +130,6 @@ public class Tag {
                 String realmName = tag.getData().getString("data.realm");
                 if(realmName!=null) realm = CorePlugin.getServerRealmProvider().getRealm(realmName);
             }
-            // Load location name
-            if(locationName==null) locationName = tag.getData().getString("data.location");
 
             // Load conditions on which to display marker
             if(markerConditions==null||markerConditions.isEmpty()){
@@ -145,7 +139,7 @@ public class Tag {
                     markerConditions.add(new Condition(c));
             }
         }
-        if(realm!=null) if(!realm.getName().equalsIgnoreCase(name)) inheritedTags.add(Tag.get(realm.getName()));
+        if(realm!=null) if(!realm.getIdentifier().equalsIgnoreCase(name)) inheritedTags.add(Tag.get(realm.getIdentifier()));
     }
 
 
@@ -251,15 +245,6 @@ public class Tag {
     public Realm getRealm(){
         load();
         return realm;
-    }
-    /**
-     * Gets the location name associated with this Tag. Can be any string.
-     * @return the location name, or null if one was not found
-     */
-    @Deprecated
-    public String getLocationName(){
-        load();
-        return locationName;
     }
     /**
      * Gets every {@link Condition} on which to display a marker above tagged objects.
