@@ -27,6 +27,7 @@ import com.kylenanakdewa.story.quests.objectives.AutoQuest;
 import com.kylenanakdewa.story.quests.objectives.NPCTalkObjective;
 import com.kylenanakdewa.story.quests.objectives.Objective;
 import com.kylenanakdewa.story.tags.Condition;
+import com.kylenanakdewa.story.tags.Interaction;
 import com.kylenanakdewa.story.tags.NPCTag;
 import com.kylenanakdewa.story.tags.Tag;
 import com.kylenanakdewa.story.utils.SentinelNPC;
@@ -191,8 +192,9 @@ public class TaggedNPC extends Trait implements Taggable {
             if(npcAction.equalsIgnoreCase("autoquest")){
                 Journal journal = Journal.get(PlayerCharacter.getCharacter(event.getPlayer()));
                 if(journal.getActiveObjective("autoquest_npc_"+npc.getNPC().getId())!=null) npcAction = "autoquestAlreadyExists";
-                Objective autoQuest = new AutoQuest(getTags());
-                if(autoQuest.getStartInteraction()!=null) autoQuest.getStartInteraction().setCharacter(new TempNPC(npc.getNPC()));
+                Objective autoQuest = new AutoQuest(npc.getNPC());
+                if(autoQuest.getStartInteraction()==null) autoQuest.setStartInteraction(new Interaction());
+                autoQuest.getStartInteraction().setCharacter(new TempNPC(npc.getNPC()));
                 journal.addObjective(autoQuest);
             }
 

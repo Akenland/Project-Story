@@ -43,6 +43,7 @@ public class Quest extends Objective {
         Objective previous = null;
         while(iterator.hasNext()){
             Objective current = iterator.next();
+            // Add previous objective to end of previous objective
             if(previous!=null){
                 Interaction completion = current.getCompletionInteraction();
                 if(completion==null){
@@ -52,7 +53,9 @@ public class Quest extends Objective {
                 Collection<Objective> objectives = completion.getObjectives();
                 if(objectives==null) completion.setObjective(previous);
                 else objectives.add(previous);
-            } else {
+            }
+            // Start the first sub-objective at the same time this objective is started
+            else {
                 Interaction start = getStartInteraction();
                 if(start==null){
                     start = new Interaction();

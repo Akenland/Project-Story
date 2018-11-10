@@ -56,8 +56,8 @@ public class AutoQuest extends Quest {
             }
         }
 
-        // Add objective to return to NPC
         if(npc!=null){
+            // Add objective to return to NPC
             NPCTalkObjective npcObjective = new NPCTalkObjective(npc);
             npcObjective.setDescription("Return to "+new TempNPC(npc).getFormattedName());
             Interaction completion = new Interaction();
@@ -70,14 +70,24 @@ public class AutoQuest extends Quest {
             completion.setItems(new ItemStack(Material.EMERALD, 10*subObjectives.size()));
             completion.setCharacter(new TempNPC(npc));
             npcObjective.setCompletionInteraction(completion);
-
             // Add it as the final objective
             subObjectives.add(npcObjective);
+
+
+            // Set character for first sub-objectives starting interaction to be the same as the quest's
+            Interaction subStart = subObjectives.get(0).getStartInteraction();
+            if(subStart==null){
+                subStart = new Interaction();
+                subObjectives.get(0).setStartInteraction(subStart);
+            }
+            if(subStart.getCharacter()==null) subStart.setCharacter(new TempNPC(npc));
         }
 
         Utils.notifyAdmins("[Story] AutoQuest generated with "+subObjectives.size()+" objectives.");
         subObjectives.forEach(obj -> Utils.notifyAdmins("[Story] - "+obj.getIdentifier()+" - "+obj.getDescription()));
         setSubObjectives(subObjectives);
+
+        
     }
     /**
      * Creates an AutoQuest, started from a specific NPC.

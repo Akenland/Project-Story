@@ -10,6 +10,7 @@ import com.kylenanakdewa.core.common.Utils;
 import com.kylenanakdewa.core.common.savedata.PlayerSaveDataSection;
 import com.kylenanakdewa.story.StoryPlugin;
 import com.kylenanakdewa.story.quests.objectives.CompoundObjective;
+import com.kylenanakdewa.story.quests.objectives.NPCTalkObjective;
 import com.kylenanakdewa.story.quests.objectives.Objective;
 import com.kylenanakdewa.story.quests.objectives.ObjectiveStatusEvent;
 import com.kylenanakdewa.story.quests.objectives.Quest;
@@ -20,6 +21,8 @@ import com.kylenanakdewa.story.utils.Book;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
+
+import net.citizensnpcs.api.CitizensAPI;
 
 /**
  * A journal for a Character, containing objectives that they have yet to complete.
@@ -57,6 +60,7 @@ public class Journal extends PlayerSaveDataSection {
 		//activeObjectives.add(new DummyObjective(null, "Talk to NPCs to find things to do"));
 		//activeObjectives.add(new DummyObjective(null, "Explore the world"));
 		//activeObjectives.add(new DummyObjective("talknpc_231", "Talk to the Greeter"));
+		activeObjectives.add(new NPCTalkObjective(CitizensAPI.getNPCRegistry().getById(231)));
 
 		//discoveredObjectives.add(new DummyObjective("library-aunix", "Learn about the Aunix"));
 		//discoveredObjectives.add(new DummyObjective("talknpc_278", "Talk to the Waramon researcher"));
@@ -216,7 +220,7 @@ public class Journal extends PlayerSaveDataSection {
 	 * Update with an objective status change.
 	 */
 	void objectiveStatusUpdate(ObjectiveStatusEvent event){
-		if(!character.isOnline() || (!activeObjectives.contains(event.getObjective()) && !discoveredObjectives.contains(event.getObjective()))) return;
+		if(!character.isOnline() || !hasObjective(event.getObjective())) return;
 		Player player = (Player)character.getPlayer();
 
 		if(event.getNewStatus().equals(Status.COMPLETED)){

@@ -217,6 +217,7 @@ public class Interaction extends Prompt {
 	}
 	@Override
 	protected void displayAllQuestions(CommandSender target){
+		if(getQuestions()==null) return;
 		int delay = 0;
 		for(String question : getQuestions()){
 
@@ -228,7 +229,7 @@ public class Interaction extends Prompt {
 	}
 	@Override
 	protected void displayAnswers(CommandSender target){
-		int delay = isRandomQuestions() ? 0 : (getQuestions().size()-1)*30;
+		int delay = isRandomQuestions() || getQuestions()==null ? 0 : (getQuestions().size()-1)*30;
 		Bukkit.getScheduler().scheduleSyncDelayedTask(StoryPlugin.plugin, () -> super.displayAnswers(target), delay);
 	}
 
