@@ -4,6 +4,7 @@ import java.util.Map;
 
 import com.kylenanakdewa.story.tags.Condition;
 import com.kylenanakdewa.story.tags.Interaction;
+import com.kylenanakdewa.story.tags.Tag;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
@@ -25,6 +26,9 @@ public abstract class Objective {
 
         if(identifier.startsWith("gotoloc")){
             String[] idContents = identifier.replaceFirst("_", " ").split(" ", 7);
+            if(idContents.length==2){
+                return new GoToLocationObjective(Tag.get(idContents[1]));
+            }
             String worldName = idContents[1];
             double x = Double.parseDouble(idContents[2]);
             double y = Double.parseDouble(idContents[3]);
