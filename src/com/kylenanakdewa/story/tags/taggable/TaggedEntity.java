@@ -126,13 +126,13 @@ public class TaggedEntity implements Taggable {
                 PlayerCharacter data = PlayerCharacter.getCharacter((Player)entity);
 
                 // If not a realm officer, condition fails
-                if(!data.isRealmOfficer()) return false;
+                if(!data.isRealmOfficer() || data.getRealm()==null) return false;
 
                 // Otherwise check if they are officer in specified realm
                 String[] splitStrings = text.split("_", 2);
                 if(splitStrings.length==2){
                     Realm realm = CorePlugin.getServerRealmProvider().getRealm(splitStrings[1]);
-                    if(realm==null || !data.isRealmOfficer()) return false;
+                    return CorePlugin.getServerRealmProvider().isOfficer(data, realm);
                 }
             }
 

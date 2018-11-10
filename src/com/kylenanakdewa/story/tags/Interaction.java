@@ -179,7 +179,7 @@ public class Interaction extends Prompt {
 			return;
 		}
 
-		int delay = isRandomQuestions() ? 0 : (getQuestions().size()-1)*30;
+		int delay = isRandomQuestions() || getQuestions()==null ? 0 : (getQuestions().size()-1)*30;
 		Bukkit.getScheduler().scheduleSyncDelayedTask(StoryPlugin.plugin, () -> {
 
 			// Actions
