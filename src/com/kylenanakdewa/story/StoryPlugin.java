@@ -6,6 +6,7 @@ import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 
+import com.kylenanakdewa.story.journal.JournalCommands;
 import com.kylenanakdewa.story.journal.JournalListener;
 import com.kylenanakdewa.story.tags.Condition;
 import com.kylenanakdewa.story.tags.TagCommands;
@@ -37,6 +38,9 @@ public final class StoryPlugin extends JavaPlugin {
 
 		// Tag command
 		this.getCommand("tag").setExecutor(new TagCommands());
+
+		// Journal command
+		this.getCommand("journal").setExecutor(new JournalCommands());
 
 
 		// Register listener

@@ -38,11 +38,11 @@ public class Journal extends PlayerSaveDataSection {
 	//private final PlayerCharacter character;
 
 	/** The active objectives in this journal. */
-	private final Set<Objective> activeObjectives;
+	final Set<Objective> activeObjectives;
 	/** The discovered objectives in this journal. */
-	private final Set<Objective> discoveredObjectives;
+	final Set<Objective> discoveredObjectives;
 	/** The completed objectives in this journal. */
-	private final Set<Objective> completedObjectives;
+	final Set<Objective> completedObjectives;
 
 
 	/**

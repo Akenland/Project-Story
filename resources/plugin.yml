@@ -14,3 +14,7 @@ commands:
   tag:
     description: Manage tags for objects
     usage: "Usage: /tag <info/entity/player/npc> <target> [add/remove] [tag]"
+  
+  journal:
+    description: Manage journals for characters
+    usage: "Usage: /journal [list/add/remove/reset] [objectiveID] [-player playerName] [-active/-discovered/-completed]"
