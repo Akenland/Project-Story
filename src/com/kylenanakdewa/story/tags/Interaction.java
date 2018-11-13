@@ -193,25 +193,28 @@ public class Interaction extends Prompt {
 		String npcLocDirection = !((TempNPC)character).getTag().getLocationData().getDirectionalNames().isEmpty() ? ((TempNPC)character).getTag().getLocationData().getDirectionalName() : "in the "+npcRealm;
 		
 		// Format questions
-        List<String> questions = getQuestions();
-        for(int i=0; i<questions.size(); i++){
-            String question = questions.get(i);
-            questions.remove(i);
-            question = question
-                .replace("PLAYER_NAME", playerName + ChatColor.WHITE)
-                .replace("PLAYER_TITLE", playerTitle + ChatColor.WHITE)
-                .replace("PLAYER_REALM", playerRealm + ChatColor.WHITE)
-                .replace("NPC_NAME", npcName + ChatColor.WHITE)
-                .replace("NPC_TITLE", npcTitle + ChatColor.WHITE)
-                .replace("NPC_REALM", npcRealm + ChatColor.WHITE)
-                .replace("NPC_LOCATION", npcLoc + ChatColor.WHITE)
-                .replace("NPC_LOCATION_DESCRIPTION", npcLocDirection + ChatColor.WHITE);
-            questions.add(i, ChatColor.WHITE + question);
-        }
-        setQuestions(questions);
-        // Format answers
-        getAnswers().forEach(answer -> {
-            answer
+		List<String> questions = getQuestions();
+		if(questions!=null){
+			for(int i=0; i<questions.size(); i++){
+        	    String question = questions.get(i);
+        	    questions.remove(i);
+        	    question = question
+        	        .replace("PLAYER_NAME", playerName + ChatColor.WHITE)
+        	        .replace("PLAYER_TITLE", playerTitle + ChatColor.WHITE)
+        	        .replace("PLAYER_REALM", playerRealm + ChatColor.WHITE)
+        	        .replace("NPC_NAME", npcName + ChatColor.WHITE)
+        	        .replace("NPC_TITLE", npcTitle + ChatColor.WHITE)
+        	        .replace("NPC_REALM", npcRealm + ChatColor.WHITE)
+        	        .replace("NPC_LOCATION", npcLoc + ChatColor.WHITE)
+        	        .replace("NPC_LOCATION_DESCRIPTION", npcLocDirection + ChatColor.WHITE);
+        	    questions.add(i, ChatColor.WHITE + question);
+        	}
+        	setQuestions(questions);
+		}
+		// Format answers
+		if(getAnswers()!=null){
+			getAnswers().forEach(answer -> {
+            	answer
                 .replaceText("PLAYER_NAME", playerName + ChatColor.GRAY)
                 .replaceText("PLAYER_TITLE", playerTitle + ChatColor.GRAY)
                 .replaceText("PLAYER_REALM", playerRealm + ChatColor.GRAY)
@@ -226,7 +229,8 @@ public class Interaction extends Prompt {
                 .replaceAction("thisNPC", "npc_"+((TempNPC)character).getNPC().getId())
                 .replaceAction("THISNPC", "npc_"+((TempNPC)character).getNPC().getId())
                 .replaceAction("PLAYER_USERNAME", player.getName());
-        });
+        	});
+		}
 
 		int delay = isRandomQuestions() || getQuestions()==null ? 0 : (getQuestions().size()-1)*30;
 		Bukkit.getScheduler().scheduleSyncDelayedTask(StoryPlugin.plugin, () -> {
