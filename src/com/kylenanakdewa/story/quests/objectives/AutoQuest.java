@@ -35,7 +35,7 @@ public class AutoQuest extends Quest {
         this.npc = npc;
         List<Objective> subObjectives = new ArrayList<Objective>();
         // Pick out 1-4 objectives
-        for(int o=0; o < new Random().nextInt(4); o++){
+        for(int o=0; o < new Random().nextInt(3)+1; o++){
             // Pick a random tag and objective, max 10 attempts
             int attempts = 0;
             Objective objective = null;

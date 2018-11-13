@@ -193,11 +193,14 @@ public class TaggedNPC extends Trait implements Taggable {
             // AutoQuest
             if(npcAction.equalsIgnoreCase("autoquest")){
                 Journal journal = Journal.get(PlayerCharacter.getCharacter(event.getPlayer()));
-                if(journal.getActiveObjective("autoquest_npc_"+npc.getNPC().getId())!=null) npcAction = "autoquestAlreadyExists";
-                Objective autoQuest = new AutoQuest(npc.getNPC());
-                if(autoQuest.getStartInteraction()==null) autoQuest.setStartInteraction(new Interaction());
-                autoQuest.getStartInteraction().setCharacter(new TempNPC(npc.getNPC()));
-                journal.addObjective(autoQuest);
+                if(journal.getActiveObjective("autoquest_npc_"+npc.getNPC().getId())!=null)
+                    npcAction = "autoquestAlreadyExists";
+                else {
+                    Objective autoQuest = new AutoQuest(npc.getNPC());
+                    if(autoQuest.getStartInteraction()==null) autoQuest.setStartInteraction(new Interaction());
+                    autoQuest.getStartInteraction().setCharacter(new TempNPC(npc.getNPC()));
+                    journal.addObjective(autoQuest);
+                }
             }
 
             // Display prompt
