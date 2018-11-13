@@ -108,7 +108,7 @@ public class Journal extends PlayerSaveDataSection {
 		}
 		book.addSimplePage(activePage);
 
-		String discoveredPage = ChatColor.DARK_PURPLE+"Discoveries:\n";
+		String discoveredPage = ChatColor.DARK_AQUA+"Discoveries:\n";
 		for(Objective objective : discoveredObjectives){
 			discoveredPage += ChatColor.RESET+"- "+objective.getDescription()+"\n";
 		}
@@ -170,7 +170,15 @@ public class Journal extends PlayerSaveDataSection {
 		// Add sub-objectives
 		Set<Objective> subObjectives = new HashSet<Objective>();
 		objectives.forEach(objective -> {
-			if(objective instanceof Quest) ((Quest)objective).getSubObjectives().forEach(subObjective -> subObjectives.add(subObjective));
+			if(objective instanceof Quest){
+				boolean latestActiveObjAdded = false;
+				for(Objective subObjective : ((Quest)objective).getSubObjectives()){
+					if(subObjective.isCompleted() || !latestActiveObjAdded){
+						subObjectives.add(subObjective);
+						if(!subObjective.isCompleted()) latestActiveObjAdded = true;
+					}
+				}
+			}
 			if(objective instanceof CompoundObjective) ((CompoundObjective)objective).getSubObjectives().forEach(subObjective -> subObjectives.add(subObjective));
 		});
 		objectives.addAll(subObjectives);

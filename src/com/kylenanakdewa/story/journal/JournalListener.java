@@ -1,8 +1,6 @@
 package com.kylenanakdewa.story.journal;
 
 import com.kylenanakdewa.core.characters.players.PlayerCharacter;
-import com.kylenanakdewa.core.common.CommonColors;
-import com.kylenanakdewa.core.common.Utils;
 import com.kylenanakdewa.core.common.prompts.PromptActionEvent;
 import com.kylenanakdewa.story.quests.objectives.GoToLocationObjective;
 import com.kylenanakdewa.story.quests.objectives.Objective;
@@ -63,7 +61,7 @@ public final class JournalListener implements Listener {
 		Journal.playerJournals.values().forEach(journal -> {
 			journal.objectiveStatusUpdate(event);
 		});
-		Utils.notifyAdmins(CommonColors.INFO+"Objective completed: "+event.getObjective().getIdentifier()+" - "+event.getObjective().getDescription());
+		//Utils.notifyAdmins(CommonColors.INFO+"Objective completed: "+event.getObjective().getIdentifier()+" - "+event.getObjective().getDescription());
 	}
 
 
@@ -84,7 +82,7 @@ public final class JournalListener implements Listener {
 		PlayerCharacter player = PlayerCharacter.getCharacter(event.getPlayer());
 
 		for(Objective objective : Journal.get(player).getActiveTypeObjectives("gotoloc")){
-			if(objective instanceof GoToLocationObjective && ((GoToLocationObjective)objective).isWithinLocation(event.getTo())){
+			if(!objective.isCompleted() && objective instanceof GoToLocationObjective && ((GoToLocationObjective)objective).isWithinLocation(event.getTo())){
 				objective.setCompleted();
 			}
 		}
