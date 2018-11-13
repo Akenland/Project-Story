@@ -168,9 +168,11 @@ public class TaggedNPC extends Trait implements Taggable {
             // Set the NPC for the completion interaction
             if(objective.getCompletionInteraction()!=null){
                 objective.getCompletionInteraction().setCharacter(new TempNPC(npc));
-                return;
             }
             objective.setCompleted();
+
+            // If completion interaction has questions, skip the normal interact conversion
+            if(objective.getCompletionInteraction()!=null && objective.getCompletionInteraction().getQuestions()!=null && !objective.getCompletionInteraction().getQuestions().isEmpty()) return;
         }
 
         // Display the conversation
