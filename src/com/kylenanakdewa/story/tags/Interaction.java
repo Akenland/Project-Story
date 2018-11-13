@@ -1,6 +1,7 @@
 package com.kylenanakdewa.story.tags;
 
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.entity.Player;
@@ -20,6 +21,7 @@ import com.kylenanakdewa.core.common.prompts.PromptActionEvent;
 import com.kylenanakdewa.story.StoryPlugin;
 import com.kylenanakdewa.story.journal.Journal;
 import com.kylenanakdewa.story.quests.objectives.Objective;
+import com.kylenanakdewa.story.tags.taggable.TempNPC;
 
 /**
  * Represents a interaction with an NPC.
@@ -179,6 +181,53 @@ public class Interaction extends Prompt {
 			return;
 		}
 
+		// Format all strings with player and NPC name
+		PlayerCharacter playerCharacter = PlayerCharacter.getCharacter(player);
+		String playerName = playerCharacter.getName();
+		String playerTitle = playerCharacter.getTitle().length()<2 ? "explorer" : playerCharacter.getTitle();
+		String playerRealm = playerCharacter.getRealm()!=null ? playerCharacter.getRealm().getName() : "Akenland";
+		String npcName = character.getFormattedName();
+		String npcTitle = character.getTitle()!=null ? (character.getTitle().length()>2 ? character.getTitle() : character.getTitle()+"citizen" ) : "citizen";
+		String npcRealm = character.getRealm()!=null ? character.getRealm().getName() : "Akenland";
+		String npcLoc = !((TempNPC)character).getTag().getLocationData().getDisplayNames().isEmpty() ? ((TempNPC)character).getTag().getLocationData().getDisplayName() : "the "+npcRealm;
+		String npcLocDirection = !((TempNPC)character).getTag().getLocationData().getDirectionalNames().isEmpty() ? ((TempNPC)character).getTag().getLocationData().getDirectionalName() : "in the "+npcRealm;
+		
+		// Format questions
+        List<String> questions = getQuestions();
+        for(int i=0; i<questions.size(); i++){
+            String question = questions.get(i);
+            questions.remove(i);
+            question = question
+                .replace("PLAYER_NAME", playerName + ChatColor.WHITE)
+                .replace("PLAYER_TITLE", playerTitle + ChatColor.WHITE)
+                .replace("PLAYER_REALM", playerRealm + ChatColor.WHITE)
+                .replace("NPC_NAME", npcName + ChatColor.WHITE)
+                .replace("NPC_TITLE", npcTitle + ChatColor.WHITE)
+                .replace("NPC_REALM", npcRealm + ChatColor.WHITE)
+                .replace("NPC_LOCATION", npcLoc + ChatColor.WHITE)
+                .replace("NPC_LOCATION_DESCRIPTION", npcLocDirection + ChatColor.WHITE);
+            questions.add(i, ChatColor.WHITE + question);
+        }
+        setQuestions(questions);
+        // Format answers
+        getAnswers().forEach(answer -> {
+            answer
+                .replaceText("PLAYER_NAME", playerName + ChatColor.GRAY)
+                .replaceText("PLAYER_TITLE", playerTitle + ChatColor.GRAY)
+                .replaceText("PLAYER_REALM", playerRealm + ChatColor.GRAY)
+                .replaceText("NPC_NAME", npcName + ChatColor.GRAY)
+                .replaceText("NPC_TITLE", npcTitle + ChatColor.GRAY)
+                .replaceText("NPC_REALM", npcRealm + ChatColor.GRAY)
+                .replaceText("NPC_LOCATION", npcLoc + ChatColor.GRAY)
+                .replaceText("NPC_LOCATION_DESCRIPTION", npcLocDirection + ChatColor.GRAY)
+
+                // Replace THISNPC with npc_ID in all actions
+                .replaceAction("thisnpc", "npc_"+((TempNPC)character).getNPC().getId())
+                .replaceAction("thisNPC", "npc_"+((TempNPC)character).getNPC().getId())
+                .replaceAction("THISNPC", "npc_"+((TempNPC)character).getNPC().getId())
+                .replaceAction("PLAYER_USERNAME", player.getName());
+        });
+
 		int delay = isRandomQuestions() || getQuestions()==null ? 0 : (getQuestions().size()-1)*30;
 		Bukkit.getScheduler().scheduleSyncDelayedTask(StoryPlugin.plugin, () -> {
 
@@ -194,11 +243,13 @@ public class Interaction extends Prompt {
 			}
 
 			// Objectives
-			Bukkit.getScheduler().scheduleSyncDelayedTask(StoryPlugin.plugin, () -> {
-				if(getObjectives()!=null){
-					getObjectives().forEach(objective -> Journal.get(PlayerCharacter.getCharacter(player)).addObjective(objective));
+			if(getObjectives()!=null){
+				int objDelay = 30;
+				for(Objective objective : getObjectives()){
+					Bukkit.getScheduler().scheduleSyncDelayedTask(StoryPlugin.plugin, () -> Journal.get(PlayerCharacter.getCharacter(player)).addObjective(objective), objDelay);
+					objDelay += 30;
 				}
-			}, 30);
+			}
 
 		}, delay);
 

@@ -22,7 +22,15 @@ public class TempNPC implements Character {
     public TempNPC(NPC npc) {
         this.npc = npc;
         tag = TaggedNPC.getTaggedNPC(npc).getTag();
-    }
+	}
+	
+	public NPC getNPC(){
+		return npc;
+	}
+
+	public NPCTag getTag(){
+		return tag;
+	}
 
 	@Override
 	public Realm getRealm() {
