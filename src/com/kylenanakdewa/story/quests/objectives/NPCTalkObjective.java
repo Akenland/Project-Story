@@ -34,8 +34,8 @@ public class NPCTalkObjective extends NPCObjective {
         TempNPC npcCharacter = new TempNPC(npc);
         String location = taggedNPC.getTag().getLocationData().getDisplayName();
         if(location==null && npcCharacter.getRealm()!=null) location = "the "+npcCharacter.getRealm().getName();
-        location = location!=null ? ChatColor.RESET+" in "+location : "";
-        return "Talk to "+npcCharacter.getFormattedName()+location;
+        location = location!=null ? " in "+location : "";
+        return "Talk to "+npcCharacter.getFormattedName()+ChatColor.RESET+location;
     }
 
     @Override

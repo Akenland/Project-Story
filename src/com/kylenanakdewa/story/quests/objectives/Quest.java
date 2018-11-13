@@ -78,7 +78,10 @@ public class Quest extends Objective {
             Collection<String> actions = completion.getActions();
             if(actions==null) completion.setAction("completeObjective_"+getIdentifier());
             else actions.add("completeObjective_"+getIdentifier());
-        } else setCompleted();
+        } else {
+            //setCompleted();
+            //Utils.notifyAdmins(CommonColors.INFO+"Quest ("+objective.getIdentifier()+" - "+objective.getDescription()+") had no objectives and was marked as complete.");
+        }
     }
     /**
      * Gets a list of the sub-objectives in this quest, in the order they must be completed in.
