@@ -187,14 +187,12 @@ public class Journal extends PlayerSaveDataSection {
 	 * @return the objective, or null if not found
 	 */
 	public Objective getActiveObjective(String identifier){
-		Objective objective = null;
-		for(Objective i : getActiveObjectives()){
-			if(i.getIdentifier()!=null && i.getIdentifier().equalsIgnoreCase(identifier)){
-				objective = i;
-				break;
+		for(Objective objective : getActiveObjectives()){
+			if(objective.getIdentifier()!=null && objective.getIdentifier().equalsIgnoreCase(identifier)){
+				return objective;
 			}
 		}
-		return objective;
+		return null;
 	}
 	/**
 	 * Gets all active objective with the specified identifier type.

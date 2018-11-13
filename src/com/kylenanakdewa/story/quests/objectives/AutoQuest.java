@@ -30,7 +30,7 @@ public class AutoQuest extends Quest {
     /**
      * Creates an AutoQuest, where the starting objective is within the specified tags.
      */
-    public AutoQuest(Collection<Tag> tags){
+    public AutoQuest(Collection<Tag> tags, NPC npc){
         List<Objective> subObjectives = new ArrayList<Objective>();
         // Pick out 1-4 objectives
         for(int o=0; o < new Random().nextInt(4); o++){
@@ -43,6 +43,14 @@ public class AutoQuest extends Quest {
                 Iterator<Tag> iterator = tags.iterator();
                 for(int i=0; i < new Random().nextInt(tags.size()); i++) iterator.next();
                 objective = iterator.next().getObjectiveData().getRandomObjective();
+
+                // Avoid duplicate objectives
+                if(objective!=null){
+                    if(npc!=null && objective.getIdentifier().equalsIgnoreCase("talknpc_"+npc.getId())) objective = null;
+                    else for(Objective previousObjectives : subObjectives){
+                        if(previousObjectives.getIdentifier().equalsIgnoreCase(objective.getIdentifier())) objective = null;
+                    }
+                }
             }
             if(objective==null) Utils.notifyAdminsError("[Story] AutoQuest couldn't find an objective.");
             else {
@@ -56,7 +64,7 @@ public class AutoQuest extends Quest {
             }
         }
 
-        if(npc!=null){
+        if(!subObjectives.isEmpty() && npc!=null){
             // Add objective to return to NPC
             NPCTalkObjective npcObjective = new NPCTalkObjective(npc);
             npcObjective.setDescription("Return to "+new TempNPC(npc).getFormattedName());
@@ -86,15 +94,18 @@ public class AutoQuest extends Quest {
         Utils.notifyAdmins("[Story] AutoQuest generated with "+subObjectives.size()+" objectives.");
         subObjectives.forEach(obj -> Utils.notifyAdmins("[Story] - "+obj.getIdentifier()+" - "+obj.getDescription()));
         setSubObjectives(subObjectives);
-
-        
     }
     /**
      * Creates an AutoQuest, started from a specific NPC.
      */
     public AutoQuest(NPC npc){
-        this(TaggedNPC.getTaggedNPC(npc).getTags());
-        this.npc = npc;
+        this(TaggedNPC.getTaggedNPC(npc).getTags(), npc);
+    }
+    /**
+     * Creates an AutoQuest, where the starting objective is within the specified tags.
+     */
+    public AutoQuest(Collection<Tag> tags){
+        this(tags, null);
     }
 
 
