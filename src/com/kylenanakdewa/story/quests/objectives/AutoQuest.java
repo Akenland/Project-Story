@@ -31,6 +31,7 @@ public class AutoQuest extends Quest {
      * Creates an AutoQuest, where the starting objective is within the specified tags.
      */
     public AutoQuest(Collection<Tag> tags, NPC npc){
+        this.npc = npc;
         List<Objective> subObjectives = new ArrayList<Objective>();
         // Pick out 1-4 objectives
         for(int o=0; o < new Random().nextInt(4); o++){
