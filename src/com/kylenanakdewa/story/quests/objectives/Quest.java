@@ -6,6 +6,8 @@ import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
 
+import com.kylenanakdewa.core.common.CommonColors;
+import com.kylenanakdewa.core.common.Utils;
 import com.kylenanakdewa.story.tags.Interaction;
 
 /**
@@ -79,8 +81,8 @@ public class Quest extends Objective {
             if(actions==null) completion.setAction("completeObjective_"+getIdentifier());
             else actions.add("completeObjective_"+getIdentifier());
         } else {
-            //setCompleted();
-            //Utils.notifyAdmins(CommonColors.INFO+"Quest ("+objective.getIdentifier()+" - "+objective.getDescription()+") had no objectives and was marked as complete.");
+            setCompleted();
+            Utils.notifyAdmins(CommonColors.INFO+"Quest ("+getIdentifier()+" - "+getDescription()+") had no objectives and was marked as complete.");
         }
     }
     /**

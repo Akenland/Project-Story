@@ -13,6 +13,7 @@ import com.kylenanakdewa.story.tags.data.LocationData;
 import com.kylenanakdewa.story.tags.taggable.TaggedNPC;
 import com.kylenanakdewa.story.tags.taggable.TempNPC;
 
+import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 
@@ -68,7 +69,7 @@ public class AutoQuest extends Quest {
         if(!subObjectives.isEmpty() && npc!=null){
             // Add objective to return to NPC
             NPCTalkObjective npcObjective = new NPCTalkObjective(npc);
-            npcObjective.setDescription("Return to "+new TempNPC(npc).getFormattedName());
+            npcObjective.setDescription("Return to "+new TempNPC(npc).getFormattedName()+ChatColor.RESET+" in "+new TempNPC(npc).getTag().getLocationData().getDisplayName());
             Interaction completion = new Interaction();
             completion.addQuestion("Thank you, PLAYER_TITLE. Here is something for your trouble.");
             completion.addQuestion("Thank you, PLAYER_TITLE! Here, have this.");
