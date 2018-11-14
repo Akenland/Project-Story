@@ -147,7 +147,17 @@ public class Journal extends PlayerSaveDataSection {
 	 * @param objective the objective to add
 	 */
 	public void addDiscoveredObjective(Objective objective){
-		if(objective==null || hasObjective(objective)) return;
+		if(objective==null) return;
+		// Auto-complete objectives that have already been completed
+		if(hasObjective(objective)){
+			for(Objective completedObjective : completedObjectives){
+				if(completedObjective.getIdentifier().equalsIgnoreCase(objective.getIdentifier())){
+					objective.setCompleted();
+					return;
+				}
+			}
+			return;
+		}
 
 		discoveredObjectives.add(objective);
 		if(character.isOnline()){
