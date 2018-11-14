@@ -9,6 +9,9 @@ import java.util.List;
 import com.kylenanakdewa.core.common.CommonColors;
 import com.kylenanakdewa.core.common.Utils;
 import com.kylenanakdewa.story.tags.Interaction;
+import com.kylenanakdewa.story.utils.RandomDialogue;
+
+import org.bukkit.ChatColor;
 
 /**
  * An objective made up of several sub-objectives. 
@@ -140,4 +143,39 @@ public class Quest extends Objective {
         return !subObjectives.isEmpty() ? subObjectives.get(subObjectives.size()-1).getDescription() : "[Empty Quest]";
     }
 
+    @Override
+    public Interaction getStartInteraction() {
+        if(super.getStartInteraction()!=null || subObjectives==null || subObjectives.isEmpty()) return super.getStartInteraction();
+
+        Interaction interaction = new Interaction();
+
+        List<String> objectiveStrings = new ArrayList<String>();
+        for(Objective objective : subObjectives){
+            objectiveStrings.add(RandomDialogue.lowerFirstLetter(objective.getDescription()) + ChatColor.RESET);
+        }
+
+        String firstLine = RandomDialogue.getRandomLine(RandomDialogue.objectiveStarters)+objectiveStrings.get(0);
+        firstLine =+ objectiveStrings.size()>=2 ? ", and "+objectiveStrings.get(1)+". " : ".";
+        interaction.addQuestion(firstLine);
+
+        if(objectiveStrings.size()>=3){
+            String secondLine = RandomDialogue.lowerFirstLetter(RandomDialogue.getRandomLine(RandomDialogue.objectiveStarters));
+            secondLine += objectiveStrings.get(2);
+            interaction.addQuestion("Then, "+secondLine+".");
+        }
+
+        for(int i=3; i<objectiveStrings.size()-2; i++){
+            String additionalLines = RandomDialogue.lowerFirstLetter(RandomDialogue.getRandomLine(RandomDialogue.objectiveStarters));
+            additionalLines += objectiveStrings.get(2);
+            interaction.addQuestion("Then, "+additionalLines+".");
+        }
+
+        if(objectiveStrings.size()>=4){
+            String finalLine = RandomDialogue.lowerFirstLetter(RandomDialogue.getRandomLine(RandomDialogue.objectiveStarters));
+            finalLine += objectiveStrings.get(objectiveStrings.size()-1);
+            interaction.addQuestion("Finally, "+finalLine+".");
+        }
+
+        return interaction;
+    }
 }
