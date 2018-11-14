@@ -155,7 +155,7 @@ public class Quest extends Objective {
         }
 
         String firstLine = RandomDialogue.getRandomLine(RandomDialogue.objectiveStarters)+objectiveStrings.get(0);
-        firstLine =+ objectiveStrings.size()>=2 ? ", and "+objectiveStrings.get(1)+". " : ".";
+        firstLine += objectiveStrings.size()>=2 ? ", and "+objectiveStrings.get(1)+". " : ".";
         interaction.addQuestion(firstLine);
 
         if(objectiveStrings.size()>=3){

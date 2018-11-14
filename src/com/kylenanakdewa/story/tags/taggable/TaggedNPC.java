@@ -201,7 +201,8 @@ public class TaggedNPC extends Trait implements Taggable {
                     Interaction interaction = autoQuest.getStartInteraction();
                     interaction.setCharacter(new TempNPC(npc.getNPC()));
                     autoQuest.setStartInteraction(interaction);
-                    journal.addObjective(autoQuest);
+                    // Delay the objective start to make it more natural
+                    Bukkit.getScheduler().scheduleSyncDelayedTask(StoryPlugin.plugin, () -> journal.addObjective(autoQuest), 30);
                 }
             }
 
