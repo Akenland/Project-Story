@@ -5,6 +5,7 @@ import java.util.Map;
 import com.kylenanakdewa.story.tags.Condition;
 import com.kylenanakdewa.story.tags.Interaction;
 import com.kylenanakdewa.story.tags.Tag;
+import com.kylenanakdewa.story.tags.taggable.TaggedNPC;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
@@ -20,8 +21,13 @@ public abstract class Objective {
 
     public static Objective loadObjective(String identifier){
         if(identifier.startsWith("talknpc")){
-            int npcID = Integer.parseInt(identifier.split("_", 2)[1]);
-            return new NPCTalkObjective(CitizensAPI.getNPCRegistry().getById(npcID));
+            String content = identifier.split("_", 2)[1];
+            if(Character.isDigit(content.charAt(0))){
+                int npcID = Integer.parseInt(content);
+                return new NPCTalkObjective(CitizensAPI.getNPCRegistry().getById(npcID));
+            } else {
+                return new NPCTalkObjective(TaggedNPC.getRandomNPC(new Condition(content)).getNPC());
+            }
         }
 
         if(identifier.startsWith("gotoloc")){
