@@ -198,7 +198,9 @@ public class TaggedNPC extends Trait implements Taggable {
                 else {
                     Objective autoQuest = new AutoQuest(npc.getNPC());
                     if(autoQuest.getStartInteraction()==null) autoQuest.setStartInteraction(new Interaction());
-                    autoQuest.getStartInteraction().setCharacter(new TempNPC(npc.getNPC()));
+                    Interaction interaction = autoQuest.getStartInteraction();
+                    interaction.setCharacter(new TempNPC(npc.getNPC()));
+                    autoQuest.setStartInteraction(interaction);
                     journal.addObjective(autoQuest);
                 }
             }
