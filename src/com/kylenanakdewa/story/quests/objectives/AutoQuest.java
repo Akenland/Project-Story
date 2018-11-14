@@ -42,9 +42,23 @@ public class AutoQuest extends Quest {
             while(attempts<10 && objective==null){
                 attempts++;
                 // Pick a random objective
-                Iterator<Tag> iterator = tags.iterator();
-                for(int i=0; i < new Random().nextInt(tags.size()); i++) iterator.next();
-                objective = iterator.next().getObjectiveData().getRandomObjective();
+                Tag chosenTag = null;
+                // 50% chance to use location
+                if(new Random().nextBoolean()){
+                    Tag testTag = null;
+                    Iterator<Tag> iterator = tags.iterator();
+                    while(iterator.hasNext() && (testTag==null || testTag.getLocationData().getDisplayName()==null || testTag.getObjectiveData().getRandomObjective()==null)){
+                        testTag = iterator.next();
+                    }
+                    if(testTag!=null && testTag.getLocationData().getDisplayName()!=null && testTag.getObjectiveData().getRandomObjective()!=null) chosenTag = testTag;
+                }
+                // 50% chance to get any tag
+                if(chosenTag==null){
+                    Iterator<Tag> iterator = tags.iterator();
+                    for(int i=0; i < new Random().nextInt(tags.size()); i++) iterator.next();
+                    chosenTag = iterator.next();
+                }
+                objective = chosenTag.getObjectiveData().getRandomObjective();
 
                 // Avoid duplicate objectives
                 if(objective!=null){

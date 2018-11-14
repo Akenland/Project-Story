@@ -6,6 +6,7 @@ import java.util.Map;
 import java.util.Set;
 
 import com.kylenanakdewa.core.characters.players.PlayerCharacter;
+import com.kylenanakdewa.core.common.CommonColors;
 import com.kylenanakdewa.core.common.Utils;
 import com.kylenanakdewa.core.common.savedata.PlayerSaveDataSection;
 import com.kylenanakdewa.story.StoryPlugin;
@@ -139,7 +140,7 @@ public class Journal extends PlayerSaveDataSection {
 			Interaction startInteraction = objective.getStartInteraction();
 			if(startInteraction!=null) startInteraction.display(player);
 		}
-		//Utils.notifyAdmins(character.getName()+CommonColors.INFO+" started an objective: "+objective.getIdentifier()+" - "+objective.getDescription());
+		Utils.notifyAdmins(character.getName()+CommonColors.INFO+" started an objective: "+objective.getIdentifier()+" - "+objective.getDescription());
 	}
 	/**
 	 * Adds an objective to the journal, as a discovery.
