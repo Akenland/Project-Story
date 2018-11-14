@@ -145,7 +145,7 @@ public class Quest extends Objective {
 
     @Override
     public Interaction getStartInteraction() {
-        if(super.getStartInteraction()!=null || subObjectives==null || subObjectives.isEmpty()) return super.getStartInteraction();
+        if((super.getStartInteraction()!=null && super.getStartInteraction().getQuestions()!=null && !super.getStartInteraction().getQuestions().isEmpty()) || subObjectives==null || subObjectives.isEmpty()) return super.getStartInteraction();
 
         Interaction interaction = new Interaction();
 
