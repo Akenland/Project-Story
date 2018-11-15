@@ -172,7 +172,8 @@ public class Quest extends Objective {
 
         if(objectiveStrings.size()>=4){
             String finalLine = RandomDialogue.lowerFirstLetter(RandomDialogue.getRandomLine(RandomDialogue.objectiveStarters));
-            finalLine += objectiveStrings.get(objectiveStrings.size()-1);
+            String finalObjective = objectiveStrings.get(objectiveStrings.size()-1);
+            finalLine += finalObjective.startsWith("return to") ? "return to me." : finalObjective;
             interaction.addQuestion("Finally, "+finalLine+".");
         }
 

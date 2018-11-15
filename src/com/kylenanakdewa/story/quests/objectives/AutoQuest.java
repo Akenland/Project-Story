@@ -43,8 +43,8 @@ public class AutoQuest extends Quest {
                 attempts++;
                 // Pick a random objective
                 Tag chosenTag = null;
-                // 50% chance to use location
-                if(new Random().nextBoolean()){
+                // 66% chance to use location
+                if(new Random().nextInt(2)>0){
                     Tag testTag = null;
                     Iterator<Tag> iterator = tags.iterator();
                     while(iterator.hasNext() && (testTag==null || testTag.getLocationData().getDisplayName()==null || testTag.getObjectiveData().getRandomObjective()==null)){
@@ -52,7 +52,7 @@ public class AutoQuest extends Quest {
                     }
                     if(testTag!=null && testTag.getLocationData().getDisplayName()!=null && testTag.getObjectiveData().getRandomObjective()!=null) chosenTag = testTag;
                 }
-                // 50% chance to get any tag
+                // 33% chance to get any tag
                 if(chosenTag==null){
                     Iterator<Tag> iterator = tags.iterator();
                     for(int i=0; i < new Random().nextInt(tags.size()); i++) iterator.next();
