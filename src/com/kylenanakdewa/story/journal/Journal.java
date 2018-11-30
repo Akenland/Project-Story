@@ -1,7 +1,9 @@
 package com.kylenanakdewa.story.journal;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -57,11 +59,20 @@ public class Journal extends PlayerSaveDataSection {
 		completedObjectives = new HashSet<Objective>();
 
 		//ConfigurationSection data = character.getData(StoryPlugin.plugin).getData();
+		data.getStringList("objectives.active").forEach(objString -> {
+			if(!objString.startsWith("autoquest")) activeObjectives.add(Objective.loadObjective(objString));
+		});
+		data.getStringList("objectives.discovered").forEach(objString -> {
+			if(!objString.startsWith("autoquest")) activeObjectives.add(Objective.loadObjective(objString));
+		});
+		data.getStringList("objectives.completed").forEach(objString -> {
+			if(!objString.startsWith("autoquest")) activeObjectives.add(Objective.loadObjective(objString));
+		});
 
 		//activeObjectives.add(new DummyObjective(null, "Talk to NPCs to find things to do"));
 		//activeObjectives.add(new DummyObjective(null, "Explore the world"));
 		//activeObjectives.add(new DummyObjective("talknpc_231", "Talk to the Greeter"));
-		activeObjectives.add(new NPCTalkObjective(CitizensAPI.getNPCRegistry().getById(231)));
+		if(activeObjectives.isEmpty()) activeObjectives.add(new NPCTalkObjective(CitizensAPI.getNPCRegistry().getById(231)));
 
 		//discoveredObjectives.add(new DummyObjective("library-aunix", "Learn about the Aunix"));
 		//discoveredObjectives.add(new DummyObjective("talknpc_278", "Talk to the Waramon researcher"));
@@ -85,6 +96,33 @@ public class Journal extends PlayerSaveDataSection {
 	 */
 	static void updateJournals(){
 		playerJournals.clear();
+	}
+
+
+	/**
+	 * Saves this Journal to the character's save data.
+	 */
+	@Override
+	public void save(){
+		List<String> activeList = new ArrayList<String>();
+		activeObjectives.forEach(obj -> {
+			if(!obj.getIdentifier().startsWith("autoquest")) activeList.add(obj.getIdentifier());
+		});
+		if(!activeList.isEmpty()) data.set("objectives.active", activeList);
+
+		List<String> discoveredList = new ArrayList<String>();
+		discoveredObjectives.forEach(obj -> {
+			if(!obj.getIdentifier().startsWith("autoquest")) discoveredList.add(obj.getIdentifier());
+		});
+		if(!discoveredList.isEmpty()) data.set("objectives.discovered", discoveredList);
+
+		List<String> completedList = new ArrayList<String>();
+		completedObjectives.forEach(obj -> {
+			if(!obj.getIdentifier().startsWith("autoquest")) completedList.add(obj.getIdentifier());
+		});
+		if(!completedList.isEmpty()) data.set("objectives.completed", completedList);
+
+		super.save();
 	}
 
 
@@ -234,6 +272,7 @@ public class Journal extends PlayerSaveDataSection {
 	public void completeObjective(Objective objective){
 		objective.setCompleted();
 		//Utils.notifyAdmins(character.getName()+CommonColors.INFO+" completed an objective: "+objective.getIdentifier()+" - "+objective.getDescription());
+		if(completedObjectives.size()>1) save();
 	}
 
 	/**
