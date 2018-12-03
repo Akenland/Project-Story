@@ -123,6 +123,8 @@ public class Journal extends PlayerSaveDataSection {
 		if(!completedList.isEmpty()) data.set("objectives.completed", completedList);
 
 		super.save();
+
+		Utils.notifyAdmins(CommonColors.INFO+"Saved "+(activeList.size()+discoveredList.size()+completedList.size())+" objectives for "+character.getName());
 	}
 
 

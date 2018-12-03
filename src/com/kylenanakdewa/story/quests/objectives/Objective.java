@@ -47,6 +47,11 @@ public abstract class Objective {
             return new GoToLocationObjective(loc, radius, locName);
         }
 
+        if(identifier.startsWith("tag:")){
+            String[] idContents = identifier.replace("tag:", "").split(".", 2);
+            return Tag.get(idContents[0]).getObjectiveData().getObjective(idContents[1]);
+        }
+
 
         return new DummyObjective(identifier.split("_", 2)[0], identifier.split("_", 2)[1]);
     }
