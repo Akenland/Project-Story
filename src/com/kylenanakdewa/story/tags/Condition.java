@@ -31,7 +31,7 @@ public class Condition {
         for(int i=0; i<expressions.size(); i++){
             String e = expressions.get(i);
             expressions.remove(i);
-            expressions.add(i, e.toLowerCase().replace(" ", ""));
+            expressions.add(i, e.toLowerCase().trim());
         }
     }
 

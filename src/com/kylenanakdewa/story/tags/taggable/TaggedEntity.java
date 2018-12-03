@@ -116,6 +116,33 @@ public class TaggedEntity implements Taggable {
                 // Remove tag from list to evaluate
                 checkTagNames.remove(text);
             }
+            // Has custom item, Take custom item
+            if(text.startsWith("hascustomitem_") || text.startsWith("takecustomitem_")){
+                // This condition fails instantly if entity is not a player
+                if(!(entity instanceof HumanEntity)) return false;
+                Inventory inv = ((HumanEntity)entity).getInventory();
+
+                // Split up the string
+                String[] itemString = text.replaceFirst("hascustomitem_", "").replaceFirst("takecustomitem_", "").split("\\*", 2);
+                String itemName = itemString[0];
+                int amount = itemString.length==2 ? Integer.parseInt(itemString[1]) : 1;
+
+                // Check for the item
+                ItemStack item = null;
+                for(ItemStack i : inv.getContents()){
+                    if(i.hasItemMeta() && i.getItemMeta().hasDisplayName() && i.getItemMeta().getDisplayName().equalsIgnoreCase(itemName)){
+                        item = new ItemStack(i);
+                        item.setAmount(amount);
+                    }
+                }
+                if(item==null || !inv.contains(item, amount)) return false;
+
+                // Take item
+                if(text.startsWith("takecustomitem_")) inv.removeItem(item);
+
+                // Remove tag from list to evaluate
+                checkTagNames.remove(text);
+            }
 
             // Realm officer
             if(text.startsWith("realmofficer")){
