@@ -14,14 +14,12 @@ import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 
 import com.kylenanakdewa.core.common.CommonColors;
-import com.kylenanakdewa.core.CorePlugin;
 import com.kylenanakdewa.core.characters.players.PlayerCharacter;
 import com.kylenanakdewa.core.common.prompts.Prompt;
-import com.kylenanakdewa.core.realms.Realm;
 import com.kylenanakdewa.story.tags.Tag;
 
 /**
- * Represents an entity with RealmsStory Tags. 
+ * Represents an entity with RealmsStory Tags.
  * Note that entities load their tags from the scoreboard, alphabetically. Therefore, it is not possible to manually order tags by priority.
  * Inherited tags will still be loaded in order.
  */
@@ -32,7 +30,7 @@ public class TaggedEntity implements Taggable {
      */
     private final Entity entity;
     /**
-     * All tags applied to this entity, 
+     * All tags applied to this entity,
      */
     private List<Tag> tags;
 
@@ -72,7 +70,7 @@ public class TaggedEntity implements Taggable {
                 //if(title!=null && title.length()>1) tags.addAll(new Tag(title).getTotalInheritedTags());
             }
         }
-        return tags;       
+        return tags;
     }
 
     public Tag getTag(){
@@ -158,8 +156,9 @@ public class TaggedEntity implements Taggable {
                 // Otherwise check if they are officer in specified realm
                 String[] splitStrings = text.split("_", 2);
                 if(splitStrings.length==2){
-                    Realm realm = CorePlugin.getServerRealmProvider().getRealm(splitStrings[1]);
-                    return CorePlugin.getServerRealmProvider().isOfficer(data, realm);
+                    return data.getRealm().getIdentifier().equals(splitStrings[1]);
+                    //Realm realm = CorePlugin.getServerRealmProvider().getRealm(splitStrings[1]);
+                    //return CorePlugin.getServerRealmProvider().isOfficer(data, realm);
                 }
             }
 
