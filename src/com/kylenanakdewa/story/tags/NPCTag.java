@@ -33,7 +33,7 @@ public class NPCTag extends Tag {
 
     //// CONVERSATIONS
     private Map<String,Interaction> prompts = new LinkedHashMap<String,Interaction>();
-    
+
     //// REALMSCORE DATA
     // The title of NPCs with this tag
     private String title;
@@ -72,7 +72,7 @@ public class NPCTag extends Tag {
         // If already loaded, return
         if(loaded) return;
 
-        // Iterate through tags 
+        // Iterate through tags
         for(Tag tag : getTotalInheritedTags()){
 
             // Prompts - load per condition
@@ -179,10 +179,10 @@ public class NPCTag extends Tag {
         for(Map.Entry<String,Interaction> p : prompts.entrySet()){
             String s[] = p.getKey().split("cond:", 2);
             String newPromptName = s[0].trim();
-            
+
             // Replace variables in condition
             if(s.length==2){
-                s[1] = s[1].replace("NPC_REALM", getRealm()!=null ? getRealm().getName() : "norealm");
+                s[1] = s[1].replace("NPC_REALM", getRealm()!=null ? getRealm().getIdentifier() : "norealm");
             }
 
             // If condition is missing, or evaluates to true, add prompt to availablePrompts
