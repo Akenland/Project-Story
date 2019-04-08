@@ -183,6 +183,7 @@ public class NPCTag extends Tag {
             // Replace variables in condition
             if(s.length==2){
                 s[1] = s[1].replace("NPC_REALM", getRealm()!=null ? getRealm().getIdentifier() : "norealm");
+                Utils.notifyAdmins("Fixed condition: "+s[1]);
             }
 
             // If condition is missing, or evaluates to true, add prompt to availablePrompts
