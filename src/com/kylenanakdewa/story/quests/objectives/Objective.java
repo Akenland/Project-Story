@@ -69,8 +69,8 @@ public abstract class Objective {
         Objective objective = loadObjective(config.getName());
         if(config.contains("description")) objective.setDescription(config.getString("description"));
         if(config.contains("onStart")) objective.setStartInteraction(Interaction.getFromConfig(config.getConfigurationSection("onStart")));
-        if(config.contains("onComplete")) objective.setStartInteraction(Interaction.getFromConfig(config.getConfigurationSection("onComplete")));
-        if(config.contains("onFail")) objective.setStartInteraction(Interaction.getFromConfig(config.getConfigurationSection("onFail")));
+        if(config.contains("onComplete")) objective.setCompletionInteraction(Interaction.getFromConfig(config.getConfigurationSection("onComplete")));
+        if(config.contains("onFail")) objective.setFailInteraction(Interaction.getFromConfig(config.getConfigurationSection("onFail")));
 
 		return objective;
     }

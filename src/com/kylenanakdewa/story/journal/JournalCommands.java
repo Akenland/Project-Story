@@ -68,8 +68,8 @@ public class JournalCommands implements TabExecutor {
         if(!sender.hasPermission("story.journal")) return Error.NO_PERMISSION.displayChat(sender);
 
 
-        // List command
-        if(argsList.get(0).equalsIgnoreCase("list")){
+        // Quests command
+        if(argsList.get(0).equalsIgnoreCase("quests")){
             Prompt prompt = new Prompt();
             prompt.addQuestion(CommonColors.INFO+"--- "+CommonColors.MESSAGE+"Journal for "+character.getName()+CommonColors.INFO+" ---");
             Collection<Quest> quests = null;
@@ -89,6 +89,16 @@ public class JournalCommands implements TabExecutor {
                     break;
             }
             quests.forEach(quest -> prompt.addAnswer(quest.getName()+CommonColors.INFO+" - "+CommonColors.MESSAGE+quest.getDescription()+CommonColors.INFO+" - "+CommonColors.MESSAGE+quest.getCurrentObjective().getDescription()+CommonColors.INFO+" - "+quest.getCurrentObjective().getIdentifier(), ""));
+            prompt.display(sender);
+            return true;
+        }
+
+        // Objectives command
+        if(argsList.get(0).equalsIgnoreCase("objectives")){
+            Prompt prompt = new Prompt();
+            prompt.addQuestion(CommonColors.INFO+"--- "+CommonColors.MESSAGE+"Journal for "+character.getName()+CommonColors.INFO+" ---");
+            prompt.addQuestion(CommonColors.INFO+"Current objectives:");
+            journal.getCurrentObjectives().forEach(objective -> prompt.addAnswer(objective.getDescription()+CommonColors.INFO+" - "+objective.getIdentifier(), ""));
             prompt.display(sender);
             return true;
         }
@@ -150,7 +160,7 @@ public class JournalCommands implements TabExecutor {
             return null;
         }
 
-        return Arrays.asList("list", "add", "remove", "reset", "-player", "-active", "-discovered", "-completed");
+        return Arrays.asList("quests", "objectives", "add", "remove", "reset", "-player", "-active", "-discovered", "-completed");
     }
 
 }

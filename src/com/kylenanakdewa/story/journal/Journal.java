@@ -243,11 +243,11 @@ public class Journal extends PlayerSaveDataSection {
 
 		player.sendTitle(ChatColor.DARK_PURPLE+"!", "Quest Started", 10, 20, 10);
 		Bukkit.getScheduler().scheduleSyncDelayedTask(StoryPlugin.plugin, () -> {
-			player.sendTitle(ChatColor.DARK_PURPLE+"!", ChatColor.getLastColors(quest.getName()) + ChatColor.BOLD + quest.getName(), 10, 70, 20);
+			player.sendTitle(ChatColor.DARK_PURPLE+"!", ChatColor.getLastColors(quest.getName()) + ChatColor.BOLD + quest.getName(), 10, 40, 10);
 		}, 30);
 		Bukkit.getScheduler().scheduleSyncDelayedTask(StoryPlugin.plugin, () -> {
 			player.sendTitle(ChatColor.DARK_PURPLE+"!", quest.getCurrentObjective().getDescription(), 10, 70, 20);
-		}, 110);
+		}, 80);
 
 		Utils.sendActionBar(player, "Added to Journal!");
 	}
@@ -278,10 +278,10 @@ public class Journal extends PlayerSaveDataSection {
 
 		player.playSound(player.getLocation(), Sound.BLOCK_ENCHANTMENT_TABLE_USE, SoundCategory.MASTER, 1000, 0.6f);
 
-		player.sendTitle(ChatColor.DARK_PURPLE+"?", ChatColor.getLastColors(quest.getName()) + ChatColor.BOLD + quest.getName(), 10, 70, 20);
+		player.sendTitle(ChatColor.DARK_PURPLE+"?", ChatColor.getLastColors(quest.getName()) + ChatColor.BOLD + quest.getName(), 10, 40, 10);
 		Bukkit.getScheduler().scheduleSyncDelayedTask(StoryPlugin.plugin, () -> {
 			player.sendTitle(ChatColor.DARK_PURPLE+"?", quest.getCurrentObjective().getDescription(), 10, 70, 20);
-		}, 80);
+		}, 50);
 
 		Utils.sendActionBar(player, "Added to Journal!");
 	}
@@ -297,7 +297,7 @@ public class Journal extends PlayerSaveDataSection {
 
 		player.sendTitle(ChatColor.GREEN+"\u2713", "Quest Completed", 10, 20, 10);
 		Bukkit.getScheduler().scheduleSyncDelayedTask(StoryPlugin.plugin, () -> {
-			player.sendTitle(ChatColor.GREEN+"\u2713", ChatColor.getLastColors(quest.getName()) + ChatColor.BOLD + quest.getName(), 10, 70, 20);
+			player.sendTitle(ChatColor.GREEN+"\u2713", ChatColor.getLastColors(quest.getName()) + ChatColor.BOLD + quest.getName(), 10, 40, 10);
 		}, 30);
 
 		Utils.sendActionBar(player, "Journal updated.");
@@ -314,7 +314,7 @@ public class Journal extends PlayerSaveDataSection {
 
 		player.sendTitle(ChatColor.RED+"x", "Quest Failed", 10, 20, 10);
 		Bukkit.getScheduler().scheduleSyncDelayedTask(StoryPlugin.plugin, () -> {
-			player.sendTitle(ChatColor.RED+"x", ChatColor.getLastColors(quest.getName()) + ChatColor.BOLD + quest.getName(), 10, 70, 20);
+			player.sendTitle(ChatColor.RED+"x", ChatColor.getLastColors(quest.getName()) + ChatColor.BOLD + quest.getName(), 10, 40, 10);
 		}, 30);
 
 		Utils.sendActionBar(player, "Journal updated.");
@@ -582,10 +582,10 @@ public class Journal extends PlayerSaveDataSection {
 	void objectiveStatusUpdate(ObjectiveStatusEvent event){
 		if(!character.isOnline() || !getCurrentObjectives().contains(event.getObjective())) return;
 		Player player = (Player)character.getPlayer();
-		Quest quest = getQuestByObjective(event.getObjective());
 
 		switch (event.getNewStatus()) {
 			case ACTIVE:
+				Quest quest = getQuestByObjective(event.getObjective());
 				if(quest!=null) showQuestProgressMessage(quest);
 
 				Interaction startInteraction = event.getObjective().getStartInteraction();
