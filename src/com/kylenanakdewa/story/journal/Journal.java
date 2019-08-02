@@ -53,17 +53,23 @@ public class Journal extends PlayerSaveDataSection {
 		super(character, StoryPlugin.plugin);
 
 		// Load data from file
-		for(String key : data.getConfigurationSection("quests.active").getKeys(false)){
-			ConfigurationSection questData = data.getConfigurationSection("quests.active."+key);
-			activeQuests.add(Quest.retrieveSavedQuest(questData));
+		if(data.contains("quests.active")){
+			for(String key : data.getConfigurationSection("quests.active").getKeys(false)){
+				ConfigurationSection questData = data.getConfigurationSection("quests.active."+key);
+				activeQuests.add(Quest.retrieveSavedQuest(questData));
+			}
 		}
-		for(String key : data.getConfigurationSection("quests.discovered").getKeys(false)){
-			ConfigurationSection questData = data.getConfigurationSection("quests.discovered."+key);
-			discoveredQuests.add(Quest.retrieveSavedQuest(questData));
+		if(data.contains("quests.discovered")){
+			for(String key : data.getConfigurationSection("quests.discovered").getKeys(false)){
+				ConfigurationSection questData = data.getConfigurationSection("quests.discovered."+key);
+				discoveredQuests.add(Quest.retrieveSavedQuest(questData));
+			}
 		}
-		for(String key : data.getConfigurationSection("quests.completed").getKeys(false)){
-			ConfigurationSection questData = data.getConfigurationSection("quests.completed."+key);
-			completedQuests.add(Quest.retrieveSavedQuest(questData));
+		if(data.contains("quests.completed")){
+			for(String key : data.getConfigurationSection("quests.completed").getKeys(false)){
+				ConfigurationSection questData = data.getConfigurationSection("quests.completed."+key);
+				completedQuests.add(Quest.retrieveSavedQuest(questData));
+			}
 		}
 
 		updateCurrentObjectives();
