@@ -156,6 +156,8 @@ public class Journal extends PlayerSaveDataSection {
 				}
 			}
 		}
+
+		save();
 	}
 
 	/**
@@ -195,9 +197,14 @@ public class Journal extends PlayerSaveDataSection {
 		for(Quest quest : activeQuests){
 			String page = ChatColor.DARK_GREEN + "Active Quests:\n\n" + ChatColor.RESET;
 			page += ChatColor.getLastColors(quest.getName()) + ChatColor.BOLD + quest.getName() + ChatColor.RESET + "\n";
-			page += ChatColor.ITALIC + quest.getDescription() + ChatColor.RESET + "\n";
+			page += ChatColor.ITALIC + quest.getDescription() + ChatColor.RESET + "\n\n";
 			page += "- " + quest.getCurrentObjective().getDescription();
 
+			book.addSimplePage(page);
+		}
+		if(activeQuests.isEmpty()){
+			String page = ChatColor.DARK_GREEN + "Active Quests:\n\n" + ChatColor.RESET;
+			page += ChatColor.ITALIC + "You have no active quests. Talk to NPCs to find things to do.";
 			book.addSimplePage(page);
 		}
 

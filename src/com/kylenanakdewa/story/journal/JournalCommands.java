@@ -88,7 +88,7 @@ public class JournalCommands implements TabExecutor {
                     quests = journal.completedQuests;
                     break;
             }
-            quests.forEach(quest -> prompt.addAnswer(quest.getName()+CommonColors.INFO+" - "+CommonColors.MESSAGE+quest.getDescription()+CommonColors.INFO+" - "+CommonColors.MESSAGE+quest.getCurrentObjective().getDescription(), ""));
+            quests.forEach(quest -> prompt.addAnswer(quest.getName()+CommonColors.INFO+" - "+CommonColors.MESSAGE+quest.getDescription()+CommonColors.INFO+" - "+CommonColors.MESSAGE+quest.getCurrentObjective().getDescription()+CommonColors.INFO+" - "+quest.getCurrentObjective().getIdentifier(), ""));
             prompt.display(sender);
             return true;
         }

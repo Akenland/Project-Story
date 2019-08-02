@@ -152,7 +152,7 @@ public class TaggedNPC extends Trait implements Taggable {
      */
     @EventHandler
     public void onPlayerInteract(NPCRightClickEvent event){
-        if(event.getNPC() != this.getNPC()) return;
+        if(!event.getNPC().equals(this.getNPC())) return;
 
         PlayerCharacter player = PlayerCharacter.getCharacter(event.getClicker());
 
@@ -163,9 +163,9 @@ public class TaggedNPC extends Trait implements Taggable {
         Objective objective = Journal.get(player).getCurrentObjective("talknpc_" + npc.getId());
         if(objective!=null){
             // Set the NPC for the completion interaction
-            if(objective.getCompletionInteraction()!=null){
+            /*if(objective.getCompletionInteraction()!=null){
                 objective.getCompletionInteraction().setCharacter(new TempNPC(npc));
-            }
+            }*/
             objective.setCompleted();
 
             // If completion interaction has questions, skip the normal interact conversion
