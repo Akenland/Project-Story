@@ -292,10 +292,10 @@ public class Quest {
      * Updates the count of completed objectives.
      */
     private void updateObjectivesCompletedCount() {
+        objectivesComplete = 0;
         for (Objective objective : subObjectives) {
-            if(objective.isActive()){
-                objectivesComplete = subObjectives.indexOf(objective);
-                return;
+            if(objective.isCompleted()){
+                objectivesComplete++;
             }
         }
     }

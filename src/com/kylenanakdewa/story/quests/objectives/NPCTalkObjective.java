@@ -44,9 +44,9 @@ public class NPCTalkObjective extends NPCObjective {
 
         Interaction interaction = new Interaction();
         TempNPC npcCharacter = new TempNPC(npc);
-        String name = npcCharacter.getFormattedName();
+        String name = npcCharacter.getFormattedName() + ChatColor.RESET;
         String location = taggedNPC.getTag().getLocationData().getDisplayName();
-        if(location==null && npcCharacter.getRealm()!=null) location = "the "+npcCharacter.getRealm().getName();
+        if(location==null && npcCharacter.getRealm()!=null) location = "the "+npcCharacter.getRealm().getName() + ChatColor.RESET;
         if(location==null) location = "Akenland";
         interaction.addQuestion("You need to go talk to "+name+" in "+location+".");
         interaction.addQuestion("Could you go talk to "+name+"? They can be found in "+location+".");
