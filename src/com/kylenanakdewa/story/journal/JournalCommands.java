@@ -10,7 +10,7 @@ import com.kylenanakdewa.core.common.CommonColors;
 import com.kylenanakdewa.core.common.Error;
 import com.kylenanakdewa.core.common.Utils;
 import com.kylenanakdewa.core.common.prompts.Prompt;
-import com.kylenanakdewa.story.quests.objectives.Objective;
+import com.kylenanakdewa.story.quests.Quest;
 
 import org.bukkit.OfflinePlayer;
 import org.bukkit.command.Command;
@@ -72,26 +72,23 @@ public class JournalCommands implements TabExecutor {
         if(argsList.get(0).equalsIgnoreCase("list")){
             Prompt prompt = new Prompt();
             prompt.addQuestion(CommonColors.INFO+"--- "+CommonColors.MESSAGE+"Journal for "+character.getName()+CommonColors.INFO+" ---");
-            Collection<Objective> objectives = null;
+            Collection<Quest> quests = null;
             switch(targetSection){
                 case ALL:
-                    prompt.addQuestion(CommonColors.INFO+"All active objectives:");
-                    objectives = journal.getActiveObjectives();
-                    break;
                 case ACTIVE:
-                    prompt.addQuestion(CommonColors.INFO+"Listed active objectives:");
-                    objectives = journal.activeObjectives;
+                    prompt.addQuestion(CommonColors.INFO+"Active quests:");
+                    quests = journal.activeQuests;
                     break;
                 case DISCOVERED:
-                    prompt.addQuestion(CommonColors.INFO+"Discovered objectives:");
-                    objectives = journal.discoveredObjectives;
+                    prompt.addQuestion(CommonColors.INFO+"Discovered quests:");
+                    quests = journal.discoveredQuests;
                     break;
                 case COMPLETED:
-                    prompt.addQuestion(CommonColors.INFO+"Completed objectives:");
-                    objectives = journal.completedObjectives;
+                    prompt.addQuestion(CommonColors.INFO+"Completed quests:");
+                    quests = journal.completedQuests;
                     break;
             }
-            objectives.forEach(objective -> prompt.addAnswer(objective.getIdentifier()+CommonColors.INFO+" - "+objective.getStatus()+CommonColors.INFO+" - "+CommonColors.MESSAGE+objective.getDescription(), ""));
+            quests.forEach(quest -> prompt.addAnswer(quest.getName()+CommonColors.INFO+" - "+CommonColors.MESSAGE+quest.getDescription()+CommonColors.INFO+" - "+CommonColors.MESSAGE+quest.getCurrentObjective().getDescription(), ""));
             prompt.display(sender);
             return true;
         }
@@ -99,28 +96,28 @@ public class JournalCommands implements TabExecutor {
         // Add command
         if(argsList.get(0).equalsIgnoreCase("add")){
             argsList.remove(0);
-            String objectiveId = String.join(" ", argsList);
-            Objective objective = Objective.loadObjective(objectiveId);
+            String questTemplateName = String.join(" ", argsList);
+            Quest quest = Quest.generateFromTemplate(questTemplateName, null);
 
             switch(targetSection){
                 case ALL: case ACTIVE:
-                    journal.addObjective(objective);
+                    journal.addQuest(quest);
                     break;
                 case DISCOVERED:
-                    journal.addDiscoveredObjective(objective);
+                    journal.addDiscoveredQuest(quest);
                     break;
                 case COMPLETED:
-                    journal.completeObjective(objective);
-                    journal.completedObjectives.add(objective);
+                    //journal.completeObjective(quest);
+                    //journal.completedObjectives.add(quest);
                     break;
             }
 
-            sender.sendMessage(CommonColors.MESSAGE+"Added to Journal: "+objectiveId);
+            sender.sendMessage(CommonColors.MESSAGE+"Added to Journal: "+questTemplateName);
             return true;
         }
 
         // Remove command
-        if(argsList.get(0).equalsIgnoreCase("remove")){
+        /*if(argsList.get(0).equalsIgnoreCase("remove")){
             argsList.remove(0);
             String objectiveId = String.join(" ", argsList);
             Objective objective = journal.getActiveObjective(objectiveId);
@@ -134,7 +131,7 @@ public class JournalCommands implements TabExecutor {
                 sender.sendMessage(CommonColors.ERROR+"Journal does not contain objective: "+objectiveId);
                 return false;
             }
-        }
+        }*/
 
         // Reset command
         if(argsList.get(0).equalsIgnoreCase("reset")){

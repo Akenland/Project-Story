@@ -5,10 +5,11 @@ import java.util.HashSet;
 import java.util.Set;
 
 /**
- * An objective made up of several sub-objectives. 
+ * An objective made up of several sub-objectives.
  * This objective is complete when all of its sub-objectives are complete. Objectives can be completed in any order.
  * @author Kyle Nanakdewa
  */
+@Deprecated
 public class CompoundObjective extends Objective {
 
     /** The sub-objectives. */

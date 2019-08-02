@@ -23,11 +23,8 @@ import com.kylenanakdewa.core.common.prompts.Prompt;
 import com.kylenanakdewa.core.common.prompts.PromptActionEvent;
 import com.kylenanakdewa.story.StoryPlugin;
 import com.kylenanakdewa.story.journal.Journal;
-import com.kylenanakdewa.story.quests.objectives.AutoQuest;
-import com.kylenanakdewa.story.quests.objectives.NPCTalkObjective;
 import com.kylenanakdewa.story.quests.objectives.Objective;
 import com.kylenanakdewa.story.tags.Condition;
-import com.kylenanakdewa.story.tags.Interaction;
 import com.kylenanakdewa.story.tags.NPCTag;
 import com.kylenanakdewa.story.tags.Tag;
 import com.kylenanakdewa.story.utils.SentinelNPC;
@@ -91,7 +88,7 @@ public class TaggedNPC extends Trait implements Taggable {
             // Load other traits
             //for(Trait trait : getNPC().getTraits()) tags.addAll(new Tag(trait.getName()).getTotalInheritedTags());
         }
-        return tags;       
+        return tags;
     }
 
     public NPCTag getTag(){
@@ -158,13 +155,13 @@ public class TaggedNPC extends Trait implements Taggable {
         if(event.getNPC() != this.getNPC()) return;
 
         PlayerCharacter player = PlayerCharacter.getCharacter(event.getClicker());
-        
+
         // NPC should face the player
         npc.faceLocation(event.getClicker().getEyeLocation());
 
         // Clear the objective
-        Objective objective = Journal.get(player).getActiveObjective("talknpc_" + npc.getId());
-        if(objective!=null && !objective.isCompleted() && objective instanceof NPCTalkObjective){
+        Objective objective = Journal.get(player).getCurrentObjective("talknpc_" + npc.getId());
+        if(objective!=null){
             // Set the NPC for the completion interaction
             if(objective.getCompletionInteraction()!=null){
                 objective.getCompletionInteraction().setCharacter(new TempNPC(npc));
@@ -191,7 +188,7 @@ public class TaggedNPC extends Trait implements Taggable {
             String npcAction = action[1];
 
             // AutoQuest
-            if(npcAction.equalsIgnoreCase("autoquest")){
+            /*if(npcAction.equalsIgnoreCase("autoquest")){
                 Journal journal = Journal.get(PlayerCharacter.getCharacter(event.getPlayer()));
                 if(journal.getActiveObjective("autoquest_npc_"+npc.getNPC().getId())!=null)
                     npcAction = "autoquestAlreadyExists";
@@ -204,7 +201,7 @@ public class TaggedNPC extends Trait implements Taggable {
                     // Delay the objective start to make it more natural
                     Bukkit.getScheduler().scheduleSyncDelayedTask(StoryPlugin.plugin, () -> journal.addObjective(autoQuest), 30);
                 }
-            }
+            }*/
 
             // Display prompt
             ((NPCTag)npc.getTag()).displayConversation(event.getPlayer(), npc.getNPC(), npcAction);

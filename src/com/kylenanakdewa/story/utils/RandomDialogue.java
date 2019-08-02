@@ -12,7 +12,7 @@ import java.util.Random;
 public class RandomDialogue {
 
     /** Dialogue in the format "I need you to..." or "You should..." */
-    public final static Collection<String> objectiveStarters = Arrays.asList("I need you to ", "You should ", "You need to ", "Could you ", "I'd like you to ", "You could");
+    public final static Collection<String> objectiveStarters = Arrays.asList("I need you to ", "You should ", "You need to ", "Could you ", "I'd like you to ", "You could ");
 
 
     /** Gets a random line from a string collection. */

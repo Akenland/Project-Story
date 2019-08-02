@@ -20,7 +20,7 @@ import com.kylenanakdewa.core.common.prompts.Prompt;
 import com.kylenanakdewa.core.common.prompts.PromptActionEvent;
 import com.kylenanakdewa.story.StoryPlugin;
 import com.kylenanakdewa.story.journal.Journal;
-import com.kylenanakdewa.story.quests.objectives.Objective;
+import com.kylenanakdewa.story.quests.Quest;
 import com.kylenanakdewa.story.tags.taggable.TempNPC;
 
 /**
@@ -33,7 +33,9 @@ public class Interaction extends Prompt {
 	/** Items to be given the player in this Interaction. */
 	private ItemStack[] items;
 	/** Objectives to be given to the player in this Interaction. */
-	private Collection<Objective> objectives;
+	//private Collection<Objective> objectives;
+	/** Quests to be given to the player in this Interaction. */
+	private Collection<Quest> quests;
 	/** Prompt actions to run when this Interaction starts. The action is run from the player. */
 	private Collection<String> actions;
 
@@ -67,13 +69,21 @@ public class Interaction extends Prompt {
 			interaction.setQuestions(config.getStringList("questions"));
 			interaction.setRandomQuestions(config.getBoolean("randomQuestions"));
 			interaction.setAnswers(config.getStringList("answers"), config.getStringList("actions"), config.getStringList("conditions"));
-			List<String> objectiveList = config.getStringList("objectives");
+			/*List<String> objectiveList = config.getStringList("objectives");
 			if(objectiveList!=null && !objectiveList.isEmpty()){
 				interaction.setObjectives(new ArrayList<Objective>());
 				objectiveList.forEach(objectiveString -> interaction.getObjectives().add(Objective.loadObjective(objectiveString)));
 			} else {
 				String objectiveString = config.getString("objective");
 				if(objectiveString!=null) interaction.setObjective(Objective.loadObjective(objectiveString));
+			}*/
+			List<String> questList = config.getStringList("quests");
+			if(questList!=null && !questList.isEmpty()){
+				interaction.setQuests(new ArrayList<Quest>());
+				questList.forEach(questString -> interaction.getQuests().add(Quest.generateFromTemplate(questString, interaction.getCharacter())));
+			} else {
+				String questString = config.getString("quest");
+				if(questString!=null) interaction.setQuest(Quest.generateFromTemplate(questString, interaction.getCharacter()));
 			}
 			List<String> actionList = config.getStringList("runActions");
 			if(actionList!=null && !actionList.isEmpty()){
@@ -106,28 +116,28 @@ public class Interaction extends Prompt {
 	}
 
 	/**
-	 * Sets a single objective to be given for this Interaction.
-	 * This overwrites all existing objectives.
-	 * @param objective the objective
+	 * Sets a single quest to be given for this Interaction.
+	 * This overwrites all existing quests.
+	 * @param quest the quest
 	 */
-	public void setObjective(Objective objective){
-		objectives = objective!=null ? Arrays.asList(objective) : objectives;
+	public void setQuest(Quest quest){
+		quests = Arrays.asList(quest);
 	}
 	/**
-	 * Sets the objectives to be given for this Interaction.
-	 * This overwrites all existing objectives.
-	 * @param objectives the objectives
+	 * Sets the quests to be given for this Interaction.
+	 * This overwrites all existing quests.
+	 * @param quests the quests
 	 */
-	public void setObjectives(Collection<Objective> objectives){
-		this.objectives = objectives;
-		if(objectives!=null) objectives.removeIf(objective -> objective==null);
+	public void setQuests(Collection<Quest> quests){
+		this.quests = quests;
+		//if(objectives!=null) objectives.removeIf(objective -> objective==null);
 	}
 	/**
-	 * Gets the objectives to be given for this Interaction.
-	 * @return the objectives
+	 * Gets the quests to be given for this Interaction.
+	 * @return the quests
 	 */
-	public Collection<Objective> getObjectives(){
-		return objectives;
+	public Collection<Quest> getQuests(){
+		return quests;
 	}
 
 	/**
@@ -191,7 +201,7 @@ public class Interaction extends Prompt {
 		String npcRealm = character.getRealm()!=null ? character.getRealm().getName() : "Akenland";
 		String npcLoc = !((TempNPC)character).getTag().getLocationData().getDisplayNames().isEmpty() ? ((TempNPC)character).getTag().getLocationData().getDisplayName() : "the "+npcRealm;
 		String npcLocDirection = !((TempNPC)character).getTag().getLocationData().getDirectionalNames().isEmpty() ? ((TempNPC)character).getTag().getLocationData().getDirectionalName() : "in the "+npcRealm;
-		
+
 		// Format questions
 		List<String> questions = getQuestions();
 		if(questions!=null){
@@ -228,7 +238,8 @@ public class Interaction extends Prompt {
                 .replaceAction("thisnpc", "npc_"+((TempNPC)character).getNPC().getId())
                 .replaceAction("thisNPC", "npc_"+((TempNPC)character).getNPC().getId())
                 .replaceAction("THISNPC", "npc_"+((TempNPC)character).getNPC().getId())
-                .replaceAction("PLAYER_USERNAME", player.getName());
+                .replaceAction("PLAYER_USERNAME", player.getName())
+                .replaceAction("PLAYER_CO-ORDS", player.getLocation().getX()+" "+player.getLocation().getY()+" "+player.getLocation().getZ());
         	});
 		}
 
@@ -237,7 +248,15 @@ public class Interaction extends Prompt {
 
 			// Actions
 			if(getActions()!=null){
-				getActions().forEach(action -> Bukkit.getServer().getPluginManager().callEvent(new PromptActionEvent(player, action)));
+				getActions().forEach(action -> {
+					action.replace("thisnpc", "npc_"+((TempNPC)character).getNPC().getId());
+					action.replace("thisNPC", "npc_"+((TempNPC)character).getNPC().getId());
+					action.replace("THISNPC", "npc_"+((TempNPC)character).getNPC().getId());
+					action.replace("PLAYER_USERNAME", player.getName());
+					action.replace("PLAYER_CO-ORDS", player.getLocation().getX()+" "+player.getLocation().getY()+" "+player.getLocation().getZ());
+
+					Bukkit.getServer().getPluginManager().callEvent(new PromptActionEvent(player, action));
+				});
 			}
 
 			// Items
@@ -247,11 +266,20 @@ public class Interaction extends Prompt {
 			}
 
 			// Objectives
-			if(getObjectives()!=null){
+			/*if(getObjectives()!=null){
 				int objDelay = 30;
 				for(Objective objective : getObjectives()){
 					Bukkit.getScheduler().scheduleSyncDelayedTask(StoryPlugin.plugin, () -> Journal.get(PlayerCharacter.getCharacter(player)).addObjective(objective), objDelay);
 					objDelay += 30;
+				}
+			}*/
+			// Quests
+			if(getQuests()!=null){
+				int questDelay = 30;
+				for(Quest quest : getQuests()){
+					quest.setQuestGiver(character);
+					Bukkit.getScheduler().scheduleSyncDelayedTask(StoryPlugin.plugin, () -> Journal.get(PlayerCharacter.getCharacter(player)).addQuest(quest), questDelay);
+					questDelay += 200;
 				}
 			}
 

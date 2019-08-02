@@ -69,8 +69,8 @@ public final class JournalListener implements Listener {
 	public void onPromptAction(PromptActionEvent event){
 		if(event.isType("completeObjective")){
 			Journal journal = Journal.get(PlayerCharacter.getCharacter(event.getPlayer()));
-			Objective objective = journal.getActiveObjective(event.getAction());
-			if(objective!=null) journal.completeObjective(objective);
+			Objective objective = journal.getCurrentObjective(event.getAction());
+			if(objective!=null) objective.setCompleted();
 		}
 	}
 
@@ -81,8 +81,8 @@ public final class JournalListener implements Listener {
 
 		PlayerCharacter player = PlayerCharacter.getCharacter(event.getPlayer());
 
-		for(Objective objective : Journal.get(player).getActiveTypeObjectives("gotoloc")){
-			if(!objective.isCompleted() && objective instanceof GoToLocationObjective && ((GoToLocationObjective)objective).isWithinLocation(event.getTo())){
+		for(Objective objective : Journal.get(player).getCurrentObjectivesByType("gotoloc")){
+			if(((GoToLocationObjective)objective).isWithinLocation(event.getTo())){
 				objective.setCompleted();
 			}
 		}

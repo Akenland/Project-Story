@@ -95,6 +95,8 @@ public abstract class Objective {
      * Represents the status of an Objective.
      */
     public enum Status {
+        /** The objective has not begun yet, and therefore cannot yet be completed. */
+        NOT_READY,
         /** The objective is active, and can successfully be completed. */
         ACTIVE,
         /** The objective has been fully completed. */
@@ -109,6 +111,48 @@ public abstract class Objective {
      */
     public Status getStatus(){
         return status;
+    }
+    /**
+     * Sets the Status of this Objective, without firing an event.
+     * This will silently change the status of the objective, allowing it to be modified with no effects.
+     * Do not use this method to mark the completion or failure of an event.
+     */
+    public void setStatus(Status newStatus){
+        status = newStatus;
+    }
+
+    /**
+     * Returns true if this objective has not yet started.
+     * @return true if the objective is not ready, otherwise false
+     */
+    public boolean isNotReady(){
+        return status.equals(Status.NOT_READY);
+    }
+    /**
+     * Marks this objective as not ready.
+     * Override this method to change what happens when this objective is not ready.
+     * Remember to call super.setNotReady() so that the objective is actually completed.
+     */
+    public void setNotReady(){
+        status = Status.NOT_READY;
+        Bukkit.getServer().getPluginManager().callEvent(new ObjectiveStatusEvent(this, getStatus()));
+    }
+
+    /**
+     * Returns true if this objective is active.
+     * @return true if the objective is active, otherwise false
+     */
+    public boolean isActive(){
+        return status.equals(Status.ACTIVE);
+    }
+    /**
+     * Marks this objective as active.
+     * Override this method to change what happens when this objective becomes active.
+     * Remember to call super.setActive() so that the objective is actually active.
+     */
+    public void setActive(){
+        status = Status.ACTIVE;
+        Bukkit.getServer().getPluginManager().callEvent(new ObjectiveStatusEvent(this, getStatus()));
     }
 
     /**
@@ -129,7 +173,7 @@ public abstract class Objective {
     }
 
     /**
-     * Returns true if this objective can no longer be successfully completed. 
+     * Returns true if this objective can no longer be successfully completed.
      * The Character is considered to have failed the objective.
      * @return true if the objective is impossible to complete, otherwise false
      */

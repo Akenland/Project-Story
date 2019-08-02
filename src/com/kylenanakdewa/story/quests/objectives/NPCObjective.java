@@ -6,6 +6,7 @@ import net.citizensnpcs.api.npc.NPC;
 
 /**
  * An objective involving an NPC.
+ *
  * @author Kyle Nanakdewa
  */
 public abstract class NPCObjective extends Objective {
@@ -15,10 +16,12 @@ public abstract class NPCObjective extends Objective {
 	/** The TaggedNPC involved in this objective. */
 	protected TaggedNPC taggedNPC;
 
-
-	public NPCObjective(NPC npc){
+	public NPCObjective(NPC npc) {
 		this.npc = npc;
 		taggedNPC = TaggedNPC.getTaggedNPC(npc);
 	}
 
+	public TaggedNPC getTaggedNPC(){
+		return taggedNPC;
+	}
 }

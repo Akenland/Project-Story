@@ -1,12 +1,15 @@
-package com.kylenanakdewa.story.quests.objectives;
+package com.kylenanakdewa.story.quests;
 
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
-import java.util.List;
 import java.util.Random;
 
 import com.kylenanakdewa.core.common.Utils;
+import com.kylenanakdewa.story.quests.objectives.LocationObjective;
+import com.kylenanakdewa.story.quests.objectives.NPCObjective;
+import com.kylenanakdewa.story.quests.objectives.NPCTalkObjective;
+import com.kylenanakdewa.story.quests.objectives.Objective;
 import com.kylenanakdewa.story.tags.Interaction;
 import com.kylenanakdewa.story.tags.Tag;
 import com.kylenanakdewa.story.tags.data.LocationData;
@@ -23,6 +26,7 @@ import net.citizensnpcs.api.npc.NPC;
  * AutoQuest
  * @author Kyle Nanakdewa
  */
+@Deprecated
 public class AutoQuest extends Quest {
 
     /** The NPC that gave out this objective. May be null. */
@@ -32,8 +36,10 @@ public class AutoQuest extends Quest {
      * Creates an AutoQuest, where the starting objective is within the specified tags.
      */
     public AutoQuest(Collection<Tag> tags, NPC npc){
+        super("{AutoQuest}", "{AutoQuest description}", new TempNPC(npc), new ArrayList<Objective>());
+
         this.npc = npc;
-        List<Objective> subObjectives = new ArrayList<Objective>();
+        //List<Objective> subObjectives;
         // Pick out 1-4 objectives
         for(int o=0; o < new Random().nextInt(3)+1; o++){
             // Pick a random tag and objective, max 10 attempts
@@ -72,9 +78,9 @@ public class AutoQuest extends Quest {
             else {
                 subObjectives.add(objective);
                 // Next objective uses tags from previous objective
-                if(objective instanceof NPCObjective) tags = ((NPCObjective)objective).taggedNPC.getTags();
+                if(objective instanceof NPCObjective) tags = ((NPCObjective)objective).getTaggedNPC().getTags();
                 if(objective instanceof LocationObjective){
-                    LocationData locData = ((LocationObjective)objective).locationData;
+                    LocationData locData = null;//((LocationObjective)objective).locationData;
                     tags = locData==null ? tags : locData.getTag().getTotalInheritedTags();
                 }
             }
@@ -109,7 +115,7 @@ public class AutoQuest extends Quest {
 
         Utils.notifyAdmins("[Story] AutoQuest generated with "+subObjectives.size()+" objectives.");
         subObjectives.forEach(obj -> Utils.notifyAdmins("[Story] - "+obj.getIdentifier()+" - "+obj.getDescription()));
-        setSubObjectives(subObjectives);
+        //setSubObjectives(subObjectives);
     }
     /**
      * Creates an AutoQuest, started from a specific NPC.
@@ -125,9 +131,9 @@ public class AutoQuest extends Quest {
     }
 
 
-    @Override
+    /*@Override
     public String getIdentifier() {
         return npc==null ? super.getIdentifier().replaceFirst("quest", "autoquest") : "autoquest_npc_"+npc.getId();
-    }
+    }*/
 
 }
