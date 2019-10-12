@@ -241,13 +241,13 @@ public class Journal extends PlayerSaveDataSection {
 
 		player.playSound(player.getLocation(), Sound.UI_TOAST_CHALLENGE_COMPLETE, SoundCategory.MASTER, 1000, 0.1f);
 
-		player.sendTitle(ChatColor.DARK_PURPLE+"!", "Quest Started", 10, 20, 10);
+		player.sendTitle(ChatColor.DARK_PURPLE+"!", ChatColor.GRAY.toString() + ChatColor.ITALIC + "Quest Started", 10, 20, 10);
 		Bukkit.getScheduler().scheduleSyncDelayedTask(StoryPlugin.plugin, () -> {
-			player.sendTitle(ChatColor.DARK_PURPLE+"!", ChatColor.getLastColors(quest.getName()) + ChatColor.BOLD + quest.getName(), 10, 40, 10);
+			player.sendTitle(ChatColor.DARK_PURPLE+"!", ChatColor.DARK_PURPLE + " - " + ChatColor.RESET + quest.getName().toUpperCase() +  ChatColor.DARK_PURPLE + " - ", 0, 40, 10);
 		}, 30);
 		Bukkit.getScheduler().scheduleSyncDelayedTask(StoryPlugin.plugin, () -> {
-			player.sendTitle(ChatColor.DARK_PURPLE+"!", quest.getCurrentObjective().getDescription(), 10, 70, 20);
-		}, 80);
+			player.sendTitle(ChatColor.DARK_PURPLE+"!", quest.getCurrentObjective().getDescription(), 0, 60, 20);
+		}, 70);
 
 		Utils.sendActionBar(player, "Added to Journal!");
 	}
@@ -261,10 +261,10 @@ public class Journal extends PlayerSaveDataSection {
 
 		player.playSound(player.getLocation(), Sound.BLOCK_ENCHANTMENT_TABLE_USE, SoundCategory.MASTER, 1000, 1.6f);
 
-		player.sendTitle(ChatColor.GRAY+"!", ChatColor.getLastColors(quest.getName()) + ChatColor.BOLD + quest.getName(), 10, 40, 10);
+		player.sendTitle(ChatColor.GRAY+"!", ChatColor.DARK_PURPLE + " - " + ChatColor.RESET + quest.getName().toUpperCase() +  ChatColor.DARK_PURPLE + " - ", 10, 20, 10);
 		Bukkit.getScheduler().scheduleSyncDelayedTask(StoryPlugin.plugin, () -> {
-			player.sendTitle(ChatColor.GRAY+"!", quest.getCurrentObjective().getDescription(), 10, 70, 20);
-		}, 50);
+			player.sendTitle(ChatColor.GRAY+"!", quest.getCurrentObjective().getDescription(), 0, 60, 20);
+		}, 30);
 
 		Utils.sendActionBar(player, "Journal updated.");
 	}
@@ -278,10 +278,13 @@ public class Journal extends PlayerSaveDataSection {
 
 		player.playSound(player.getLocation(), Sound.BLOCK_ENCHANTMENT_TABLE_USE, SoundCategory.MASTER, 1000, 0.6f);
 
-		player.sendTitle(ChatColor.DARK_PURPLE+"?", ChatColor.getLastColors(quest.getName()) + ChatColor.BOLD + quest.getName(), 10, 40, 10);
+		player.sendTitle(ChatColor.DARK_PURPLE+"?", ChatColor.GRAY.toString() + ChatColor.ITALIC + "New Discovery", 10, 20, 10);
 		Bukkit.getScheduler().scheduleSyncDelayedTask(StoryPlugin.plugin, () -> {
-			player.sendTitle(ChatColor.DARK_PURPLE+"?", quest.getCurrentObjective().getDescription(), 10, 70, 20);
-		}, 50);
+			player.sendTitle(ChatColor.DARK_PURPLE+"?", ChatColor.DARK_PURPLE + " - " + ChatColor.RESET + quest.getName().toUpperCase() +  ChatColor.DARK_PURPLE + " - ", 0, 40, 10);
+		}, 30);
+		Bukkit.getScheduler().scheduleSyncDelayedTask(StoryPlugin.plugin, () -> {
+			player.sendTitle(ChatColor.DARK_PURPLE+"?", quest.getCurrentObjective().getDescription(), 0, 60, 20);
+		}, 70);
 
 		Utils.sendActionBar(player, "Added to Journal!");
 	}
@@ -295,9 +298,9 @@ public class Journal extends PlayerSaveDataSection {
 
 		player.playSound(player.getLocation(), Sound.UI_TOAST_CHALLENGE_COMPLETE, SoundCategory.MASTER, 1000, 1.6f);
 
-		player.sendTitle(ChatColor.GREEN+"\u2713", "Quest Completed", 10, 20, 10);
+		player.sendTitle(ChatColor.GREEN+"\u2713", ChatColor.GRAY.toString() + ChatColor.ITALIC + "Quest Completed", 10, 20, 10);
 		Bukkit.getScheduler().scheduleSyncDelayedTask(StoryPlugin.plugin, () -> {
-			player.sendTitle(ChatColor.GREEN+"\u2713", ChatColor.getLastColors(quest.getName()) + ChatColor.BOLD + quest.getName(), 10, 40, 10);
+			player.sendTitle(ChatColor.GREEN+"\u2713", ChatColor.DARK_PURPLE + " - " + ChatColor.RESET + quest.getName().toUpperCase() +  ChatColor.DARK_PURPLE + " - ", 0, 40, 20);
 		}, 30);
 
 		Utils.sendActionBar(player, "Journal updated.");
@@ -312,9 +315,9 @@ public class Journal extends PlayerSaveDataSection {
 
 		player.playSound(player.getLocation(), Sound.BLOCK_ENCHANTMENT_TABLE_USE, SoundCategory.MASTER, 1000, 1.1f);
 
-		player.sendTitle(ChatColor.RED+"x", "Quest Failed", 10, 20, 10);
+		player.sendTitle(ChatColor.RED+"x", ChatColor.GRAY.toString() + ChatColor.ITALIC + "Quest Failed", 10, 20, 10);
 		Bukkit.getScheduler().scheduleSyncDelayedTask(StoryPlugin.plugin, () -> {
-			player.sendTitle(ChatColor.RED+"x", ChatColor.getLastColors(quest.getName()) + ChatColor.BOLD + quest.getName(), 10, 40, 10);
+			player.sendTitle(ChatColor.RED+"x", ChatColor.DARK_PURPLE + " - " + ChatColor.RESET + quest.getName().toUpperCase() +  ChatColor.DARK_PURPLE + " - ", 0, 40, 20);
 		}, 30);
 
 		Utils.sendActionBar(player, "Journal updated.");
@@ -587,6 +590,7 @@ public class Journal extends PlayerSaveDataSection {
 			case ACTIVE:
 				Quest quest = getQuestByObjective(event.getObjective());
 				if(quest!=null) showQuestProgressMessage(quest);
+				else Utils.notifyAdminsError("[Story] Progression Message for "+character.getName()+CommonColors.ERROR+", objective ID "+event.getObjective().getIdentifier()+", failed because the quest couldn't be found.");
 
 				Interaction startInteraction = event.getObjective().getStartInteraction();
 				if(startInteraction!=null) startInteraction.display(player);

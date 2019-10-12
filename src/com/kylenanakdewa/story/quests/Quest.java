@@ -11,6 +11,7 @@ import com.kylenanakdewa.story.quests.objectives.Objective;
 import com.kylenanakdewa.story.quests.objectives.Objective.Status;
 import com.kylenanakdewa.story.tags.taggable.TempNPC;
 
+import org.bukkit.ChatColor;
 import org.bukkit.configuration.ConfigurationSection;
 
 import net.citizensnpcs.api.CitizensAPI;
@@ -45,8 +46,8 @@ public class Quest {
     public static Quest generateFromConfiguration(ConfigurationSection data, Character questGiver){
         Quest quest = new Quest();
 
-        quest.name = data.getString("name");
-        quest.description = data.getString("description");
+        quest.name = ChatColor.translateAlternateColorCodes('&', data.getString("name"));
+        quest.description = ChatColor.translateAlternateColorCodes('&', data.getString("description"));
         quest.questGiver = questGiver;
 
         quest.subObjectives = new ArrayList<Objective>();
@@ -94,24 +95,6 @@ public class Quest {
         return quest;
     }
 
-
-    /**
-     * Creates a Quest.
-     * @param subObjectives a list of sub-objectives
-     */
-    /*@Deprecated
-    public Quest(List<Objective> subObjectives) {
-        //setSubObjectives(subObjectives);
-    }*/
-    /**
-     * Creates a Quest.
-     * @param subObjectives an array of sub-objectives
-     */
-    /*@Deprecated
-    public Quest(Objective... subObjectives) {
-        this(new ArrayList<Objective>(Arrays.asList(subObjectives)));
-    }*/
-
     /**
      * Creates a quest.
      * @param name the display name of the quest
@@ -125,7 +108,6 @@ public class Quest {
         this.questGiver = questGiver;
         this.subObjectives = subObjectives;
     }
-
     private Quest(){
 
     }
@@ -146,55 +128,6 @@ public class Quest {
     }
 
 
-    /*@Deprecated
-    protected void setSubObjectives(List<Objective> subObjectives){
-        this.subObjectives = subObjectives;
-
-        // Add the following objective to the completion interaction of the preceding action
-        Iterator<Objective> iterator = subObjectives.iterator();
-        Objective previous = null;
-        while(iterator.hasNext()){
-            Objective current = iterator.next();
-            // Add previous objective to end of previous objective
-            if(previous!=null){
-                Interaction completion = current.getCompletionInteraction();
-                if(completion==null){
-                    completion = new Interaction();
-                    current.setCompletionInteraction(completion);
-                }
-                Collection<Objective> objectives = completion.getObjectives();
-                if(objectives==null) completion.setObjective(previous);
-                else objectives.add(previous);
-            }
-            // Start the first sub-objective at the same time this objective is started
-            else {
-                Interaction start = getStartInteraction();
-                if(start==null){
-                    start = new Interaction();
-                    setStartInteraction(start);
-                }
-                Collection<Objective> objectives = start.getObjectives();
-                if(objectives==null) start.setObjective(current);
-                else objectives.add(current);
-            }
-            previous = current;
-        }
-        // Complete the quest at the end of the final objective
-        if(!subObjectives.isEmpty()){
-            Objective finalObjective = subObjectives.get(subObjectives.size()-1);
-            Interaction completion = finalObjective.getCompletionInteraction();
-            if(completion==null){
-                completion = new Interaction();
-                finalObjective.setCompletionInteraction(completion);
-            }
-            Collection<String> actions = completion.getActions();
-            if(actions==null) completion.setAction("completeObjective_"+getIdentifier());
-            else actions.add("completeObjective_"+getIdentifier());
-        } else {
-            setCompleted();
-            Utils.notifyAdmins(CommonColors.INFO+"Quest ("+getIdentifier()+" - "+getDescription()+") had no objectives and was marked as complete.");
-        }
-    }*/
     /**
      * Gets a list of the sub-objectives in this quest, in the order they must be completed in.
      * @return the sub-objectives
@@ -223,16 +156,6 @@ public class Quest {
     }*/
 
 
-    /*@Override
-    public String getIdentifier() {
-        String identifier = "quest[";
-        for(Objective objective : subObjectives) identifier += objective.getIdentifier()+",";
-        if(identifier.endsWith(",")) identifier = identifier.substring(0, identifier.length());
-        identifier += "]";
-        return identifier;
-    }*/
-
-
     /**
      * Gets the name of this Quest.
      */
@@ -246,12 +169,6 @@ public class Quest {
 	public String getDescription() {
         if(description!=null) return description;
 
-        // Return first incomplete objective description
-        /*for(Objective objective : subObjectives){
-            if(!objective.isCompleted()){
-                return objective.getDescription();
-            }
-        }*/
         return subObjectives.get(getObjectivesComplete()).getDescription();
 
         // If all objectives are complete, return the last objective's description, so it shows on the title at the end

@@ -4,27 +4,36 @@ import com.kylenanakdewa.story.tags.Interaction;
 import com.kylenanakdewa.story.tags.taggable.TempNPC;
 
 import org.bukkit.ChatColor;
+import org.bukkit.Material;
 
 import net.citizensnpcs.api.npc.NPC;
 
 /**
- * An objective to talk to an NPC.
+ * An objective to give an item to an NPC.
  * @author Kyle Nanakdewa
  */
-public class NPCTalkObjective extends NPCObjective {
+public class NPCGiveObjective extends NPCObjective {
+
+    /** The type of material that needs to be delivered. */
+    private final Material material;
+    /** The quantity of items that need to be delivered. */
+    private final int quantity;
+
 
     /**
-     * Creates an objective for talking to the specified NPC.
+     * Creates an objective for giving an item to the specified NPC.
      * @param npc the NPC to talk to
      */
-    public NPCTalkObjective(NPC npc){
+    public NPCGiveObjective(NPC npc, Material material, int quantity) {
         super(npc);
+        this.material = material;
+        this.quantity = quantity;
     }
 
 
     @Override
     public String getIdentifier() {
-        return "talknpc_"+npc.getId();
+        return "givenpc_"+npc.getId();
     }
 
     @Override
@@ -35,7 +44,7 @@ public class NPCTalkObjective extends NPCObjective {
         String location = taggedNPC.getTag().getLocationData().getDisplayName();
         if(location==null && npcCharacter.getRealm()!=null) location = "the "+npcCharacter.getRealm().getName();
         location = location!=null ? " in "+location : "";
-        return "Talk to " + npcCharacter.getFormattedName() + ChatColor.RESET + location;
+        return "Bring ITEM_NAME to " + npcCharacter.getFormattedName() + ChatColor.RESET + location;
     }
 
     @Override

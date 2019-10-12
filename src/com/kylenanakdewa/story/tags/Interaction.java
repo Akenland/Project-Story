@@ -32,10 +32,10 @@ public class Interaction extends Prompt {
 	private Character character;
 	/** Items to be given the player in this Interaction. */
 	private ItemStack[] items;
-	/** Objectives to be given to the player in this Interaction. */
-	//private Collection<Objective> objectives;
 	/** Quests to be given to the player in this Interaction. */
 	private Collection<Quest> quests;
+	/** Discovery quests to be given to the player in this Interaction. */
+	private Collection<Quest> discoveries;
 	/** Prompt actions to run when this Interaction starts. The action is run from the player. */
 	private Collection<String> actions;
 
@@ -68,15 +68,9 @@ public class Interaction extends Prompt {
 			// Load the data from file
 			interaction.setQuestions(config.getStringList("questions"));
 			interaction.setRandomQuestions(config.getBoolean("randomQuestions"));
+
 			interaction.setAnswers(config.getStringList("answers"), config.getStringList("actions"), config.getStringList("conditions"));
-			/*List<String> objectiveList = config.getStringList("objectives");
-			if(objectiveList!=null && !objectiveList.isEmpty()){
-				interaction.setObjectives(new ArrayList<Objective>());
-				objectiveList.forEach(objectiveString -> interaction.getObjectives().add(Objective.loadObjective(objectiveString)));
-			} else {
-				String objectiveString = config.getString("objective");
-				if(objectiveString!=null) interaction.setObjective(Objective.loadObjective(objectiveString));
-			}*/
+
 			List<String> questList = config.getStringList("quests");
 			if(questList!=null && !questList.isEmpty()){
 				interaction.setQuests(new ArrayList<Quest>());
@@ -85,12 +79,23 @@ public class Interaction extends Prompt {
 				String questString = config.getString("quest");
 				if(questString!=null) interaction.setQuest(Quest.generateFromTemplate(questString, interaction.getCharacter()));
 			}
+
+			List<String> discoveryList = config.getStringList("discoveries");
+			if(discoveryList!=null && !discoveryList.isEmpty()){
+				interaction.setDiscoveries(new ArrayList<Quest>());
+				discoveryList.forEach(questString -> interaction.getDiscoveries().add(Quest.generateFromTemplate(questString, interaction.getCharacter())));
+			} else {
+				String questString = config.getString("discovery");
+				if(questString!=null) interaction.setDiscovery(Quest.generateFromTemplate(questString, interaction.getCharacter()));
+			}
+
 			List<String> actionList = config.getStringList("runActions");
 			if(actionList!=null && !actionList.isEmpty()){
 				interaction.setActions(actionList);
 			} else {
 				interaction.setAction(config.getString("action"));
 			}
+
 			interaction.setItems(config.getItemStack("item"));
 		} else return null;
 
@@ -130,7 +135,6 @@ public class Interaction extends Prompt {
 	 */
 	public void setQuests(Collection<Quest> quests){
 		this.quests = quests;
-		//if(objectives!=null) objectives.removeIf(objective -> objective==null);
 	}
 	/**
 	 * Gets the quests to be given for this Interaction.
@@ -138,6 +142,29 @@ public class Interaction extends Prompt {
 	 */
 	public Collection<Quest> getQuests(){
 		return quests;
+	}
+	/**
+	 * Sets a single quest to be given for this Interaction.
+	 * This overwrites all existing quests.
+	 * @param quest the quest
+	 */
+	public void setDiscovery(Quest quest){
+		discoveries = Arrays.asList(quest);
+	}
+	/**
+	 * Sets the quests to be given for this Interaction.
+	 * This overwrites all existing quests.
+	 * @param quests the quests
+	 */
+	public void setDiscoveries(Collection<Quest> quests){
+		this.discoveries = quests;
+	}
+	/**
+	 * Gets the quests to be given for this Interaction.
+	 * @return the quests
+	 */
+	public Collection<Quest> getDiscoveries(){
+		return discoveries;
 	}
 
 	/**
@@ -185,6 +212,9 @@ public class Interaction extends Prompt {
 	 * Starts this Interaction between the specified Player and Character.
 	 */
 	public void start(Player player, Character character){
+		if(character==null){
+			character = PlayerCharacter.getCharacter(player);
+		}
 		setCharacter(character);
 		if(character==null){
 			Utils.notifyAdminsError("[Story] Interaction for "+player.getDisplayName()+CommonColors.ERROR+" failed because there is no character.");
@@ -223,7 +253,7 @@ public class Interaction extends Prompt {
 		}
 		// Format answers
 		if(getAnswers()!=null){
-			getAnswers().forEach(answer -> {
+			for(Answer answer : getAnswers()){
             	answer
                 .replaceText("PLAYER_NAME", playerName + ChatColor.GRAY)
                 .replaceText("PLAYER_TITLE", playerTitle + ChatColor.GRAY)
@@ -237,26 +267,29 @@ public class Interaction extends Prompt {
                 // Replace THISNPC with npc_ID in all actions
                 .replaceAction("thisnpc", "npc_"+((TempNPC)character).getNPC().getId())
                 .replaceAction("thisNPC", "npc_"+((TempNPC)character).getNPC().getId())
-                .replaceAction("THISNPC", "npc_"+((TempNPC)character).getNPC().getId())
+				.replaceAction("THISNPC", "npc_"+((TempNPC)character).getNPC().getId())
+
                 .replaceAction("PLAYER_USERNAME", player.getName())
                 .replaceAction("PLAYER_CO-ORDS", player.getLocation().getX()+" "+player.getLocation().getY()+" "+player.getLocation().getZ());
-        	});
+        	}
 		}
 
+		/** TODO - this is a dirty solution to make the character effectively final, need to fix this later! */
+		Character finalCharacter = character;
 		int delay = isRandomQuestions() || getQuestions()==null ? 0 : (getQuestions().size()-1)*30;
 		Bukkit.getScheduler().scheduleSyncDelayedTask(StoryPlugin.plugin, () -> {
 
 			// Actions
 			if(getActions()!=null){
-				getActions().forEach(action -> {
-					action.replace("thisnpc", "npc_"+((TempNPC)character).getNPC().getId());
-					action.replace("thisNPC", "npc_"+((TempNPC)character).getNPC().getId());
-					action.replace("THISNPC", "npc_"+((TempNPC)character).getNPC().getId());
+				for(String action : getActions()){
+					action.replace("thisnpc", "npc_"+((TempNPC)finalCharacter).getNPC().getId());
+					action.replace("thisNPC", "npc_"+((TempNPC)finalCharacter).getNPC().getId());
+					action.replace("THISNPC", "npc_"+((TempNPC)finalCharacter).getNPC().getId());
 					action.replace("PLAYER_USERNAME", player.getName());
 					action.replace("PLAYER_CO-ORDS", player.getLocation().getX()+" "+player.getLocation().getY()+" "+player.getLocation().getZ());
 
 					Bukkit.getServer().getPluginManager().callEvent(new PromptActionEvent(player, action));
-				});
+				}
 			}
 
 			// Items
@@ -265,20 +298,21 @@ public class Interaction extends Prompt {
 				catch(IllegalArgumentException e){}
 			}
 
-			// Objectives
-			/*if(getObjectives()!=null){
-				int objDelay = 30;
-				for(Objective objective : getObjectives()){
-					Bukkit.getScheduler().scheduleSyncDelayedTask(StoryPlugin.plugin, () -> Journal.get(PlayerCharacter.getCharacter(player)).addObjective(objective), objDelay);
-					objDelay += 30;
-				}
-			}*/
 			// Quests
 			if(getQuests()!=null){
 				int questDelay = 30;
 				for(Quest quest : getQuests()){
-					quest.setQuestGiver(character);
+					quest.setQuestGiver(finalCharacter);
 					Bukkit.getScheduler().scheduleSyncDelayedTask(StoryPlugin.plugin, () -> Journal.get(PlayerCharacter.getCharacter(player)).addQuest(quest), questDelay);
+					questDelay += 200;
+				}
+			}
+			// Discoveries
+			if(getDiscoveries()!=null){
+				int questDelay = 30 + (getQuests()!=null ? 30 + (getQuests().size() * 200) : 0);
+				for(Quest quest : getDiscoveries()){
+					quest.setQuestGiver(finalCharacter);
+					Bukkit.getScheduler().scheduleSyncDelayedTask(StoryPlugin.plugin, () -> Journal.get(PlayerCharacter.getCharacter(player)).addDiscoveredQuest(quest), questDelay);
 					questDelay += 200;
 				}
 			}

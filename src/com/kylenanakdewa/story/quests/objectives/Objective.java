@@ -8,6 +8,7 @@ import com.kylenanakdewa.story.tags.Tag;
 import com.kylenanakdewa.story.tags.taggable.TaggedNPC;
 
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.configuration.ConfigurationSection;
 
@@ -209,7 +210,7 @@ public abstract class Objective {
      * @param description the new short description for this objective, or null to clear
      */
     public void setDescription(String description){
-        this.description = description;
+        this.description = ChatColor.translateAlternateColorCodes('&', description);
     }
 
     /**
